@@ -19,6 +19,9 @@ class Category
 
     bool is_category;
 
+    //ADD FOR DEBUG IN 02/27/14
+    QString description;
+
 public:
     Category(){}
 
@@ -29,7 +32,8 @@ public:
              int sub_category_id,
              int n_value,
              int page_count,
-             bool is_category)
+             bool is_category,
+             QString description)
     {
         this->node_id = node_id;
 
@@ -44,6 +48,8 @@ public:
         this->page_count = page_count;
 
         this->is_category = is_category;
+
+        this->description = description;
     }
 
     int getNodeId()
@@ -89,6 +95,12 @@ public:
     bool isCategory()
     {
         return is_category;
+    }
+
+    //ADD FOR DEBUG IN 02/27/14
+    QString getDescription()
+    {
+        return description;
     }
 };
 
