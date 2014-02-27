@@ -58,7 +58,13 @@ void Spider::getCategories()
 
 void Spider::getSubCategories()
 {
-    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getSubCategories(QNetworkReply*)));
+    //==============================================================================
+    QEventLoop synchronous;
+
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
+    //==============================================================================
+
+    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getSubCategories(QNetworkReply*)));
 
     QString url = "http://www.ows.newegg.com/Stores.egg/StoreNavigation?storeId=%1&categoryId=%2&storeType=%3&nodeId=%4";
 
@@ -79,7 +85,15 @@ void Spider::getSubCategories()
                                 )
                            );
 
-            manager.get(request);
+            //manager.get(request);
+
+            //===========================
+            reply = manager.get(request);
+
+            synchronous.exec();
+
+            getSubCategories(reply);
+            //===========================
         }
         else
         {
@@ -87,7 +101,11 @@ void Spider::getSubCategories()
 
             isCategory = false;
 
-            emit manager.finished(reply);
+            //emit manager.finished(reply);
+
+            //======================
+            getSubCategories(reply);
+            //======================
         }
     }
 }
@@ -98,7 +116,30 @@ void Spider::getSubCategories()
 
 void Spider::getPageCounts()
 {
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getPageCounts(QNetworkReply*)));
 
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");//设置请求头部信息
+
+    request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
+
+    for(int i = 0; i < categories.size(); ++i)
+    {
+        if(categories[i].isCategory())
+        {
+
+        }
+        else
+        {
+            QJsonObject json;
+
+            json.insert("NValue", categories[i].getNValue());
+            json.insert("NodeId", categories[i].getNodeId());
+            json.insert("StoreId", categories[i].getStoreId());
+            json.insert("StoreType", categories[i].getStoreType());
+            json.insert("SubCategoryId", categories[i].getSubCategoryId());
+
+        }
+    }
 }
 
 
@@ -285,7 +326,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
                     leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
                 }
 
-                this->leaves[245 - count]->addChildren(leaves);
+                this->leaves[245 - count]->addChildren(leaves);//SYNCHRONOUS
             }
             else
             {
