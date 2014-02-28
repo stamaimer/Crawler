@@ -130,14 +130,22 @@ void Spider::getPageCounts()
         }
         else
         {
-            QJsonObject json;
+            QJsonObject json;//JSON对象
 
+            //插入数据
             json.insert("NValue", categories[i].getNValue());
             json.insert("NodeId", categories[i].getNodeId());
             json.insert("StoreId", categories[i].getStoreId());
             json.insert("StoreType", categories[i].getStoreType());
             json.insert("SubCategoryId", categories[i].getSubCategoryId());
 
+            QJsonDocument doc;
+
+            doc.setObject(json);
+
+            QByteArray request_body = doc.toJson();//转换格式
+
+            manager.post(request, request_body);
         }
     }
 }
@@ -352,7 +360,17 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        getPageCounts();
+        for(int i = 0; i < categories.size(); ++i)
+        {
+            qDebug() << categories[i].getDescription()
+                     << categories[i].isCategory()
+                     << categories[i].getStoreId()
+                     << categories[i].getCategoryId()
+                     << categories[i].getStoreType()
+                     << categories[i].getNodeId();
+        }
+
+        //getPageCounts();
     }
 }
 
