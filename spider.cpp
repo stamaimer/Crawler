@@ -360,6 +360,9 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
+        //=============================================
+        //输出所有目录(二级目录和三级目录)用于分析如何获得索引
+
         for(int i = 0; i < categories.size(); ++i)
         {
             qDebug() << categories[i].getDescription()
@@ -369,6 +372,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
                      << categories[i].getStoreType()
                      << categories[i].getNodeId();
         }
+        //=============================================
 
         //getPageCounts();
     }
