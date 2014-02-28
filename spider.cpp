@@ -59,12 +59,12 @@ void Spider::getCategories()
 void Spider::getSubCategories()
 {
     //==============================================================================
-    QEventLoop synchronous;
+    //QEventLoop synchronous;
 
-    connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
+    //connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
     //==============================================================================
 
-    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getSubCategories(QNetworkReply*)));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getSubCategories(QNetworkReply*)));
 
     QString url = "http://www.ows.newegg.com/Stores.egg/StoreNavigation?storeId=%1&categoryId=%2&storeType=%3&nodeId=%4";
 
@@ -85,14 +85,14 @@ void Spider::getSubCategories()
                                 )
                            );
 
-            //manager.get(request);
+            manager.get(request);
 
             //===========================
-            reply = manager.get(request);
+            //reply = manager.get(request);
 
-            synchronous.exec();
+            //synchronous.exec();
 
-            getSubCategories(reply);
+            //getSubCategories(reply);
             //===========================
         }
         else
@@ -101,10 +101,10 @@ void Spider::getSubCategories()
 
             isCategory = false;
 
-            //emit manager.finished(reply);
+            emit manager.finished(reply);
 
             //======================
-            getSubCategories(reply);
+            //getSubCategories(reply);
             //======================
         }
     }
@@ -285,6 +285,7 @@ void Spider::getCategories(QNetworkReply* reply)
 void Spider::getSubCategories(QNetworkReply* reply)
 {
     static int count = categories.size();//获取当前函数运行次数
+    static int size = categories.size();//获取二级目录大小用于遍历
 
     qDebug() << count;
 
@@ -334,7 +335,38 @@ void Spider::getSubCategories(QNetworkReply* reply)
                     leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
                 }
 
-                this->leaves[245 - count]->addChildren(leaves);//SYNCHRONOUS
+                //this->leaves[245 - count]->addChildren(leaves);//SYNCHRONOUS
+
+                int index;
+
+                //获取查询参数用于确定索引
+                int node_id = QUrlQuery(reply->request().url()).queryItemValue("nodeId").toInt();
+                int store_id = QUrlQuery(reply->request().url()).queryItemValue("storeId").toInt();
+                int store_type = QUrlQuery(reply->request().url()).queryItemValue("storeType").toInt();
+                int category_id = QUrlQuery(reply->request().url()).queryItemValue("categoryId").toInt();
+
+                //遍历获取索引
+
+                for(int i = 0; i < size; ++i)
+                {
+                    if(this->categories[i].getNodeId() == node_id)
+                    {
+                        if(this->categories[i].getStoreId() == store_id)
+                        {
+                            if(this->categories[i].getStoreType() == store_type)
+                            {
+                                if(this->categories[i].getCategoryId() == category_id)
+                                {
+                                    index = i;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                this->leaves[index]->addChildren(leaves);//ASYNCHRONOUS
             }
             else
             {
@@ -363,15 +395,15 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //=============================================
         //输出所有目录(二级目录和三级目录)用于分析如何获得索引
 
-        for(int i = 0; i < categories.size(); ++i)
-        {
-            qDebug() << categories[i].getDescription()
-                     << categories[i].isCategory()
-                     << categories[i].getStoreId()
-                     << categories[i].getCategoryId()
-                     << categories[i].getStoreType()
-                     << categories[i].getNodeId();
-        }
+        //for(int i = 0; i < categories.size(); ++i)
+        //{
+        //    qDebug() << categories[i].getDescription()
+        //             << categories[i].isCategory()
+        //             << categories[i].getStoreId()
+        //             << categories[i].getCategoryId()
+        //             << categories[i].getStoreType()
+        //             << categories[i].getNodeId();
+        //}
         //=============================================
 
         //getPageCounts();
