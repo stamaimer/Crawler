@@ -281,7 +281,7 @@ void Spider::getCategories(QNetworkReply* reply)
 
 
 
-
+//遗留问题：两个二级目录不能获得三级目录"DIY PC SuperCombo"&"Car Electronics"
 void Spider::getSubCategories(QNetworkReply* reply)
 {
     static int count = categories.size();//获取当前函数运行次数
@@ -408,7 +408,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //}
         //=============================================
 
-        //getPageCounts();
+        getPageCounts();
     }
 }
 
@@ -453,7 +453,7 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
     }
     else
     {
-        qDebug() << __TIME__ "IN [" << FUNCTION << "] NETWORK ERROR";
+        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR";
     }
 }
 
