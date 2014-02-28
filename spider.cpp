@@ -417,7 +417,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //}
         //=============================================
 
-        //getPageCounts();
+        getPageCounts();
     }
 }
 
@@ -458,6 +458,8 @@ void Spider::getPageCounts(QNetworkReply* reply)
             QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
+
+            qDebug() << reply->request().url();
         }
         else
         {
