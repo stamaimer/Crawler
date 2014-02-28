@@ -44,6 +44,14 @@ void Spider::getCategories()
 
     QString url = "http://www.ows.newegg.com/Stores.egg/StoreNavigation?storeId=%1&categoryId=-1&storeType=4&nodeId=-1";
 
+    this->menus.remove(this->menus.indexOf(6));     //REMOVE SOFTWARE
+    this->menus.remove(this->menus.indexOf(140));   //REMOVE CELL_PHONE
+    this->menus.remove(this->menus.indexOf(15));    //REMOVE HOME&OUTDOORS
+    this->menus.remove(this->menus.indexOf(19));    //REMOVE AOTOMOTIVE
+    this->menus.remove(this->menus.indexOf(131));   //REMOVE ACCESSORIES
+    this->menus.remove(this->menus.indexOf(143));   //REMOVE SERVICES
+    this->menus.remove(this->menus.indexOf(14));    //REMOVE MARKETPLACE
+
     for(int i = 0; i < menus.size(); ++i)
     {
         request.setUrl(QUrl(url.arg(menus[i])));
@@ -74,8 +82,6 @@ void Spider::getSubCategories()
     {
         if(categories[i].isCategory())//判断二级目录与否
         {
-            //qDebug() << categories[i].getDescription();
-
             isCategory = true;
 
             request.setUrl(QUrl(url.arg(categories[i].getStoreId())
@@ -97,8 +103,6 @@ void Spider::getSubCategories()
         }
         else
         {
-            //qDebug() << categories[i].getDescription();
-
             isCategory = false;
 
             emit manager.finished(reply);
@@ -122,8 +126,6 @@ void Spider::getPageCounts()
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
-    manager.setProxy(QNetworkProxy(QNetworkProxy::HttpProxy, "127.0.0.1", 8888));
-
     for(int i = 0; i < categories.size(); ++i)
     {
         if(categories[i].isCategory())
@@ -136,7 +138,7 @@ void Spider::getPageCounts()
         {
             isSubCategory = true;
 
-            QJsonObject json;//JSON对象
+            QJsonObject json;
 
             //插入数据
             json.insert("NValue", categories[i].getNValue());
@@ -149,7 +151,7 @@ void Spider::getPageCounts()
 
             doc.setObject(json);
 
-            QByteArray request_body = doc.toJson();//转换格式
+            QByteArray request_body = doc.toJson();//转换数据
 
             manager.post(request, request_body);
         }
@@ -169,7 +171,7 @@ void Spider::getProducts()
 
 
 
-void Spider::getMenus(QNetworkReply* reply)//该函数调用一次
+void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
 {
     disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getMenus(QNetworkReply*)));//解绑信号关联
 
@@ -411,11 +413,11 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //             << categories[i].getCategoryId()
         //             << categories[i].getStoreType()
         //             << categories[i].getNodeId();
-        //               << categories[i].getNValue();
+        //             << categories[i].getNValue();
         //}
         //=============================================
 
-        getPageCounts();
+        //getPageCounts();
     }
 }
 
@@ -456,8 +458,6 @@ void Spider::getPageCounts(QNetworkReply* reply)
             QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
-
-            qDebug() << "THE PAGE INFO IS" << page_info;
         }
         else
         {
@@ -519,33 +519,3 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
