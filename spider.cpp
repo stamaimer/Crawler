@@ -417,7 +417,27 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //}
         //=============================================
 
-        getPageCounts();
+        //==================================================
+        //输出所有三级目录，由于分析如何获得索引
+        for(int i = 0; i < categories.size(); ++i)
+        {
+            if(categories[i].isCategory())
+            {
+
+            }
+            else
+            {
+                qDebug() << categories[i].getDescription()
+                         << categories[i].getStoreId()
+                         << categories[i].getStoreType()
+                         << categories[i].getNodeId()
+                         << categories[i].getSubCategoryId()
+                         << categories[i].getNValue();
+            }
+        }
+        //===================================================
+
+        //getPageCounts();
     }
 }
 
@@ -458,8 +478,6 @@ void Spider::getPageCounts(QNetworkReply* reply)
             QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
-
-            qDebug() << reply->request().url();
         }
         else
         {
