@@ -122,6 +122,8 @@ void Spider::getPageCounts()
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
+    manager.setProxy(QNetworkProxy(QNetworkProxy::HttpProxy, "127.0.0.1", 8888));
+
     for(int i = 0; i < categories.size(); ++i)
     {
         if(categories[i].isCategory())
@@ -246,7 +248,7 @@ void Spider::getCategories(QNetworkReply* reply)
                                              categories[i].toObject()["StoreType"].toInt(),
                                              categories[i].toObject()["CategoryId"].toInt(),
                                              categories[i].toObject()["SubCategoryId"].toInt(),
-                                             categories[i].toObject()["NValue"].toInt(),
+                                             categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
                                              categories[i].toObject()["PageCount"].toInt(),//NULL
                                              categories[i].toObject()["ShowSeeAllDeals"].toBool(),
                     categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
@@ -325,7 +327,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
                                                      categories[i].toObject()["StoreType"].toInt(),
                                                      categories[i].toObject()["CategoryId"].toInt(),
                                                      categories[i].toObject()["SubCategoryId"].toInt(),
-                                                     categories[i].toObject()["NValue"].toInt(),
+                                                     categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
                                                      categories[i].toObject()["PageCount"].toInt(),//NULL
                                                      categories[i].toObject()["ShowSeeAllDeals"].toBool(),
                             categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
@@ -409,6 +411,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
         //             << categories[i].getCategoryId()
         //             << categories[i].getStoreType()
         //             << categories[i].getNodeId();
+        //               << categories[i].getNValue();
         //}
         //=============================================
 
@@ -454,11 +457,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
 
-            qDebug() << reply->;
-
             qDebug() << "THE PAGE INFO IS" << page_info;
-
-            //qDebug() << "THE PAGE COUNT IS" << page_info["PageCount"].toInt();
         }
         else
         {

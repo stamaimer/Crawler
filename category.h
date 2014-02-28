@@ -13,7 +13,7 @@ class Category
     int category_id;
     int sub_category_id;
 
-    int n_value;
+    QString n_value;//CHANGE INT TO STRING IN 02/18/14
 
     int page_count;
 
@@ -30,7 +30,7 @@ public:
              int store_type,
              int category_id,
              int sub_category_id,
-             int n_value,
+             QString n_value,//CHANGE INT TO STRING IN 02/18/14
              int page_count,
              bool is_category,
              QString description)
@@ -77,7 +77,7 @@ public:
         return sub_category_id;
     }
 
-    int getNValue()
+    QString getNValue()//CHANGE INT TO STRING IN 02/18/14
     {
         return n_value;
     }

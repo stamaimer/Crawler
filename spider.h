@@ -28,6 +28,7 @@
 //网络相关
 #include <QUrl>
 #include <QUrlQuery>
+#include <QNetworkProxy>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
