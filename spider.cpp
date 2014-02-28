@@ -423,7 +423,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
 void Spider::getPageCounts(QNetworkReply* reply)
 {
     //使用lambda表达式获取三级目录数目
-    static int count = []()->int
+    static int count = [this]()->int
                        {
                            int count = 0;
 
@@ -436,7 +436,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
                            }
 
                            return count;
-                       };
+                       }();
 
     qDebug() << count;
 
@@ -454,7 +454,11 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
 
-            qDebug() << page_info["PageCount"].toInt();
+            qDebug() << reply->;
+
+            qDebug() << "THE PAGE INFO IS" << page_info;
+
+            //qDebug() << "THE PAGE COUNT IS" << page_info["PageCount"].toInt();
         }
         else
         {
@@ -516,6 +520,7 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR";
     }
 }
+
 
 
 
