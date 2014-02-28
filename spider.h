@@ -61,9 +61,9 @@ class Spider : public QMainWindow
     QJsonParseError parse_error;
     QJsonDocument doc;
 
-    //========================
-    bool isCategory;
-    //========================
+    //===========================
+    /*volatile*/ bool isCategory;
+    //===========================
 
     void getMenus();
     void getCategories();

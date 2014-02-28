@@ -380,6 +380,8 @@ void Spider::getSubCategories(QNetworkReply* reply)
     }
     else
     {
+        isCategory = true;
+
         qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] IS NOT A CATEGORY";
     }
 
