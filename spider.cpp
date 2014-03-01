@@ -174,6 +174,8 @@ void Spider::getPageCounts()
             //==========================================
         }
     }
+
+    getProducts();
 }
 
 
@@ -726,6 +728,6 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        getProducts();
+        //getProducts();
     }
 }
