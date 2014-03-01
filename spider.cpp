@@ -637,6 +637,25 @@ void Spider::getProducts(QNetworkReply* reply)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+        //ADD FOR CHECKOUT IN 03/01/14
+
+        QFile file("D:/SPIDER");
+
+        file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+
+        QTextStream out(&file);
+
+        for(int i = 0; i < products.size(); ++i)
+        {
+            out << "PRODUCT ID             : " << products[i].getProductId() << "\n"
+                << "PRODUCT NAME           : " << products[i].getProductName() << "\n"
+                << "PRODUCT FINAL PRICE    : " << products[i].getFinalPrice() << "\n"
+                << "PRODUCt ORIGINAL PRICE : " << products[i].getOriginalPrice() << "\n"
+                << "PRODUCT PROMOTION TEXT : " << products[i].getPromotionText() << "\n"
+                << "PRODUCT REVIEWS        : " << products[i].getReviews() << "\n"
+                << "PRODUCT IS IN STOCK    : " << products[i].isInStock() << "\n\n\n\n\n";
+        }
     }
 }
 
