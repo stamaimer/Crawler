@@ -571,7 +571,71 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
 void Spider::getProducts(QNetworkReply* reply)
 {
-    getJsonDoc(reply, __FUNCTION__);
+    //使用lambda表达式获取三级目录数目
+    static int count = [this]()->int
+                       {
+                           int count = 0;
+
+                           for(int i = 0; i < categories.size(); ++i)
+                           {
+                               if(!categories[i].isCategory())
+                               {
+                                   count = count + (int)categories[i].getPageCount();//获取当前函数调用次数
+                               }
+                           }
+
+                           return count;
+                       }();
+
+    qDebug() << count;
+
+    if(isSubCategory)
+    {
+        getJsonDoc(reply, __FUNCTION__);
+
+        if(doc.isObject())
+        {
+            //JSON
+
+            QJsonObject obj = doc.object();//临时对象
+
+            QJsonArray array = obj["ProductGroups"].toArray();//临时对象
+
+            QJsonArray products = array[0].toObject()["ProductDeals"].toArray();//产品信息数组
+
+            for(int i = 0; i < products.size(); ++i)
+            {
+                this->products.append(Product(
+                                          products[i].toObject()["NeweggItemNumber"].toString(),
+                                          products[i].toObject()["Title"].toString(),
+                                          products[i].toObject()["FinalPrice"].toString(),
+                                          products[i].toObject()["OriginalPrice"].toString(),
+                                          products[i].toObject()["PromotionText"].toString(),
+                                          products[i].toObject()["ReviewSummary"].toObject()["TotalReviews"].toInt(),
+                                          products[i].toObject()["Instock"].toBool()));
+            }
+        }
+        else
+        {
+            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+        }
+    }
+    else
+    {
+        isSubCategory = true;
+
+        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] IS NOT A SUBCATEGORY";
+    }
+
+    if(--count)
+    {
+    }
+    else
+    {
+        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
+
+        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+    }
 }
 
 
@@ -662,6 +726,6 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        //getProducts();
+        getProducts();
     }
 }
