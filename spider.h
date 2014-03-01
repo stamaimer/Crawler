@@ -84,6 +84,7 @@ private slots:
     void getCategories(QNetworkReply*);
     void getSubCategories(QNetworkReply*);
     void getPageCounts(QNetworkReply*);
+    void getPageCounts(QNetworkReply*, int);//ADD FOR SUNCHRONOUS
     void getProducts(QNetworkReply*);
 };
 

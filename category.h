@@ -15,7 +15,7 @@ class Category
 
     QString n_value;//CHANGE INT TO STRING IN 02/18/14
 
-    int page_count;
+    double page_count;//CHANGE INT TO DOUBLE IN 03/01/14
 
     bool is_category;
 
@@ -31,7 +31,7 @@ public:
              int category_id,
              int sub_category_id,
              QString n_value,//CHANGE INT TO STRING IN 02/18/14
-             int page_count,
+             double page_count,//CHANGE INT TO DOUBLE IN 03/01/14
              bool is_category,
              QString description)
     {
@@ -82,12 +82,12 @@ public:
         return n_value;
     }
 
-    int getPageCount()
+    double getPageCount()//CHANGE INT TO DOUBLE IN 03/01/14
     {
         return page_count;
     }
 
-    void setPageCount(int page_count)
+    void setPageCount(double page_count)//CHANGE INT TO DOUBLE IN 03/01/14
     {
         this->page_count = page_count;
     }
