@@ -182,7 +182,46 @@ void Spider::getPageCounts()
 
 void Spider::getProducts()
 {
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
 
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
+
+    for(int i = 0; i < categories.size(); ++i)
+    {
+        if(categories[i].isCategory())
+        {
+            isSubCategory = false;
+
+            emit manager.finished(reply);
+        }
+        else
+        {
+            for(int page_number = 0; page_number < categories[i].getPageCount(); ++i)
+            {
+                isSubCategory = true;
+
+                QJsonObject json;
+
+                //插入数据
+                json.insert("NValue", categories[i].getNValue());
+                json.insert("NodeId", categories[i].getNodeId());
+                json.insert("StoreId", categories[i].getStoreId());
+                json.insert("StoreType", categories[i].getStoreType());
+                json.insert("PageNumber", ++page_number);//插入页码信息
+                json.insert("SubCategoryId", categories[i].getSubCategoryId());
+
+                QJsonDocument doc;
+
+                doc.setObject(json);
+
+                QByteArray request_body = doc.toJson();//转换数据
+
+                manager.post(request, request_body);
+            }
+        }
+    }
 }
 
 
