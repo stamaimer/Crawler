@@ -523,7 +523,24 @@ void Spider::getPageCounts(QNetworkReply* reply)
 void Spider::getProducts(QNetworkReply* reply)
 {
     //使用lambda表达式获取三级目录数目
-    static int count = categories.size();
+    static int count = [this]()->int
+    {
+        int count = 0;
+
+        for(int i = 0; i < categories.size(); ++i)
+        {
+            if(categories[i].isCategory())
+            {
+                count = count + 1;
+            }
+            else
+            {
+                count = count + (int)categories[i].getPageCount();
+            }
+        }
+
+        return count;
+    }();
 
     qDebug() << count;
 
