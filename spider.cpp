@@ -1,5 +1,4 @@
 #include "spider.h"
-#include <iostream>
 
 Spider::Spider(QWidget* parent) : QMainWindow(parent)
 {
@@ -176,7 +175,7 @@ void Spider::getPageCounts()
         }
     }
 
-    //getProducts();
+    getProducts();
 }
 
 
@@ -266,8 +265,6 @@ void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        std::cout << '\a';
-
         getCategories();
     }
     else
@@ -346,8 +343,6 @@ void Spider::getCategories(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        std::cout << '\a';
-
         getSubCategories();
     }
 }
@@ -355,7 +350,7 @@ void Spider::getCategories(QNetworkReply* reply)
 
 
 
-//遗留问题：两个二级目录不能获得三级目录"DIY PC SuperCombo"&"Car Electronics"
+//遗留问题：两个二级目录不能获得三级目录"DIY PC SuperCombo"&"Car Electronics"， 这是由于NEWEGG本身导致， 由此引出去重问题
 void Spider::getSubCategories(QNetworkReply* reply)
 {
     static int count = categories.size();//获取当前函数运行次数
@@ -468,8 +463,6 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        std::cout << '\a';
-
         getPageCounts();
     }
 }
@@ -497,8 +490,6 @@ void Spider::getPageCounts(QNetworkReply* reply)
             QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
-
-            qDebug() << page_info["PageCount"].toDouble();//JUST FOR TEST
         }
         else
         {
@@ -520,8 +511,6 @@ void Spider::getPageCounts(QNetworkReply* reply)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getPageCounts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-        std::cout << '\a';
 
         //getProducts();
     }
@@ -583,9 +572,7 @@ void Spider::getProducts(QNetworkReply* reply)
     {
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
-        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-        std::cout << '\a';
+        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗  
 
         //ADD FOR CHECKOUT IN 03/01/14
 
@@ -626,12 +613,12 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         }
         else
         {
-            qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR";
+            qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR" << parse_error.errorString();
         }
     }
     else
     {
-        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR";
+        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR" << reply->errorString();
     }
 }
 
@@ -682,9 +669,5 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getPageCounts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-        std::cout << '\a';
-
-        //getProducts();
     }
 }
