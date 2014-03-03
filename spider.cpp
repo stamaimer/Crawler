@@ -1,4 +1,5 @@
 #include "spider.h"
+#include <iostream>
 
 Spider::Spider(QWidget* parent) : QMainWindow(parent)
 {
@@ -132,6 +133,8 @@ void Spider::getPageCounts()
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
+    qDebug() << categories.size();//ADD FOR DEBUG IN 03/03/14
+
     for(int i = 0; i < categories.size(); ++i)
     {
         if(categories[i].isCategory())
@@ -175,7 +178,7 @@ void Spider::getPageCounts()
         }
     }
 
-    getProducts();
+    //getProducts();
 }
 
 
@@ -265,6 +268,8 @@ void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
+        std::cout << '\a';
+
         getCategories();
     }
     else
@@ -342,6 +347,8 @@ void Spider::getCategories(QNetworkReply* reply)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getCategories(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+        std::cout << '\a';
 
         getSubCategories();
     }
@@ -463,40 +470,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
-        //=============================================
-        //输出所有目录(二级目录和三级目录)用于分析如何获得索引
-
-        //for(int i = 0; i < categories.size(); ++i)
-        //{
-        //    qDebug() << categories[i].getDescription()
-        //             << categories[i].isCategory()
-        //             << categories[i].getStoreId()
-        //             << categories[i].getCategoryId()
-        //             << categories[i].getStoreType()
-        //             << categories[i].getNodeId();
-        //             << categories[i].getNValue();
-        //}
-        //=============================================
-
-        //==================================================
-        //输出所有三级目录，由于分析如何获得索引
-        //for(int i = 0; i < categories.size(); ++i)
-        //{
-        //    if(categories[i].isCategory())
-        //    {
-        //
-        //    }
-        //    else
-        //    {
-        //        qDebug() << categories[i].getDescription()
-        //                 << categories[i].getStoreId()
-        //                 << categories[i].getStoreType()
-        //                 << categories[i].getNodeId()
-        //                 << categories[i].getSubCategoryId()
-        //                 << categories[i].getNValue();
-        //    }
-        //}
-        //===================================================
+        std::cout << '\a';
 
         getPageCounts();
     }
@@ -508,21 +482,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
 void Spider::getPageCounts(QNetworkReply* reply)
 {
-    //使用lambda表达式获取三级目录数目
-    static int count = [this]()->int
-                       {
-                           int count = 0;
-
-                           for(int i = 0; i < categories.size(); ++i)
-                           {
-                               if(!categories[i].isCategory())
-                               {
-                                   count++;
-                               }
-                           }
-
-                           return count;
-                       }();
+    static int count = categories.size();
 
     qDebug() << count;
 
@@ -540,7 +500,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
             QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
 
-            qDebug() << page_info;
+            qDebug() << page_info["PageCount"].toDouble();//JUST FOR TEST
         }
         else
         {
@@ -563,6 +523,8 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
+        std::cout << '\a';
+
         //getProducts();
     }
 }
@@ -574,20 +536,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
 void Spider::getProducts(QNetworkReply* reply)
 {
     //使用lambda表达式获取三级目录数目
-    static int count = [this]()->int
-                       {
-                           int count = 0;
-
-                           for(int i = 0; i < categories.size(); ++i)
-                           {
-                               if(!categories[i].isCategory())
-                               {
-                                   count = count + (int)categories[i].getPageCount();//获取当前函数调用次数
-                               }
-                           }
-
-                           return count;
-                       }();
+    static int count = categories.size();
 
     qDebug() << count;
 
@@ -637,6 +586,8 @@ void Spider::getProducts(QNetworkReply* reply)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+        std::cout << '\a';
 
         //ADD FOR CHECKOUT IN 03/01/14
 
@@ -693,20 +644,7 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
 void Spider::getPageCounts(QNetworkReply* reply, int index)
 {
     //使用lambda表达式获取三级目录数目
-    static int count = [this]()->int
-                       {
-                           int count = 0;
-
-                           for(int i = 0; i < categories.size(); ++i)
-                           {
-                               if(!categories[i].isCategory())
-                               {
-                                   count++;
-                               }
-                           }
-
-                           return count;
-                       }();
+    static int count = categories.size();
 
     qDebug() << count;
 
@@ -746,6 +684,8 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
         disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getPageCounts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+        std::cout << '\a';
 
         //getProducts();
     }
