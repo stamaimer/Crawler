@@ -133,8 +133,6 @@ void Spider::getPageCounts()
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
-    qDebug() << categories.size();//ADD FOR DEBUG IN 03/03/14
-
     for(int i = 0; i < categories.size(); ++i)
     {
         if(categories[i].isCategory())
