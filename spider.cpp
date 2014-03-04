@@ -568,7 +568,18 @@ void Spider::getProducts(QNetworkReply* reply)
                                           products[i].toObject()["PromotionText"].toString(),
                                           products[i].toObject()["ReviewSummary"].toObject()["TotalReviews"].toInt(),
                                           products[i].toObject()["Instock"].toBool()));
-            }
+
+                //ADD FOR DEBUG IN 04/03/14
+                //=================================================================================
+                qDebug() << "PRODUCT ID             : " << this->products[i].getProductId() << "\n"
+                         << "PRODUCT NAME           : " << this->products[i].getProductName() << "\n"
+                         << "PRODUCT FINAL PRICE    : " << this->products[i].getFinalPrice() << "\n"
+                         << "PRODUCt ORIGINAL PRICE : " << this->products[i].getOriginalPrice() << "\n"
+                         << "PRODUCT PROMOTION TEXT : " << this->products[i].getPromotionText() << "\n"
+                         << "PRODUCT REVIEWS        : " << this->products[i].getReviews() << "\n"
+                         << "PRODUCT IS IN STOCK    : " << this->products[i].isInStock() << "\n\n\n\n\n";
+                //=================================================================================
+              }
         }
         else
         {
