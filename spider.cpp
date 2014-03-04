@@ -184,19 +184,21 @@ void Spider::getPageCounts()
 
 void Spider::getProducts()
 {
-    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
-
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
     for(int i = 0; i < categories.size(); ++i)
     {
+        QNetworkAccessManager* managers = new QNetworkAccessManager[categories.size()];
+
+        connect(&managers[i], SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+
         if(categories[i].isCategory())
         {
             isSubCategory = false;
 
-            emit manager.finished(reply);
+            emit managers[i].finished(reply);
         }
         else
         {
@@ -220,7 +222,7 @@ void Spider::getProducts()
 
                 QByteArray request_body = doc.toJson();//转换数据
 
-                manager.post(request, request_body);
+                managers[i].post(request, request_body);
             }
         }
     }
@@ -598,7 +600,7 @@ void Spider::getProducts(QNetworkReply* reply)
     }
     else
     {
-        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
+        //disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗  
 
