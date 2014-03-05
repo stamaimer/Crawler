@@ -209,7 +209,7 @@ void Spider::getProducts()
         }
         else
         {
-            for(int page_number = 0; page_number < categories[i].getPageCount(); ++i)
+            for(int page_number = 0; page_number < categories[i].getPageCount(); ++page_number)
             {
                 isSubCategory = true;
 
@@ -220,7 +220,7 @@ void Spider::getProducts()
                 json.insert("NodeId", categories[i].getNodeId());
                 json.insert("StoreId", categories[i].getStoreId());
                 json.insert("StoreType", categories[i].getStoreType());
-                json.insert("PageNumber", ++page_number);//插入页码信息
+                json.insert("PageNumber", page_number + 1);//插入页码信息
                 json.insert("SubCategoryId", categories[i].getSubCategoryId());
 
                 QJsonDocument doc;
@@ -662,12 +662,16 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         }
         else
         {
-            qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR" << parse_error.errorString();
+            qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
+                     << "ERROR CODE" << parse_error.error
+                     << "ERROR STR" << parse_error.errorString();
         }
     }
     else
     {
-        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR" << reply->errorString();
+        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR"
+                 << "ERROR CODE" << reply->error()
+                 << "ERROR STR" << reply->errorString();
     }
 }
 
