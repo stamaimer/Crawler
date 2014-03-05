@@ -52,6 +52,10 @@ void Spider::getCategories()
     this->menus.remove(this->menus.indexOf(143));   //REMOVE SERVICES
     this->menus.remove(this->menus.indexOf(14));    //REMOVE MARKETPLACE
 
+    this->menus.clear();
+
+    this->menus.append(1);
+
     for(int i = 0; i < menus.size(); ++i)
     {
         request.setUrl(QUrl(url.arg(menus[i])));
@@ -184,21 +188,24 @@ void Spider::getPageCounts()
 
 void Spider::getProducts()
 {
+
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
 
     for(int i = 0; i < categories.size(); ++i)
     {
-        QNetworkAccessManager* managers = new QNetworkAccessManager[categories.size()];
+        //QNetworkAccessManager* managers = new QNetworkAccessManager[categories.size()];
 
-        connect(&managers[i], SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+        //connect(&managers[i], SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
 
         if(categories[i].isCategory())
         {
             isSubCategory = false;
 
-            emit managers[i].finished(reply);
+            emit manager.finished(reply);
         }
         else
         {
@@ -222,7 +229,9 @@ void Spider::getProducts()
 
                 QByteArray request_body = doc.toJson();//转换数据
 
-                managers[i].post(request, request_body);
+                qDebug() << "BEFORE POST" ;
+
+                manager.post(request, request_body);
             }
         }
     }
@@ -237,6 +246,8 @@ void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
     disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getMenus(QNetworkReply*)));//解绑信号关联
 
     getJsonDoc(reply, __FUNCTION__);
+
+    reply->deleteLater();
 
     //判断是否为空？
 
@@ -286,6 +297,8 @@ void Spider::getCategories(QNetworkReply* reply)
     qDebug() << count;
 
     getJsonDoc(reply, __FUNCTION__);
+
+    reply->deleteLater();
 
     if(doc.isArray())//检查数组与否
     {
@@ -363,6 +376,8 @@ void Spider::getSubCategories(QNetworkReply* reply)
     if(isCategory)
     {
         getJsonDoc(reply, __FUNCTION__);
+
+        reply->deleteLater();
 
         if(doc.isArray())//判断数组与否
         {
@@ -550,6 +565,10 @@ void Spider::getProducts(QNetworkReply* reply)
     {
         getJsonDoc(reply, __FUNCTION__);
 
+        reply->deleteLater();
+
+        qDebug() << "AFTER REPLY";
+
         if(doc.isObject())
         {
             //JSON
@@ -573,13 +592,13 @@ void Spider::getProducts(QNetworkReply* reply)
 
                 //ADD FOR DEBUG IN 04/03/14
                 //=================================================================================
-                qDebug() << "PRODUCT ID             : " << this->products[i].getProductId() << "\n"
-                         << "PRODUCT NAME           : " << this->products[i].getProductName() << "\n"
-                         << "PRODUCT FINAL PRICE    : " << this->products[i].getFinalPrice() << "\n"
-                         << "PRODUCt ORIGINAL PRICE : " << this->products[i].getOriginalPrice() << "\n"
-                         << "PRODUCT PROMOTION TEXT : " << this->products[i].getPromotionText() << "\n"
-                         << "PRODUCT REVIEWS        : " << this->products[i].getReviews() << "\n"
-                         << "PRODUCT IS IN STOCK    : " << this->products[i].isInStock() << "\n\n\n\n\n";
+//                qDebug() << "PRODUCT ID             : " << this->products[i].getProductId() << "\n"
+//                         << "PRODUCT NAME           : " << this->products[i].getProductName() << "\n"
+//                         << "PRODUCT FINAL PRICE    : " << this->products[i].getFinalPrice() << "\n"
+//                         << "PRODUCt ORIGINAL PRICE : " << this->products[i].getOriginalPrice() << "\n"
+//                         << "PRODUCT PROMOTION TEXT : " << this->products[i].getPromotionText() << "\n"
+//                         << "PRODUCT REVIEWS        : " << this->products[i].getReviews() << "\n"
+//                         << "PRODUCT IS IN STOCK    : " << this->products[i].isInStock() << "\n\n\n\n\n";
                 //=================================================================================
               }
         }
@@ -600,7 +619,7 @@ void Spider::getProducts(QNetworkReply* reply)
     }
     else
     {
-        //disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
+        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗  
 
@@ -666,6 +685,8 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
     if(isSubCategory)
     {
         getJsonDoc(reply, __FUNCTION__);
+
+        reply->deleteLater();
 
         if(doc.isObject())
         {
