@@ -377,8 +377,6 @@ void Spider::getSubCategories(QNetworkReply* reply)
     {
         getJsonDoc(reply, __FUNCTION__);
 
-        reply->deleteLater();
-
         if(doc.isArray())//判断数组与否
         {
             //JSON
@@ -453,6 +451,8 @@ void Spider::getSubCategories(QNetworkReply* reply)
                 }
 
                 this->leaves[index]->addChildren(leaves);//ASYNCHRONOUS
+
+                reply->deleteLater();
             }
             else
             {
