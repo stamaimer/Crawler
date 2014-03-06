@@ -52,9 +52,12 @@ void Spider::getCategories()
     this->menus.remove(this->menus.indexOf(143));   //REMOVE SERVICES
     this->menus.remove(this->menus.indexOf(14));    //REMOVE MARKETPLACE
 
-    this->menus.clear();
+    //ADD FOR TEST IN 03/06/14
+    //========================
+    //this->menus.clear();
 
-    this->menus.append(1);
+    //this->menus.append(1);
+    //========================
 
     for(int i = 0; i < menus.size(); ++i)
     {
@@ -197,10 +200,6 @@ void Spider::getProducts()
 
     for(int i = 0; i < categories.size(); ++i)
     {
-        //QNetworkAccessManager* managers = new QNetworkAccessManager[categories.size()];
-
-        //connect(&managers[i], SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
-
         if(categories[i].isCategory())
         {
             isSubCategory = false;
@@ -228,8 +227,6 @@ void Spider::getProducts()
                 doc.setObject(json);
 
                 QByteArray request_body = doc.toJson();//转换数据
-
-                qDebug() << "BEFORE POST" ;
 
                 manager.post(request, request_body);
             }
@@ -329,7 +326,7 @@ void Spider::getCategories(QNetworkReply* reply)
                                              categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
                                              categories[i].toObject()["PageCount"].toInt(),//NULL
                                              categories[i].toObject()["ShowSeeAllDeals"].toBool(),
-                    categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
+                                             categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
 
             QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
 
@@ -408,7 +405,7 @@ void Spider::getSubCategories(QNetworkReply* reply)
                                                      categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
                                                      categories[i].toObject()["PageCount"].toInt(),//NULL
                                                      categories[i].toObject()["ShowSeeAllDeals"].toBool(),
-                            categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
+                                                     categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
 
                     QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
 
@@ -567,8 +564,6 @@ void Spider::getProducts(QNetworkReply* reply)
 
         reply->deleteLater();
 
-        qDebug() << "AFTER REPLY";
-
         if(doc.isObject())
         {
             //JSON
@@ -650,9 +645,11 @@ void Spider::getProducts(QNetworkReply* reply)
 
 void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
 {
+    QByteArray response;
+
     if(reply->error() == QNetworkReply::NoError)//检查是否发生网络错误
     {
-        QByteArray response = reply->readAll();//获取响应信息同时清空
+        response = reply->readAll();//获取响应信息同时清空
 
         doc = QJsonDocument::fromJson(response, &parse_error);//解析响应信息
 
@@ -672,6 +669,8 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR"
                  << "ERROR CODE" << reply->error()
                  << "ERROR STR" << reply->errorString();
+
+        qDebug() << response;
     }
 }
 
