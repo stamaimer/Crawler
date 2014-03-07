@@ -25,6 +25,10 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
+//布局
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 //网络相关
 #include <QUrl>
 #include <QUrlQuery>
@@ -39,7 +43,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
-class Spider : public QMainWindow
+class Spider : public QWidget
 {
     Q_OBJECT
 

@@ -1,12 +1,16 @@
 #include "spider.h"
 
-Spider::Spider(QWidget* parent) : QMainWindow(parent)
+Spider::Spider(QWidget* parent) : QWidget(parent)
 {
     timer.start();//启动计时
 
     tree = new QTreeWidget(this);//创建树形控件
 
-    tree->resize(this->width(), this->height());//调整控件大小
+    QHBoxLayout *layout = new QHBoxLayout();//创建水平布局
+
+    layout->addWidget(tree);//添加树形控件
+
+    this->setLayout(layout);//设置布局
 
     getMenus();
 }
