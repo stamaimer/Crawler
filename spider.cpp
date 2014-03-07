@@ -60,16 +60,21 @@ void Spider::getCategories()
 
     //ADD FOR TEST IN 03/06/14
     //========================
-    //this->menus.clear();
+//    this->menus.clear();
 
-    //this->menus.append(1);
+//    this->menus.append(1);
     //========================
 
     for(int i = 0; i < menus.size(); ++i)
     {
         request.setUrl(QUrl(url.arg(menus[i])));
 
+        qDebug() << "Before send request";
+
         manager.get(request);
+
+        qDebug() << "After send request";
+
     }
 }
 
