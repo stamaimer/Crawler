@@ -624,7 +624,7 @@ void Spider::getProducts(QNetworkReply* reply)
 
         //ADD FOR CHECKOUT IN 03/01/14
 
-        QFile file("D:/SPIDER");
+        QFile file("d:/spider.log");
 
         file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
@@ -640,6 +640,8 @@ void Spider::getProducts(QNetworkReply* reply)
                 << "PRODUCT REVIEWS        : " << products[i].getReviews() << "\n"
                 << "PRODUCT IS IN STOCK    : " << products[i].isInStock() << "\n\n\n\n\n";
         }
+
+        qDebug() << "END OF FILE OUTPUT";
     }
 }
 
