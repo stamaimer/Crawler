@@ -12,6 +12,8 @@ Spider::Spider(QWidget* parent) : QWidget(parent)
 
     this->setLayout(layout);//设置布局
 
+    initDatabase();
+
     getMenus();
 }
 
@@ -677,6 +679,28 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
                  << "ERROR STR" << reply->errorString();
 
         qDebug() << response;
+    }
+}
+
+
+
+
+
+void Spider::initDatabase()
+{
+    database = QSqlDatabase::addDatabase("QMYSQL");
+
+    database.setHostName("localhost");
+
+    database.setUserName("root");
+
+    database.setPassword("");
+
+    database.setDatabaseName("spider");
+
+    if(!database.open())
+    {
+        qDebug() << "SOME ERROR HAPPENED IN CONNECT TO DATABASE";
     }
 }
 

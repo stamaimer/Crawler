@@ -37,6 +37,10 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
+//数据库相关
+#include <QSqlQuery>
+#include <QSqlDatabase>
+
 //解析相关
 #include <QJsonArray>
 #include <QJsonObject>
@@ -62,6 +66,9 @@ class Spider : public QWidget
     QNetworkRequest request;
     QNetworkReply *reply;
 
+    QSqlDatabase database;
+    QSqlQuery query;
+
     //是否应该这样编写
     QJsonParseError parse_error;
     QJsonDocument doc;
@@ -78,6 +85,8 @@ class Spider : public QWidget
     void getProducts();
 
     void getJsonDoc(QNetworkReply*, QString);
+
+    void initDatabase();
 
 public:
     Spider(QWidget* parent = 0);
