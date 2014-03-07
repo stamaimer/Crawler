@@ -700,7 +700,7 @@ void Spider::initDatabase()
 
     if(!database.open())
     {
-        qDebug() << "SOME ERROR HAPPENED IN CONNECT TO DATABASE";
+        qDebug() << database.lastError();
     }
 }
 

@@ -38,6 +38,7 @@
 #include <QNetworkAccessManager>
 
 //数据库相关
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlDatabase>
 
