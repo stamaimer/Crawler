@@ -21,6 +21,7 @@
 #include <QEventLoop>
 
 //控件
+#include <QTextEdit>
 #include <QMainWindow>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -48,11 +49,19 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
+//多线程相关
+#include <QMutex>
+#include <QThread>
+
+class Thread;
+
 class Spider : public QWidget
 {
     Q_OBJECT
 
     QElapsedTimer timer;
+
+    QTextEdit* console;
 
     QTreeWidget* tree;
 
@@ -79,6 +88,10 @@ class Spider : public QWidget
     /*volatile*/ bool isSubCategory;
     //==============================
 
+    //=================
+    Thread* threads[8];
+    //=================
+
     void getMenus();
     void getCategories();
     void getSubCategories();
@@ -93,13 +106,77 @@ public:
     Spider(QWidget* parent = 0);
     ~Spider();
 
+    //==================================
+    QVector<QNetworkReply*> replys;
+
+    QMutex mutex;
+
+    void getProductsHandler(QByteArray);
+
+    void getProducts(QNetworkReply*);
+    //==================================
+
 private slots:
     void getMenus(QNetworkReply*);
     void getCategories(QNetworkReply*);
     void getSubCategories(QNetworkReply*);
     void getPageCounts(QNetworkReply*);
     void getPageCounts(QNetworkReply*, int);//ADD FOR SYNCHRONOUS
-    void getProducts(QNetworkReply*);
+    //void getProducts(QNetworkReply*);
+    void addReply(QNetworkReply*);
+};
+
+
+class Thread : public QThread
+{
+    Spider* spider;
+
+    int tid;
+
+public:
+
+    Thread(Spider* spider)
+    {
+        this->spider = spider;
+    }
+
+    void start(int tid)
+    {
+        this->tid = tid;
+
+        QThread::start();
+
+        qDebug() << "THREAD" << tid << "HAS BEEN SUBMITTED";
+    }
+
+    void run()
+    {
+        qDebug() << "THREAD" << tid << "IS RUNNING";
+
+        while(true)
+        {
+            spider->mutex.lock();
+
+            if(!spider->replys.isEmpty())
+            {
+                qDebug() << "REPLYS SIZE" << spider->replys.size();
+
+                qDebug() << "THREAD" << tid << "IS SERVING";
+                
+                QNetworkReply* reply = spider->replys.takeFirst();
+                
+                spider->mutex.unlock();
+
+                spider->getProducts(reply);
+
+                qDebug() << "THREAD" << tid << "SERVE END";
+            }
+            else
+            {
+                spider->mutex.unlock();
+            }
+        }
+    }
 };
 
 #endif // SPIDER_H

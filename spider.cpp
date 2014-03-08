@@ -6,9 +6,14 @@ Spider::Spider(QWidget* parent) : QWidget(parent)
 
     tree = new QTreeWidget(this);//创建树形控件
 
-    QHBoxLayout *layout = new QHBoxLayout();//创建水平布局
+    console = new QTextEdit(this);
+
+    console->setReadOnly(true);
+
+    QVBoxLayout *layout = new QVBoxLayout();//创建垂直布局
 
     layout->addWidget(tree);//添加树形控件
+    layout->addWidget(console);
 
     this->setLayout(layout);//设置布局
 
@@ -60,20 +65,20 @@ void Spider::getCategories()
 
     //ADD FOR TEST IN 03/06/14
     //========================
-//    this->menus.clear();
+    this->menus.clear();
 
-//    this->menus.append(1);
+    this->menus.append(6);
     //========================
 
     for(int i = 0; i < menus.size(); ++i)
     {
         request.setUrl(QUrl(url.arg(menus[i])));
 
-        qDebug() << "Before send request";
+//        qDebug() << "Before send request";
 
         manager.get(request);
 
-        qDebug() << "After send request";
+//        qDebug() << "After send request";
 
     }
 }
@@ -203,7 +208,17 @@ void Spider::getPageCounts()
 void Spider::getProducts()
 {
 
-    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
+
+    //================================
+    for(int i = 0; i < 8; ++i)
+    {
+        threads[i] = new Thread(this);
+        threads[i]->start(i + 1);
+    }
+    //================================
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -240,6 +255,10 @@ void Spider::getProducts()
                 QByteArray request_body = doc.toJson();//转换数据
 
                 manager.post(request, request_body);
+
+                //==========================================
+                //reply = manager.post(request, request_body);
+                //==========================================
             }
         }
     }
@@ -759,4 +778,29 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
     }
+}
+
+
+
+
+
+//ADD FOR TEST IN 03/08/14
+void Spider::getProductsHandler(QByteArray tmp)
+{
+    qDebug() << tmp;
+}
+
+
+
+
+
+void Spider::addReply(QNetworkReply* reply)
+{
+    mutex.lock();
+
+    replys.append(reply);
+
+    qDebug() << "replys size" << replys.size();
+
+    mutex.unlock();
 }
