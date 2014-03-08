@@ -89,7 +89,7 @@ class Spider : public QWidget
     //==============================
 
     //=================
-    Thread* threads[8];
+    Thread* threads[2];
     //=================
 
     void getMenus();
@@ -176,6 +176,31 @@ public:
                 spider->mutex.unlock();
             }
         }
+    }
+};
+
+class Producer : public QObject
+{
+    Q_OBJECT
+
+    Spider* spider;
+
+public:
+    Producer(Spider* spider)
+    {
+        this->spider = spider;
+    }
+
+public slots:
+    void addReply(QNetworkReply* reply)
+    {
+        spider->mutex.lock();
+
+        spider->replys.append(reply);
+
+        qDebug() << "replys size" << spider->replys.size();
+
+        spider->mutex.unlock();
     }
 };
 

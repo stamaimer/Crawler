@@ -210,10 +210,29 @@ void Spider::getProducts()
 
     //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
 
-    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
+    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
+
+    int size = 5;
+
+    Producer* producers[size];
+
+    QThread* pthreads[size];
+
+    for(int i = 0; i < size; ++i)
+    {
+        producers[i] = new Producer(this);
+
+        pthreads[i] = new QThread();
+
+        producers[i]->moveToThread(pthreads[i]);
+
+        pthreads[i]->start();
+
+        connect(&manager, SIGNAL(finished(QNetworkReply*)), producers[i], SLOT(addReply(QNetworkReply*)), Qt::QueuedConnection);
+    }
 
     //================================
-    for(int i = 0; i < 8; ++i)
+    for(int i = 0; i < 2; ++i)
     {
         threads[i] = new Thread(this);
         threads[i]->start(i + 1);
