@@ -3,6 +3,7 @@
 
 #include "category.h"
 #include "product.h"
+#include "packet.h"
 
 //辅助功能：输出与计时
 #include <QFile>
@@ -53,7 +54,8 @@
 #include <QMutex>
 #include <QThread>
 
-class Thread;
+class PThread;
+class CThread;
 
 class Spider : public QWidget
 {
@@ -88,33 +90,37 @@ class Spider : public QWidget
     /*volatile*/ bool isSubCategory;
     //==============================
 
-    //=================
-    Thread* threads[2];
-    //=================
+    //===================
+    CThread* cthreads[1];
+    PThread* pthreads[100];
+    //===================
 
     void getMenus();
     void getCategories();
     void getSubCategories();
     void getPageCounts();
-    void getProducts();
+    //void getProducts();//这个函数移至生产者线程
 
     void getJsonDoc(QNetworkReply*, QString);
 
     void initDatabase();
 
+    void contract();
+
 public:
     Spider(QWidget* parent = 0);
     ~Spider();
 
-    //==================================
-    QVector<QNetworkReply*> replys;
+    //========================================
+    QVector<Category> sub_categories;//PThread
+    QVector<Packet> packets;//PThread
+
+    QVector<QNetworkReply*> replys;//CThread
 
     QMutex mutex;
 
-    void getProductsHandler(QByteArray);
-
-    void getProducts(QNetworkReply*);
-    //==================================
+    void getProducts(QNetworkReply*);//CThread
+    //========================================
 
 private slots:
     void getMenus(QNetworkReply*);
@@ -122,22 +128,24 @@ private slots:
     void getSubCategories(QNetworkReply*);
     void getPageCounts(QNetworkReply*);
     void getPageCounts(QNetworkReply*, int);//ADD FOR SYNCHRONOUS
-    //void getProducts(QNetworkReply*);
-    void addReply(QNetworkReply*);
+    //void getProducts(QNetworkReply*);//这个函数移至消费者线程
 };
 
 
-class Thread : public QThread
+class CThread : public QThread
 {
+    Q_OBJECT
+
     Spider* spider;
 
     int tid;
 
 public:
 
-    Thread(Spider* spider)
+    CThread(Spider* spider)
     {
         this->spider = spider;
+        this->setStackSize(10240);
     }
 
     void start(int tid)
@@ -145,31 +153,21 @@ public:
         this->tid = tid;
 
         QThread::start();
-
-        qDebug() << "THREAD" << tid << "HAS BEEN SUBMITTED";
     }
 
     void run()
     {
-        qDebug() << "THREAD" << tid << "IS RUNNING";
-
         while(true)
         {
             spider->mutex.lock();
 
             if(!spider->replys.isEmpty())
             {
-                qDebug() << "REPLYS SIZE" << spider->replys.size();
-
-                qDebug() << "THREAD" << tid << "IS SERVING";
-                
                 QNetworkReply* reply = spider->replys.takeFirst();
-                
-                spider->mutex.unlock();
 
                 spider->getProducts(reply);
 
-                qDebug() << "THREAD" << tid << "SERVE END";
+                spider->mutex.unlock();
             }
             else
             {
@@ -179,29 +177,111 @@ public:
     }
 };
 
-class Producer : public QObject
+class PThread : public QThread
 {
     Q_OBJECT
 
     Spider* spider;
 
+    int tid;
+
 public:
-    Producer(Spider* spider)
+    PThread(Spider* spider)
     {
         this->spider = spider;
+        this->setStackSize(10240);
+    }
+
+    void start(int tid)
+    {
+        this->tid = tid;
+
+        QThread::start();
+    }
+
+    void run()
+    {
+        QNetworkAccessManager* manager = new QNetworkAccessManager();
+
+        QNetworkRequest request;
+
+        QNetworkReply* reply;
+
+        while(true)
+        {
+            spider->mutex.lock();
+
+            if(!spider->packets.isEmpty())
+            {
+                Packet packet = spider->packets.takeFirst();
+
+                spider->mutex.unlock();
+
+                //connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
+
+                //==============================================================================
+                QEventLoop synchronous;
+
+                connect(manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
+                //==============================================================================
+
+                request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+                request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
+
+                for(int page_number = packet.getBegin(); page_number < packet.getEnd(); ++page_number)
+                {
+                    QJsonObject json;
+
+                    //插入数据
+                    json.insert("NValue", packet.getNValue());
+                    json.insert("NodeId", packet.getNodeId());
+                    json.insert("StoreId", packet.getStoreId());
+                    json.insert("StoreType", packet.getStoreType());
+                    json.insert("PageNumber", page_number + 1);//插入页码信息
+                    json.insert("SubCategoryId", packet.getSubCategoryId());
+
+                    QJsonDocument doc;
+
+                    doc.setObject(json);
+
+                    QByteArray request_body = doc.toJson();//转换数据
+
+                    reply = manager->post(request, request_body);
+
+                    synchronous.exec();
+
+                    spider->mutex.lock();
+
+                    //spider->replys.append(reply);
+
+                    spider->getProducts(reply);
+
+                    spider->mutex.unlock();
+
+                    qDebug() << "PTHREAD" << tid << "serves" << packet.getDescription();
+                }
+            }
+            else
+            {
+                spider->mutex.unlock();
+
+                break;
+            }
+        }
     }
 
 public slots:
+
     void addReply(QNetworkReply* reply)
     {
         spider->mutex.lock();
 
         spider->replys.append(reply);
 
-        qDebug() << "replys size" << spider->replys.size();
-
         spider->mutex.unlock();
     }
+
 };
 
 #endif // SPIDER_H

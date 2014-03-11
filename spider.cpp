@@ -65,21 +65,16 @@ void Spider::getCategories()
 
     //ADD FOR TEST IN 03/06/14
     //========================
-    this->menus.clear();
+//    this->menus.clear();
 
-    this->menus.append(6);
+//    this->menus.append(6);
     //========================
 
     for(int i = 0; i < menus.size(); ++i)
     {
         request.setUrl(QUrl(url.arg(menus[i])));
 
-//        qDebug() << "Before send request";
-
         manager.get(request);
-
-//        qDebug() << "After send request";
-
     }
 }
 
@@ -198,90 +193,109 @@ void Spider::getPageCounts()
         }
     }
 
-    getProducts();
-}
-
-
-
-
-
-void Spider::getProducts()
-{
-
-    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
-
-    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
-
-    int size = 5;
-
-    Producer* producers[size];
-
-    QThread* pthreads[size];
-
-    for(int i = 0; i < size; ++i)
-    {
-        producers[i] = new Producer(this);
-
-        pthreads[i] = new QThread();
-
-        producers[i]->moveToThread(pthreads[i]);
-
-        pthreads[i]->start();
-
-        connect(&manager, SIGNAL(finished(QNetworkReply*)), producers[i], SLOT(addReply(QNetworkReply*)), Qt::QueuedConnection);
-    }
-
-    //================================
-    for(int i = 0; i < 2; ++i)
-    {
-        threads[i] = new Thread(this);
-        threads[i]->start(i + 1);
-    }
-    //================================
-
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-    request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
+    //getProducts();
 
     for(int i = 0; i < categories.size(); ++i)
     {
         if(categories[i].isCategory())
         {
-            isSubCategory = false;
-
-            emit manager.finished(reply);
         }
         else
         {
-            for(int page_number = 0; page_number < categories[i].getPageCount(); ++page_number)
-            {
-                isSubCategory = true;
-
-                QJsonObject json;
-
-                //插入数据
-                json.insert("NValue", categories[i].getNValue());
-                json.insert("NodeId", categories[i].getNodeId());
-                json.insert("StoreId", categories[i].getStoreId());
-                json.insert("StoreType", categories[i].getStoreType());
-                json.insert("PageNumber", page_number + 1);//插入页码信息
-                json.insert("SubCategoryId", categories[i].getSubCategoryId());
-
-                QJsonDocument doc;
-
-                doc.setObject(json);
-
-                QByteArray request_body = doc.toJson();//转换数据
-
-                manager.post(request, request_body);
-
-                //==========================================
-                //reply = manager.post(request, request_body);
-                //==========================================
-            }
+            sub_categories.append(categories[i]);
         }
     }
+
+    contract();
+
+    for(int i = 0; i < packets.size(); ++i)
+    {
+        qDebug() << packets[i].getDescription()
+                 << (int)packets[i].getPageCount()
+                 << packets[i].getBegin()
+                 << packets[i].getEnd();
+    }
+
+    //开启消费者线程
+    //==================================
+//    for(int i = 0; i < 1; ++i)
+//    {
+//        cthreads[i] = new CThread(this);
+//        cthreads[i]->start(i + 1);
+//    }
+    //==================================
+
+    //开启生产者线程
+    //==================================
+    for(int i = 0; i < 100; ++i)
+    {
+        pthreads[i] = new PThread(this);
+        pthreads[i]->start(i + 1);
+    }
+    //==================================
+
+    for(int i = 0; i < 100; ++i)
+    {
+        pthreads[i]->wait();
+    }
+
+    for(int i = 0; i < 100; ++i)
+    {
+        pthreads[i]->deleteLater();
+    }
 }
+
+
+
+
+
+//当期函数功能移至生产者线程
+//void Spider::getProducts()
+//{
+
+//    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
+
+//    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
+
+//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+//    request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
+
+//    for(int i = 0; i < categories.size(); ++i)
+//    {
+//        if(categories[i].isCategory())
+//        {
+//            isSubCategory = false;
+
+//            emit manager.finished(reply);
+//        }
+//        else
+//        {
+//            for(int page_number = 0; page_number < (int)categories[i].getPageCount(); ++page_number)
+//            {
+//                isSubCategory = true;
+
+//                QJsonObject json;
+
+//                //插入数据
+//                json.insert("NValue", categories[i].getNValue());
+//                json.insert("NodeId", categories[i].getNodeId());
+//                json.insert("StoreId", categories[i].getStoreId());
+//                json.insert("StoreType", categories[i].getStoreType());
+//                json.insert("PageNumber", page_number + 1);//插入页码信息
+//                json.insert("SubCategoryId", categories[i].getSubCategoryId());
+
+//                QJsonDocument doc;
+
+//                doc.setObject(json);
+
+//                QByteArray request_body = doc.toJson();//转换数据
+
+//                manager.post(request, request_body);
+//            }
+//        }
+//    }
+//}
 
 
 
@@ -318,7 +332,7 @@ void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
         this->menus.removeAt(13);
         this->roots.removeAt(13);
 
-        //DELETE UNUSED NODE IN MENUS & ROOTS
+        //DELETE UNUSED NODE IN MENUS & ROOTS。。。
 
         tree->addTopLevelItems(roots);//添加顶级目录结点
 
@@ -382,6 +396,8 @@ void Spider::getCategories(QNetworkReply* reply)
             QTreeWidgetItem* leaf = new QTreeWidgetItem(QStringList(description));//创建叶子
 
             leaves.append(leaf);//临时添加叶子
+
+            leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
 
             this->leaves.append(leaf);
         }
@@ -594,7 +610,7 @@ void Spider::getProducts(QNetworkReply* reply)
         {
             if(categories[i].isCategory())
             {
-                count = count + 1;
+                //count = count + 1;
             }
             else
             {
@@ -607,8 +623,8 @@ void Spider::getProducts(QNetworkReply* reply)
 
     qDebug() << count;
 
-    if(isSubCategory)
-    {
+//    if(isSubCategory)
+//    {
         getJsonDoc(reply, __FUNCTION__);
 
         reply->deleteLater();
@@ -634,6 +650,8 @@ void Spider::getProducts(QNetworkReply* reply)
                                           products[i].toObject()["ReviewSummary"].toObject()["TotalReviews"].toInt(),
                                           products[i].toObject()["Instock"].toBool()));
 
+                //qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
                 //ADD FOR DEBUG IN 04/03/14
                 //=================================================================================
 //                qDebug() << "PRODUCT ID             : " << this->products[i].getProductId() << "\n"
@@ -650,20 +668,20 @@ void Spider::getProducts(QNetworkReply* reply)
         {
             qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
         }
-    }
-    else
-    {
-        isSubCategory = true;
+//    }
+//    else
+//    {
+//        isSubCategory = true;
 
-        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] IS NOT A SUBCATEGORY";
-    }
+//        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] IS NOT A SUBCATEGORY";
+//    }
 
     if(--count)
     {
     }
     else
     {
-        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
+//        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗  
 
@@ -753,7 +771,6 @@ void Spider::initDatabase()
 
 void Spider::getPageCounts(QNetworkReply* reply, int index)
 {
-    //使用lambda表达式获取三级目录数目
     static int count = categories.size();
 
     qDebug() << count;
@@ -803,23 +820,96 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
 
 
-//ADD FOR TEST IN 03/08/14
-void Spider::getProductsHandler(QByteArray tmp)
+//void Spider::addReply(QNetworkReply* reply)
+//{
+//    qDebug() << "in slot";
+
+//    mutex.lock();
+
+//    replys.append(reply);
+
+//    mutex.unlock();
+
+//    qDebug() << "leave slot";
+//}
+
+
+
+
+
+
+void Spider::contract()
 {
-    qDebug() << tmp;
+    const int size = 1;
+
+    for(int i = 0; i < sub_categories.size(); ++i)
+    {
+        if(size < (int)sub_categories[i].getPageCount())
+        {
+            int page_count = (int)sub_categories[i].getPageCount();
+
+            for(int packet_number = 0; packet_number < page_count / size + 1; ++packet_number)//向上取整
+            {
+                Packet packet = Packet(sub_categories[i].getNodeId(),
+                                       sub_categories[i].getStoreId(),
+                                       sub_categories[i].getStoreType(),
+                                       sub_categories[i].getCategoryId(),
+                                       sub_categories[i].getSubCategoryId(),
+                                       sub_categories[i].getNValue(),
+                                       sub_categories[i].getPageCount(),
+                                       sub_categories[i].isCategory(),
+                                       sub_categories[i].getDescription());
+
+                packet.setBegin(packet_number * size);
+
+                if(packet_number == page_count / size)
+                {
+                    packet.setEnd(page_count);
+                }
+                else
+                {
+                    packet.setEnd((packet_number + 1) * size);
+                }
+
+                packets.append(packet);
+            }
+        }
+        else
+        {
+            Packet packet = Packet(sub_categories[i].getNodeId(),
+                                   sub_categories[i].getStoreId(),
+                                   sub_categories[i].getStoreType(),
+                                   sub_categories[i].getCategoryId(),
+                                   sub_categories[i].getSubCategoryId(),
+                                   sub_categories[i].getNValue(),
+                                   sub_categories[i].getPageCount(),
+                                   sub_categories[i].isCategory(),
+                                   sub_categories[i].getDescription());
+
+            packet.setBegin(0);
+            packet.setEnd((int)sub_categories[i].getPageCount());
+
+            packets.append(packet);
+        }
+    }
 }
 
 
 
 
 
-void Spider::addReply(QNetworkReply* reply)
-{
-    mutex.lock();
 
-    replys.append(reply);
 
-    qDebug() << "replys size" << replys.size();
 
-    mutex.unlock();
-}
+
+
+
+
+
+
+
+
+
+
+
+
