@@ -10,6 +10,8 @@ Spider::Spider(QWidget* parent) : QWidget(parent)
 
     console->setReadOnly(true);
 
+    //qInstallMessageHandler(redirect);
+
     QVBoxLayout *layout = new QVBoxLayout();//创建垂直布局
 
     layout->addWidget(tree);//添加树形控件
@@ -65,9 +67,9 @@ void Spider::getCategories()
 
     //ADD FOR TEST IN 03/06/14
     //========================
-//    this->menus.clear();
+    this->menus.clear();
 
-//    this->menus.append(6);
+    this->menus.append(6);
     //========================
 
     for(int i = 0; i < menus.size(); ++i)
@@ -599,7 +601,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
 
 
-void Spider::getProducts(QNetworkReply* reply)
+void Spider::getProducts(QNetworkReply* reply, Packet packet)
 {
     //使用lambda表达式获取三级目录数目
     static int count = [this]()->int
@@ -625,7 +627,7 @@ void Spider::getProducts(QNetworkReply* reply)
 
 //    if(isSubCategory)
 //    {
-        getJsonDoc(reply, __FUNCTION__);
+        getJsonDoc(reply, packet, __FUNCTION__);
 
         reply->deleteLater();
 
@@ -683,7 +685,7 @@ void Spider::getProducts(QNetworkReply* reply)
     {
 //        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
 
-        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗  
+        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
         //ADD FOR CHECKOUT IN 03/01/14
 
@@ -707,7 +709,6 @@ void Spider::getProducts(QNetworkReply* reply)
         qDebug() << "END OF FILE OUTPUT";
     }
 }
-
 
 
 
@@ -740,6 +741,41 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
                  << "ERROR STR" << reply->errorString();
 
         qDebug() << response;
+    }
+}
+
+
+
+void Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
+{
+    QByteArray response;
+
+    if(reply->error() == QNetworkReply::NoError)//检查是否发生网络错误
+    {
+        response = reply->readAll();//获取响应信息同时清空
+
+        doc = QJsonDocument::fromJson(response, &parse_error);//解析响应信息
+
+        if(parse_error.error == QJsonParseError::NoError)//检查是否发生解析错误
+        {
+            qDebug() << __TIME__ << "IN [" << FUNCTION << "] SUCCESS";
+        }
+        else
+        {
+            qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
+                     << "ERROR CODE" << parse_error.error
+                     << "ERROR STR" << parse_error.errorString();
+        }
+    }
+    else
+    {
+        qDebug() << __TIME__ << "IN [" << FUNCTION << "] NETWORK ERROR"
+                 << "ERROR CODE" << reply->error()
+                 << "ERROR STR" << reply->errorString();
+
+        packets.append(packet);
+
+        qDebug() << packet.getDescription() << packet.getBegin();
     }
 }
 
@@ -894,6 +930,14 @@ void Spider::contract()
     }
 }
 
+
+
+
+
+void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    console->append(msg);
+}
 
 
 

@@ -16,8 +16,8 @@ SOURCES += main.cpp\
         spider.cpp
 
 HEADERS  += spider.h \
-    category.h \
     product.h \
-    packet.h
+    packet.h \
+    category.h
 
 QMAKE_CXXFLAGS += -std=c++11

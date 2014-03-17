@@ -72,6 +72,7 @@ class Spider : public QWidget
 
     QVector<int> menus;
     QVector<Category> categories;//调整类的结构
+    QVector<Category> sub_categories;
     QVector<Product> products;
 
     QNetworkAccessManager manager;
@@ -102,6 +103,7 @@ class Spider : public QWidget
     //void getProducts();//这个函数移至生产者线程
 
     void getJsonDoc(QNetworkReply*, QString);
+    void getJsonDoc(QNetworkReply*, Packet, QString);
 
     void initDatabase();
 
@@ -111,16 +113,17 @@ public:
     Spider(QWidget* parent = 0);
     ~Spider();
 
-    //========================================
-    QVector<Category> sub_categories;//PThread
+    //==================================================================
     QVector<Packet> packets;//PThread
 
     QVector<QNetworkReply*> replys;//CThread
 
     QMutex mutex;
 
-    void getProducts(QNetworkReply*);//CThread
-    //========================================
+    void getProducts(QNetworkReply*, Packet);//CThread
+
+    void redirect(QtMsgType, const QMessageLogContext&, const QString&);
+    //==================================================================
 
 private slots:
     void getMenus(QNetworkReply*);
@@ -165,7 +168,7 @@ public:
             {
                 QNetworkReply* reply = spider->replys.takeFirst();
 
-                spider->getProducts(reply);
+                //spider->getProducts(reply);
 
                 spider->mutex.unlock();
             }
@@ -255,7 +258,7 @@ public:
 
                     //spider->replys.append(reply);
 
-                    spider->getProducts(reply);
+                    spider->getProducts(reply, packet);
 
                     spider->mutex.unlock();
 
