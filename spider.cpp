@@ -307,44 +307,45 @@ void Spider::getMenus(QNetworkReply* reply)//当前函数调用一次
 {
     disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getMenus(QNetworkReply*)));//解绑信号关联
 
-    getJsonDoc(reply, __FUNCTION__);
-
-    reply->deleteLater();
-
-    //判断是否为空？
-
-    if(doc.isArray())//判断数组与否
+    if(getJsonDoc(reply, __FUNCTION__))
     {
-        QJsonArray menus = doc.array();//转换数组
+        reply->deleteLater();
 
-        for(int i = 0; i < menus.size(); ++i)
+        //判断是否为空？
+
+        if(doc.isArray())//判断数组与否
         {
-            QString description = menus[i].toObject()["Description"].toString();//获取DESCRIPTION
+            QJsonArray menus = doc.array();//转换数组
 
-            this->menus.append(menus[i].toObject()["StoreId"].toInt());//获取添加STOREID
+            for(int i = 0; i < menus.size(); ++i)
+            {
+                QString description = menus[i].toObject()["Description"].toString();//获取DESCRIPTION
 
-            this->roots.append(new QTreeWidgetItem(QStringList(description))); //添加DESCRIPTION
+                this->menus.append(menus[i].toObject()["StoreId"].toInt());//获取添加STOREID
 
-            this->roots[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
+                this->roots.append(new QTreeWidgetItem(QStringList(description))); //添加DESCRIPTION
+
+                this->roots[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
+            }
+
+            //删除MORE&AUTOPARTS
+            this->menus.removeAt(13);
+            this->roots.removeAt(13);
+            this->menus.removeAt(13);
+            this->roots.removeAt(13);
+
+            //DELETE UNUSED NODE IN MENUS & ROOTS。。。
+
+            tree->addTopLevelItems(roots);//添加顶级目录结点
+
+            qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+            getCategories();
         }
-
-        //删除MORE&AUTOPARTS
-        this->menus.removeAt(13);
-        this->roots.removeAt(13);
-        this->menus.removeAt(13);
-        this->roots.removeAt(13);
-
-        //DELETE UNUSED NODE IN MENUS & ROOTS。。。
-
-        tree->addTopLevelItems(roots);//添加顶级目录结点
-
-        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-        getCategories();
-    }
-    else
-    {
-        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+        else
+        {
+            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+        }
     }
 }
 
@@ -358,60 +359,63 @@ void Spider::getCategories(QNetworkReply* reply)
 
     qDebug() << count;
 
-    getJsonDoc(reply, __FUNCTION__);
-
-    reply->deleteLater();
-
-    if(doc.isArray())//检查数组与否
+    if(getJsonDoc(reply, __FUNCTION__))
     {
-        //JSON
+        reply->deleteLater();
 
-        QJsonArray array = doc.array();//临时数组
-
-        //[{"":{}, "NavigationItemList":[{}*]}]
-
-        QJsonObject obj = array[0].toObject();//临时对象
-
-        //{"":{}, "NavigationItemList":[{}*]}
-
-        QJsonArray categories = obj["NavigationItemList"].toArray();//次级目录列表
-
-        //[{}*]
-
-        QList<QTreeWidgetItem*> leaves;//临时使用
-
-        for(int i = 0; i < categories.size(); ++i)
+        if(doc.isArray())//检查数组与否
         {
-            this->categories.append(Category(
-                                             categories[i].toObject()["NodeId"].toInt(),
-                                             categories[i].toObject()["StoreId"].toInt(),
-                                             categories[i].toObject()["StoreType"].toInt(),
-                                             categories[i].toObject()["CategoryId"].toInt(),
-                                             categories[i].toObject()["SubCategoryId"].toInt(),
-                                             categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
-                                             categories[i].toObject()["PageCount"].toInt(),//NULL
-                                             categories[i].toObject()["ShowSeeAllDeals"].toBool(),
-                                             categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
+            //JSON
 
-            QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
+            QJsonArray array = doc.array();//临时数组
 
-            QTreeWidgetItem* leaf = new QTreeWidgetItem(QStringList(description));//创建叶子
+            //[{"":{}, "NavigationItemList":[{}*]}]
 
-            leaves.append(leaf);//临时添加叶子
+            QJsonObject obj = array[0].toObject();//临时对象
 
-            leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
+            //{"":{}, "NavigationItemList":[{}*]}
 
-            this->leaves.append(leaf);
+            QJsonArray categories = obj["NavigationItemList"].toArray();//次级目录列表
+
+            //[{}*]
+
+            QList<QTreeWidgetItem*> leaves;//临时使用
+
+            for(int i = 0; i < categories.size(); ++i)
+            {
+                this->categories.append(Category(
+                                                 categories[i].toObject()["NodeId"].toInt(),
+                                                 categories[i].toObject()["StoreId"].toInt(),
+                                                 categories[i].toObject()["StoreType"].toInt(),
+                                                 categories[i].toObject()["CategoryId"].toInt(),
+                                                 categories[i].toObject()["SubCategoryId"].toInt(),
+                                                 categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
+                                                 categories[i].toObject()["PageCount"].toInt(),//NULL
+                                                 categories[i].toObject()["ShowSeeAllDeals"].toBool(),
+                                                 categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
+
+                QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
+
+                QTreeWidgetItem* leaf = new QTreeWidgetItem(QStringList(description));//创建叶子
+
+                leaves.append(leaf);//临时添加叶子
+
+                leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
+
+                this->leaves.append(leaf);
+            }
+
+            int index = menus.indexOf(QUrlQuery(reply->request().url()).queryItemValue("storeId").toInt());//获取索引
+
+            roots[index]->addChildren(leaves);//每个顶级目录添加次级目录
         }
-
-        int index = menus.indexOf(QUrlQuery(reply->request().url()).queryItemValue("storeId").toInt());//获取索引
-
-        roots[index]->addChildren(leaves);//每个顶级目录添加次级目录
+        else
+        {
+            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+        }
     }
-    else
-    {
-        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
-    }
+
+
 
     if(--count)
     {
@@ -439,93 +443,94 @@ void Spider::getSubCategories(QNetworkReply* reply)
 
     if(isCategory)
     {
-        getJsonDoc(reply, __FUNCTION__);
-
-        if(doc.isArray())//判断数组与否
+        if(getJsonDoc(reply, __FUNCTION__))
         {
-            //JSON
-
-            QJsonArray array = doc.array();//临时数组
-
-            if(array.size() != 0)//判空
+            if(doc.isArray())//判断数组与否
             {
-                //[{"":{}, "NavigationItemList":[{}*]}]
+                //JSON
 
-                QJsonObject obj = array[0].toObject();//临时对象
+                QJsonArray array = doc.array();//临时数组
 
-                //{"":{}, "NavigationItemList":[{}*]}
-
-                QJsonArray categories = obj["NavigationItemList"].toArray();//次级目录列表
-
-                //[{}*]
-
-                QList<QTreeWidgetItem*> leaves;//临时使用
-
-                for(int i = 0; i < categories.size(); ++i)
+                if(array.size() != 0)//判空
                 {
-                    this->categories.append(Category(
-                                                     categories[i].toObject()["NodeId"].toInt(),
-                                                     categories[i].toObject()["StoreId"].toInt(),
-                                                     categories[i].toObject()["StoreType"].toInt(),
-                                                     categories[i].toObject()["CategoryId"].toInt(),
-                                                     categories[i].toObject()["SubCategoryId"].toInt(),
-                                                     categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
-                                                     categories[i].toObject()["PageCount"].toInt(),//NULL
-                                                     categories[i].toObject()["ShowSeeAllDeals"].toBool(),
-                                                     categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
+                    //[{"":{}, "NavigationItemList":[{}*]}]
 
-                    QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
+                    QJsonObject obj = array[0].toObject();//临时对象
 
-                    QTreeWidgetItem* leaf = new QTreeWidgetItem(QStringList(description));//创建叶子
+                    //{"":{}, "NavigationItemList":[{}*]}
 
-                    leaves.append(leaf);//临时添加叶子
+                    QJsonArray categories = obj["NavigationItemList"].toArray();//次级目录列表
 
-                    leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
-                }
+                    //[{}*]
 
-                //this->leaves[245 - count]->addChildren(leaves);//SYNCHRONOUS
+                    QList<QTreeWidgetItem*> leaves;//临时使用
 
-                int index;
-
-                //获取查询参数用于确定索引
-                int node_id = QUrlQuery(reply->request().url()).queryItemValue("nodeId").toInt();
-                int store_id = QUrlQuery(reply->request().url()).queryItemValue("storeId").toInt();
-                int store_type = QUrlQuery(reply->request().url()).queryItemValue("storeType").toInt();
-                int category_id = QUrlQuery(reply->request().url()).queryItemValue("categoryId").toInt();
-
-                //遍历获取索引
-
-                for(int i = 0; i < size; ++i)
-                {
-                    if(this->categories[i].getNodeId() == node_id)
+                    for(int i = 0; i < categories.size(); ++i)
                     {
-                        if(this->categories[i].getStoreId() == store_id)
-                        {
-                            if(this->categories[i].getStoreType() == store_type)
-                            {
-                                if(this->categories[i].getCategoryId() == category_id)
-                                {
-                                    index = i;
+                        this->categories.append(Category(
+                                                         categories[i].toObject()["NodeId"].toInt(),
+                                                         categories[i].toObject()["StoreId"].toInt(),
+                                                         categories[i].toObject()["StoreType"].toInt(),
+                                                         categories[i].toObject()["CategoryId"].toInt(),
+                                                         categories[i].toObject()["SubCategoryId"].toInt(),
+                                                         categories[i].toObject()["NValue"].toString(),//CHANGE INT TO STRING IN 02/18/14
+                                                         categories[i].toObject()["PageCount"].toInt(),//NULL
+                                                         categories[i].toObject()["ShowSeeAllDeals"].toBool(),
+                                                         categories[i].toObject()["Description"].toString()));//ADD FOR DEBUG IN 02/27/14
 
-                                    break;
+                        QString description = categories[i].toObject()["Description"].toString();//获取DESCRIPTION
+
+                        QTreeWidgetItem* leaf = new QTreeWidgetItem(QStringList(description));//创建叶子
+
+                        leaves.append(leaf);//临时添加叶子
+
+                        leaves[i]->setCheckState(0, Qt::Unchecked);//设置选择状态
+                    }
+
+                    //this->leaves[245 - count]->addChildren(leaves);//SYNCHRONOUS
+
+                    int index;
+
+                    //获取查询参数用于确定索引
+                    int node_id = QUrlQuery(reply->request().url()).queryItemValue("nodeId").toInt();
+                    int store_id = QUrlQuery(reply->request().url()).queryItemValue("storeId").toInt();
+                    int store_type = QUrlQuery(reply->request().url()).queryItemValue("storeType").toInt();
+                    int category_id = QUrlQuery(reply->request().url()).queryItemValue("categoryId").toInt();
+
+                    //遍历获取索引
+
+                    for(int i = 0; i < size; ++i)
+                    {
+                        if(this->categories[i].getNodeId() == node_id)
+                        {
+                            if(this->categories[i].getStoreId() == store_id)
+                            {
+                                if(this->categories[i].getStoreType() == store_type)
+                                {
+                                    if(this->categories[i].getCategoryId() == category_id)
+                                    {
+                                        index = i;
+
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    this->leaves[index]->addChildren(leaves);//ASYNCHRONOUS
+
+                    reply->deleteLater();
                 }
-
-                this->leaves[index]->addChildren(leaves);//ASYNCHRONOUS
-
-                reply->deleteLater();
+                else
+                {
+                    qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] CATEGORY IS NULL";
+                }
             }
             else
             {
-                qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] CATEGORY IS NULL";
+                qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
             }
-        }
-        else
-        {
-            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
         }
     }
     else
@@ -560,21 +565,22 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
     if(isSubCategory)
     {
-        getJsonDoc(reply, __FUNCTION__);
-
-        if(doc.isObject())
+        if(getJsonDoc(reply, __FUNCTION__))
         {
-            //JSON
+            if(doc.isObject())
+            {
+                //JSON
 
-            QJsonObject obj = doc.object();//临时对象
+                QJsonObject obj = doc.object();//临时对象
 
-            QJsonArray array = obj["ProductGroups"].toArray();//临时对象
+                QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
-            QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
-        }
-        else
-        {
-            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+                QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
+            }
+            else
+            {
+                qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+            }
         }
     }
     else
@@ -625,10 +631,8 @@ void Spider::getProducts(QNetworkReply* reply, Packet packet)
 
     qDebug() << count;
 
-//    if(isSubCategory)
-//    {
-        getJsonDoc(reply, packet, __FUNCTION__);
-
+    if(getJsonDoc(reply, packet, __FUNCTION__))
+    {
         reply->deleteLater();
 
         if(doc.isObject())
@@ -651,32 +655,13 @@ void Spider::getProducts(QNetworkReply* reply, Packet packet)
                                           products[i].toObject()["PromotionText"].toString(),
                                           products[i].toObject()["ReviewSummary"].toObject()["TotalReviews"].toInt(),
                                           products[i].toObject()["Instock"].toBool()));
-
-                //qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-                //ADD FOR DEBUG IN 04/03/14
-                //=================================================================================
-//                qDebug() << "PRODUCT ID             : " << this->products[i].getProductId() << "\n"
-//                         << "PRODUCT NAME           : " << this->products[i].getProductName() << "\n"
-//                         << "PRODUCT FINAL PRICE    : " << this->products[i].getFinalPrice() << "\n"
-//                         << "PRODUCt ORIGINAL PRICE : " << this->products[i].getOriginalPrice() << "\n"
-//                         << "PRODUCT PROMOTION TEXT : " << this->products[i].getPromotionText() << "\n"
-//                         << "PRODUCT REVIEWS        : " << this->products[i].getReviews() << "\n"
-//                         << "PRODUCT IS IN STOCK    : " << this->products[i].isInStock() << "\n\n\n\n\n";
-                //=================================================================================
-              }
+            }
         }
         else
         {
             qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
         }
-//    }
-//    else
-//    {
-//        isSubCategory = true;
-
-//        qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] IS NOT A SUBCATEGORY";
-//    }
+    }
 
     if(--count)
     {
@@ -713,7 +698,7 @@ void Spider::getProducts(QNetworkReply* reply, Packet packet)
 
 
 
-void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
+int Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
 {
     QByteArray response;
 
@@ -726,12 +711,16 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
         if(parse_error.error == QJsonParseError::NoError)//检查是否发生解析错误
         {
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] SUCCESS";
+
+            return 1;
         }
         else
         {
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
                      << "ERROR CODE" << parse_error.error
                      << "ERROR STR" << parse_error.errorString();
+
+            return 0;
         }
     }
     else
@@ -740,13 +729,13 @@ void Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
                  << "ERROR CODE" << reply->error()
                  << "ERROR STR" << reply->errorString();
 
-        qDebug() << response;
+        return 0;
     }
 }
 
 
 
-void Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
+int Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
 {
     QByteArray response;
 
@@ -759,12 +748,16 @@ void Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
         if(parse_error.error == QJsonParseError::NoError)//检查是否发生解析错误
         {
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] SUCCESS";
+
+            return 1;
         }
         else
         {
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
                      << "ERROR CODE" << parse_error.error
                      << "ERROR STR" << parse_error.errorString();
+
+            return 0;
         }
     }
     else
@@ -776,6 +769,8 @@ void Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
         packets.append(packet);
 
         qDebug() << packet.getDescription() << packet.getBegin();
+
+        return 0;
     }
 }
 
@@ -813,25 +808,26 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
     if(isSubCategory)
     {
-        getJsonDoc(reply, __FUNCTION__);
-
-        reply->deleteLater();
-
-        if(doc.isObject())
+        if(getJsonDoc(reply, __FUNCTION__))
         {
-            //JSON
+            reply->deleteLater();
 
-            QJsonObject obj = doc.object();//临时对象
+            if(doc.isObject())
+            {
+                //JSON
 
-            QJsonArray array = obj["ProductGroups"].toArray();//临时对象
+                QJsonObject obj = doc.object();//临时对象
 
-            QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
+                QJsonArray array = obj["ProductGroups"].toArray();//临时对象
 
-            categories[index].setPageCount(page_info["PageCount"].toDouble());
-        }
-        else
-        {
-            qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+                QJsonObject page_info = array[0].toObject()["PageInfo"].toObject();//页面信息对象
+
+                categories[index].setPageCount(page_info["PageCount"].toDouble());
+            }
+            else
+            {
+                qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
+            }
         }
     }
     else
@@ -876,41 +872,12 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
 void Spider::contract()
 {
-    const int size = 1;
 
     for(int i = 0; i < sub_categories.size(); ++i)
     {
-        if(size < (int)sub_categories[i].getPageCount())
-        {
-            int page_count = (int)sub_categories[i].getPageCount();
+        int page_count = (int)sub_categories[i].getPageCount();
 
-            for(int packet_number = 0; packet_number < page_count / size + 1; ++packet_number)//向上取整
-            {
-                Packet packet = Packet(sub_categories[i].getNodeId(),
-                                       sub_categories[i].getStoreId(),
-                                       sub_categories[i].getStoreType(),
-                                       sub_categories[i].getCategoryId(),
-                                       sub_categories[i].getSubCategoryId(),
-                                       sub_categories[i].getNValue(),
-                                       sub_categories[i].getPageCount(),
-                                       sub_categories[i].isCategory(),
-                                       sub_categories[i].getDescription());
-
-                packet.setBegin(packet_number * size);
-
-                if(packet_number == page_count / size)
-                {
-                    packet.setEnd(page_count);
-                }
-                else
-                {
-                    packet.setEnd((packet_number + 1) * size);
-                }
-
-                packets.append(packet);
-            }
-        }
-        else
+        for(int packet_number = 0; packet_number < page_count; ++packet_number)
         {
             Packet packet = Packet(sub_categories[i].getNodeId(),
                                    sub_categories[i].getStoreId(),
@@ -922,8 +889,16 @@ void Spider::contract()
                                    sub_categories[i].isCategory(),
                                    sub_categories[i].getDescription());
 
-            packet.setBegin(0);
-            packet.setEnd((int)sub_categories[i].getPageCount());
+            packet.setBegin(packet_number);
+
+            if(packet_number == page_count)
+            {
+                packet.setEnd(page_count);
+            }
+            else
+            {
+                packet.setEnd(packet_number + 1);
+            }
 
             packets.append(packet);
         }

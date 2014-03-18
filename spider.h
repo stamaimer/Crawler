@@ -102,8 +102,8 @@ class Spider : public QWidget
     void getPageCounts();
     //void getProducts();//这个函数移至生产者线程
 
-    void getJsonDoc(QNetworkReply*, QString);
-    void getJsonDoc(QNetworkReply*, Packet, QString);
+    int getJsonDoc(QNetworkReply*, QString);
+    int getJsonDoc(QNetworkReply*, Packet, QString);
 
     void initDatabase();
 
@@ -166,7 +166,7 @@ public:
 
             if(!spider->replys.isEmpty())
             {
-                QNetworkReply* reply = spider->replys.takeFirst();
+                //QNetworkReply* reply = spider->replys.takeFirst();
 
                 //spider->getProducts(reply);
 
