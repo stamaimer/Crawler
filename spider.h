@@ -122,7 +122,7 @@ public:
 
     void getProducts(QNetworkReply*, Packet);//CThread
 
-    void redirect(QtMsgType, const QMessageLogContext&, const QString&);
+    static void redirect(QtMsgType, const QMessageLogContext&, const QString&);
     //==================================================================
 
 private slots:
@@ -132,6 +132,7 @@ private slots:
     void getPageCounts(QNetworkReply*);
     void getPageCounts(QNetworkReply*, int);//ADD FOR SYNCHRONOUS
     //void getProducts(QNetworkReply*);//这个函数移至消费者线程
+    void stop(int);
 };
 
 
@@ -193,6 +194,8 @@ public:
     {
         this->spider = spider;
         this->setStackSize(10240);
+
+        connect(this, SIGNAL(finished(int)), spider, SLOT(stop(int)));
     }
 
     void start(int tid)
@@ -272,6 +275,8 @@ public:
                 break;
             }
         }
+
+        emit finished(tid);
     }
 
 public slots:
@@ -285,6 +290,8 @@ public slots:
         spider->mutex.unlock();
     }
 
+signals:
+    void finished(int);
 };
 
 #endif // SPIDER_H

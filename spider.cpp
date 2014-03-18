@@ -10,8 +10,6 @@ Spider::Spider(QWidget* parent) : QWidget(parent)
 
     console->setReadOnly(true);
 
-    //qInstallMessageHandler(redirect);
-
     QVBoxLayout *layout = new QVBoxLayout();//创建垂直布局
 
     layout->addWidget(tree);//添加树形控件
@@ -19,7 +17,7 @@ Spider::Spider(QWidget* parent) : QWidget(parent)
 
     this->setLayout(layout);//设置布局
 
-    initDatabase();
+    //initDatabase();
 
     getMenus();
 }
@@ -210,14 +208,6 @@ void Spider::getPageCounts()
 
     contract();
 
-    for(int i = 0; i < packets.size(); ++i)
-    {
-        qDebug() << packets[i].getDescription()
-                 << (int)packets[i].getPageCount()
-                 << packets[i].getBegin()
-                 << packets[i].getEnd();
-    }
-
     //开启消费者线程
     //==================================
 //    for(int i = 0; i < 1; ++i)
@@ -232,72 +222,10 @@ void Spider::getPageCounts()
     for(int i = 0; i < 100; ++i)
     {
         pthreads[i] = new PThread(this);
-        pthreads[i]->start(i + 1);
+        pthreads[i]->start(i);
     }
     //==================================
-
-    for(int i = 0; i < 100; ++i)
-    {
-        pthreads[i]->wait();
-    }
-
-    for(int i = 0; i < 100; ++i)
-    {
-        pthreads[i]->deleteLater();
-    }
 }
-
-
-
-
-
-//当期函数功能移至生产者线程
-//void Spider::getProducts()
-//{
-
-//    //connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));
-
-//    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(addReply(QNetworkReply*)));
-
-//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-//    request.setUrl(QUrl("http://www.ows.newegg.com/Search.egg/Query"));
-
-//    for(int i = 0; i < categories.size(); ++i)
-//    {
-//        if(categories[i].isCategory())
-//        {
-//            isSubCategory = false;
-
-//            emit manager.finished(reply);
-//        }
-//        else
-//        {
-//            for(int page_number = 0; page_number < (int)categories[i].getPageCount(); ++page_number)
-//            {
-//                isSubCategory = true;
-
-//                QJsonObject json;
-
-//                //插入数据
-//                json.insert("NValue", categories[i].getNValue());
-//                json.insert("NodeId", categories[i].getNodeId());
-//                json.insert("StoreId", categories[i].getStoreId());
-//                json.insert("StoreType", categories[i].getStoreType());
-//                json.insert("PageNumber", page_number + 1);//插入页码信息
-//                json.insert("SubCategoryId", categories[i].getSubCategoryId());
-
-//                QJsonDocument doc;
-
-//                doc.setObject(json);
-
-//                QByteArray request_body = doc.toJson();//转换数据
-
-//                manager.post(request, request_body);
-//            }
-//        }
-//    }
-//}
 
 
 
@@ -668,8 +596,6 @@ void Spider::getProducts(QNetworkReply* reply, Packet packet)
     }
     else
     {
-//        disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(getProducts(QNetworkReply*)));//解绑信号关联
-
         qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
 
         //ADD FOR CHECKOUT IN 03/01/14
@@ -852,24 +778,6 @@ void Spider::getPageCounts(QNetworkReply* reply, int index)
 
 
 
-//void Spider::addReply(QNetworkReply* reply)
-//{
-//    qDebug() << "in slot";
-
-//    mutex.lock();
-
-//    replys.append(reply);
-
-//    mutex.unlock();
-
-//    qDebug() << "leave slot";
-//}
-
-
-
-
-
-
 void Spider::contract()
 {
 
@@ -909,7 +817,7 @@ void Spider::contract()
 
 
 
-void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+static void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     console->append(msg);
 }
@@ -918,7 +826,19 @@ void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const Q
 
 
 
+void Spider::stop(int tid)
+{
+    static int count = 0;
 
+    qDebug() << "PTHREAD" << tid << "STOPPED";
+
+    pthreads[tid]->deleteLater();
+
+    if(99 == count++)
+    {
+        qDebug() << "ULTIMATE!!!!!";
+    }
+}
 
 
 
