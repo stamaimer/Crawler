@@ -122,7 +122,7 @@ public:
 
     void getProducts(QNetworkReply*, Packet);//CThread
 
-    static void redirect(QtMsgType, const QMessageLogContext&, const QString&);
+    void redirect(QtMsgType, const QMessageLogContext&, const QString&);
     //==================================================================
 
 private slots:

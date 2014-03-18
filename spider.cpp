@@ -537,27 +537,7 @@ void Spider::getPageCounts(QNetworkReply* reply)
 
 void Spider::getProducts(QNetworkReply* reply, Packet packet)
 {
-    //使用lambda表达式获取三级目录数目
-    static int count = [this]()->int
-    {
-        int count = 0;
-
-        for(int i = 0; i < categories.size(); ++i)
-        {
-            if(categories[i].isCategory())
-            {
-                //count = count + 1;
-            }
-            else
-            {
-                count = count + (int)categories[i].getPageCount();
-            }
-        }
-
-        return count;
-    }();
-
-    qDebug() << count;
+    qDebug() << "PACKETS SIZE:" << packets.size();
 
     if(getJsonDoc(reply, packet, __FUNCTION__))
     {
@@ -590,35 +570,6 @@ void Spider::getProducts(QNetworkReply* reply, Packet packet)
             qDebug() << __TIME__ << "IN [" << __FUNCTION__ << "] DATA ERROR";
         }
     }
-
-    if(--count)
-    {
-    }
-    else
-    {
-        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
-
-        //ADD FOR CHECKOUT IN 03/01/14
-
-        QFile file("d:/spider.log");
-
-        file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-
-        QTextStream out(&file);
-
-        for(int i = 0; i < products.size(); ++i)
-        {
-            out << "PRODUCT ID             : " << products[i].getProductId() << "\n"
-                << "PRODUCT NAME           : " << products[i].getProductName() << "\n"
-                << "PRODUCT FINAL PRICE    : " << products[i].getFinalPrice() << "\n"
-                << "PRODUCt ORIGINAL PRICE : " << products[i].getOriginalPrice() << "\n"
-                << "PRODUCT PROMOTION TEXT : " << products[i].getPromotionText() << "\n"
-                << "PRODUCT REVIEWS        : " << products[i].getReviews() << "\n"
-                << "PRODUCT IS IN STOCK    : " << products[i].isInStock() << "\n\n\n\n\n";
-        }
-
-        qDebug() << "END OF FILE OUTPUT";
-    }
 }
 
 
@@ -645,6 +596,8 @@ int Spider::getJsonDoc(QNetworkReply* reply, QString FUNCTION)
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
                      << "ERROR CODE" << parse_error.error
                      << "ERROR STR" << parse_error.errorString();
+
+            qDebug() << response;
 
             return 0;
         }
@@ -682,6 +635,8 @@ int Spider::getJsonDoc(QNetworkReply* reply, Packet packet, QString FUNCTION)
             qDebug() << __TIME__ << "IN [" << FUNCTION << "] PARSE ERROR"
                      << "ERROR CODE" << parse_error.error
                      << "ERROR STR" << parse_error.errorString();
+
+            qDebug() << response;
 
             return 0;
         }
@@ -817,7 +772,7 @@ void Spider::contract()
 
 
 
-static void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     console->append(msg);
 }
@@ -836,7 +791,28 @@ void Spider::stop(int tid)
 
     if(99 == count++)
     {
-        qDebug() << "ULTIMATE!!!!!";
+        qDebug() << "TIME ELAPSED" << timer.elapsed() / 1000;//输出时间消耗
+
+        //ADD FOR CHECKOUT IN 03/01/14
+
+        QFile file("d:/spider.log");
+
+        file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+
+        QTextStream out(&file);
+
+        for(int i = 0; i < products.size(); ++i)
+        {
+            out << "PRODUCT ID             : " << products[i].getProductId() << "\n"
+                << "PRODUCT NAME           : " << products[i].getProductName() << "\n"
+                << "PRODUCT FINAL PRICE    : " << products[i].getFinalPrice() << "\n"
+                << "PRODUCt ORIGINAL PRICE : " << products[i].getOriginalPrice() << "\n"
+                << "PRODUCT PROMOTION TEXT : " << products[i].getPromotionText() << "\n"
+                << "PRODUCT REVIEWS        : " << products[i].getReviews() << "\n"
+                << "PRODUCT IS IN STOCK    : " << products[i].isInStock() << "\n\n\n\n\n";
+        }
+
+        qDebug() << "END OF FILE OUTPUT";
     }
 }
 
