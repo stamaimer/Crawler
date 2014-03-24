@@ -29,6 +29,7 @@ QByteArray cookie;
 
 QVector<QString> family_ids;
 QVector<QString> cat_ids;
+QVector<QString> sku_nos;
 
 int main(int argc, char *argv[])
 {
@@ -155,7 +156,9 @@ int main(int argc, char *argv[])
 
     qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
 
-    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&available=false&begin=0&offset=400&familyId=26&catId=1154&spaType=VS&sortField=bestMatch&sortDirection=1";
+    //request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&available=false&begin=0&offset=400&familyId=26&catId=1154&spaType=VS&sortField=bestMatch&sortDirection=1";
+
+    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&begin=0&offset=400&familyId=26&catId=1154&spaType=VS";
 
     reply = manager.post(request, request_body);
 
@@ -181,9 +184,58 @@ int main(int argc, char *argv[])
             {
                 QJsonObject tmp = products[i].toObject();
 
+                sku_nos.append(tmp["shortDescription"].toString());
+
                 qDebug() << i << tmp["shortDescription"].toString()
                               << tmp["skuNo"].toString();
             }
+        }
+        else
+        {
+            qDebug() << __TIME__ << __FUNCTION__ << parse_error.error << parse_error.errorString();
+        }
+    }
+    else
+    {
+        qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
+    }
+
+    url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=getDetails";
+
+    request.setUrl(QUrl(url));
+
+    request.setRawHeader("cookie", cookie + "; " + cookie);
+
+    qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
+
+    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&skuNo=140947&spaType=VS";
+
+    reply = manager.post(request, request_body);
+
+    synchronous.exec();
+
+    if(reply->error() == QNetworkReply::NoError)
+    {
+        QByteArray response = reply->readAll();
+
+        QJsonParseError parse_error;
+
+        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
+
+        if(parse_error.error == QJsonParseError::NoError)
+        {
+            QJsonObject obj = doc.object();
+
+            QJsonObject data = obj["data"].toObject();
+
+            QJsonObject product = data["product"].toObject();
+
+            qDebug() << product["shortDescription"].toString()
+                     << product["skuNo"].toString()
+                     << product["UPC"].toString()
+                     << product["Weight"].toString()
+                     << product["price"].toObject()["priceDisplay"].toString()
+                     << product["avail"].toObject()["availDisplay"].toString();
         }
         else
         {
