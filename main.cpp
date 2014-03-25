@@ -1,24 +1,5 @@
 #include <QCoreApplication>
 
-#include <QUrl>
-#include <QNetworkProxy>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
-
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonParseError>
-
-#include <QEventLoop>
-
-#include <QString>
-#include <QByteArray>
-#include <QStringList>
-
-#include <QVector>
-
 QByteArray mobile_device = "6E970F33-57E6-4F35-B729-C54B947AA3BE";
 QByteArray mobile_os = "iPhone4S-7.0.4";
 QByteArray login_name = "erightechgroup@gmail.com";
@@ -29,7 +10,9 @@ QByteArray cookie;
 
 QVector<QString> family_ids;
 QVector<QString> cat_ids;
-QVector<QString> sku_nos;
+QVector<QString> sku_nos;;
+
+QVector<int> temp;
 
 int main(int argc, char *argv[])
 {
@@ -119,11 +102,23 @@ int main(int argc, char *argv[])
 
             QJsonArray data = obj["data"].toArray();
 
+            url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=search";
+
+            request.setUrl(QUrl(url));
+
+            request.setRawHeader("cookie", cookie + "; " + cookie);
+
+            qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
+
+            QString pattern = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&begin=0&offset=10&familyId=%1&catId=%2&spaType=VS";
+
             for(int i = 0; i < data.size(); ++i)
             {
                 QJsonObject family = data[i].toObject();
 
                 family_ids.append(family["familyId"].toString());
+
+                QString family_id = family["familyId"].toString();
 
                 qDebug() << family["familyId"].toString() << family["familyDesc"].toString();
 
@@ -133,8 +128,53 @@ int main(int argc, char *argv[])
                 {
                     cat_ids.append(sub_cats[j].toObject()["catId"].toString());
 
+                    QString cat_id = sub_cats[j].toObject()["catId"].toString();
+
                     qDebug() << '\t' << sub_cats[j].toObject()["catId"].toString()
                                      << sub_cats[j].toObject()["catDesc"].toString();
+
+                    QString tmp = pattern.arg(family_id).arg(cat_id);
+
+                    //qDebug() << tmp;
+
+                    request_body = tmp.toUtf8();
+
+                    //qDebug() << request_body;
+
+                    reply = manager.post(request, request_body);
+
+                    synchronous.exec();
+
+                    if(reply->error() == QNetworkReply::NoError)
+                    {
+                        QByteArray response = reply->readAll();
+
+                        QJsonParseError parse_error;
+
+                        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
+
+                        if(parse_error.error == QJsonParseError::NoError)
+                        {
+                            QJsonObject obj = doc.object();
+
+                            QJsonObject data = obj["data"].toObject();
+
+                            QString size = data["resultSize"].toString();
+
+                            temp.append(size.toInt());
+
+                            qDebug() << '\t' << size;
+                        }
+                        else
+                        {
+                            qDebug() << __TIME__ << __FUNCTION__ << parse_error.error << parse_error.errorString();
+                        }
+                    }
+                    else
+                    {
+                        qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
+                    }
+
                 }
             }
         }
@@ -148,105 +188,100 @@ int main(int argc, char *argv[])
         qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
     }
 
-    url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=search";
+    selection_sort(temp);
 
-    request.setUrl(QUrl(url));
+    qDebug() << temp.first();
 
-    request.setRawHeader("cookie", cookie + "; " + cookie);
+//    url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=search";
 
-    qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
+//    request.setUrl(QUrl(url));
+
+//    request.setRawHeader("cookie", cookie + "; " + cookie);
+
+//    qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
 
     //request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&available=false&begin=0&offset=400&familyId=26&catId=1154&spaType=VS&sortField=bestMatch&sortDirection=1";
 
-    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&begin=0&offset=400&familyId=26&catId=1154&spaType=VS";
+//    QString pattern = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&begin=0&offset=10&familyId=%1&catId=%2&spaType=VS";
 
-    reply = manager.post(request, request_body);
 
-    synchronous.exec();
 
-    if(reply->error() == QNetworkReply::NoError)
-    {
-        QByteArray response = reply->readAll();
 
-        QJsonParseError parse_error;
 
-        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
+//    url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=getDetails";
 
-        if(parse_error.error == QJsonParseError::NoError)
-        {
-            QJsonObject obj = doc.object();
+//    request.setUrl(QUrl(url));
 
-            QJsonObject data = obj["data"].toObject();
+//    request.setRawHeader("cookie", cookie + "; " + cookie);
 
-            QJsonArray products = data["productList"].toArray();
+//    qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
 
-            for(int i = 0; i < products.size(); ++i)
-            {
-                QJsonObject tmp = products[i].toObject();
+//    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&skuNo=140947&spaType=VS";
 
-                sku_nos.append(tmp["shortDescription"].toString());
+//    reply = manager.post(request, request_body);
 
-                qDebug() << i << tmp["shortDescription"].toString()
-                              << tmp["skuNo"].toString();
-            }
-        }
-        else
-        {
-            qDebug() << __TIME__ << __FUNCTION__ << parse_error.error << parse_error.errorString();
-        }
-    }
-    else
-    {
-        qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
-    }
+//    synchronous.exec();
 
-    url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=getDetails";
+//    if(reply->error() == QNetworkReply::NoError)
+//    {
+//        QByteArray response = reply->readAll();
 
-    request.setUrl(QUrl(url));
+//        QJsonParseError parse_error;
 
-    request.setRawHeader("cookie", cookie + "; " + cookie);
+//        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
 
-    qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
+//        if(parse_error.error == QJsonParseError::NoError)
+//        {
+//            QJsonObject obj = doc.object();
 
-    request_body = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&skuNo=140947&spaType=VS";
+//            QJsonObject data = obj["data"].toObject();
 
-    reply = manager.post(request, request_body);
+//            QJsonObject product = data["product"].toObject();
 
-    synchronous.exec();
-
-    if(reply->error() == QNetworkReply::NoError)
-    {
-        QByteArray response = reply->readAll();
-
-        QJsonParseError parse_error;
-
-        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
-
-        if(parse_error.error == QJsonParseError::NoError)
-        {
-            QJsonObject obj = doc.object();
-
-            QJsonObject data = obj["data"].toObject();
-
-            QJsonObject product = data["product"].toObject();
-
-            qDebug() << product["shortDescription"].toString()
-                     << product["skuNo"].toString()
-                     << product["UPC"].toString()
-                     << product["Weight"].toString()
-                     << product["price"].toObject()["priceDisplay"].toString()
-                     << product["avail"].toObject()["availDisplay"].toString();
-        }
-        else
-        {
-            qDebug() << __TIME__ << __FUNCTION__ << parse_error.error << parse_error.errorString();
-        }
-    }
-    else
-    {
-        qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
-    }
+//            qDebug() << product["shortDescription"].toString()
+//                     << product["skuNo"].toString()
+//                     << product["UPC"].toString()
+//                     << product["Weight"].toString()
+//                     << product["price"].toObject()["priceDisplay"].toString()
+//                     << product["avail"].toObject()["availDisplay"].toString();
+//        }
+//        else
+//        {
+//            qDebug() << __TIME__ << __FUNCTION__ << parse_error.error << parse_error.errorString();
+//        }
+//    }
+//    else
+//    {
+//        qDebug() << __TIME__ << __FUNCTION__ << reply->error() << reply->errorString();
+//    }
 
 
     return a.exec();
+}
+
+void selection_sort(QVector<int> temp)
+{
+    int index = 0;//index保存单趟比较过程中最大元素下标
+
+    for(int trip = 0; trip < temp.size() - 1; ++trip)//最后一个元素不比
+    {
+        index = trip;//使用趟数初始化index
+
+        for(int cursor = trip + 1; cursor < temp.size(); ++cursor)
+        {
+            if(temp[index] < temp[cursor])
+            {
+                index = cursor;
+            }
+        }
+
+        swap(temp[trip], temp[index]);
+    }
+}
+
+void swap(int& a, int& b)
+{
+    int tmp = a;
+    a = b;
+    b = tmp;
 }
