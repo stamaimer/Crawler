@@ -1,16 +1,8 @@
 #include <QCoreApplication>
 
-QByteArray mobile_device = "6E970F33-57E6-4F35-B729-C54B947AA3BE";
-QByteArray mobile_os = "iPhone4S-7.0.4";
-QByteArray login_name = "erightechgroup@gmail.com";
-QByteArray password = "Adzhuang2267";
-QByteArray ver_id = "2.5";
-
-QByteArray cookie;
-
 QVector<QString> family_ids;
 QVector<QString> cat_ids;
-QVector<QString> sku_nos;;
+QVector<QString> sku_nos;
 
 QVector<int> temp;
 
@@ -84,31 +76,6 @@ int main(int argc, char *argv[])
 
     request_body = "mobile_device=" + mobile_device + "&" + "mobile_os=" + mobile_os;
 
-    reply = manager.post(request, request_body);
-
-    synchronous.exec();
-
-    if(reply->error() == QNetworkReply::NoError)
-    {
-        QByteArray response = reply->readAll();
-
-        QJsonParseError parse_error;
-
-        QJsonDocument doc = QJsonDocument::fromJson(response, &parse_error);
-
-        if(parse_error.error == QJsonParseError::NoError)
-        {
-            QJsonObject obj = doc.object();
-
-            QJsonArray data = obj["data"].toArray();
-
-            url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=search";
-
-            request.setUrl(QUrl(url));
-
-            request.setRawHeader("cookie", cookie + "; " + cookie);
-
-            qDebug() << __TIME__ << __FUNCTION__ << cookie + "; " + cookie;
 
             QString pattern = "mobile_device=6E970F33-57E6-4F35-B729-C54B947AA3BE&mobile_os=iPhone4S-7.1&begin=0&offset=10&familyId=%1&catId=%2&spaType=VS";
 

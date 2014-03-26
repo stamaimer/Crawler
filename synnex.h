@@ -6,6 +6,7 @@
 #include <QString>
 #include <QByteArray>
 
+#include <QMap>
 #include <QVector>
 #include <QStringList>
 
@@ -43,6 +44,11 @@ class Synnex : public QObject
     QNetworkRequest request;
     QNetworkAccessManager manager;
 
+    QString request_url;
+    QMap<QByteArray, QByteArray> request_headers;
+    QString request_body;
+
+    bool login();
 
 public:
     explicit Synnex(QObject *parent = 0);

@@ -16,7 +16,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    synnex.cpp
+    synnex.cpp \
+    jobscheduler.cpp \
+    product.cpp \
+    category.cpp \
+    subcategory.cpp
 
 HEADERS += \
-    synnex.h
+    synnex.h \
+    jobscheduler.h \
+    product.h \
+    category.h \
+    subcategory.h
