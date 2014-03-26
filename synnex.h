@@ -10,14 +10,8 @@
 #include <QVector>
 #include <QStringList>
 
-#include <QEventLoop>
-#include <QElapsedTimer>
 
-#include <QUrl>
-#include <QNetworkProxy>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
+#include <QElapsedTimer>
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -39,10 +33,6 @@ class Synnex : public QObject
     static QByteArray version_id = "2.5";
 
     QByteArray cookie;
-
-    QNetworkReply* reply = NULL;
-    QNetworkRequest request;
-    QNetworkAccessManager manager;
 
     QString request_url;
     QMap<QByteArray, QByteArray> request_headers;

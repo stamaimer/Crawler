@@ -20,11 +20,13 @@ SOURCES += main.cpp \
     jobscheduler.cpp \
     product.cpp \
     category.cpp \
-    subcategory.cpp
+    subcategory.cpp \
+    sender.cpp
 
 HEADERS += \
     synnex.h \
     jobscheduler.h \
     product.h \
     category.h \
-    subcategory.h
+    subcategory.h \
+    sender.h

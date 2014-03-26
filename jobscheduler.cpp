@@ -1,6 +1,5 @@
 #include "jobscheduler.h"
 
-JobScheduler::JobScheduler(QObject *parent) :
-    QObject(parent)
+JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
 }
