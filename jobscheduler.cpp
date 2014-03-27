@@ -90,7 +90,7 @@ void JobScheduler::getCookie(QNetworkReply* reply, Synnex synnex)
 
         QMap<QByteArray, QByteArray> request_headers;
 
-        request_headers["cookie"] = cookie;
+        request_headers["cookie"] = JobScheduler::cookie;
 
         request_headers["content-type"] = "application/x-www-form-urlencoded";
 
@@ -109,6 +109,8 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
         QJsonObject obj = doc.object();
 
         QJsonArray data = obj["data"].toArray();
+
+        qDebug() << obj;
 
         for(int i = 0; i < data.size(); ++i)
         {
