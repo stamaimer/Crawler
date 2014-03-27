@@ -7,11 +7,49 @@
 
 #include <QMutex>
 
+#include <QNetworkReply>
+
+#include <QDebug>
+#include <QElapsedTimer>
+
+#include <QString>
+#include <QByteArray>
+
+#include <QList>
 #include <QVector>
+#include <QStringList>
+
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonParseError>
+
+#define AMOUNT_OF_THREAD 100
+
+class Sender;
 
 class JobScheduler : public QObject
 {
     Q_OBJECT
+
+    QElapsedTimer timer;
+
+    static const QByteArray mobile_os;
+    static const QByteArray mobile_device;
+
+    static const QByteArray login_name;
+    static const QByteArray password;
+
+    static const QByteArray version_id;
+
+    static QByteArray cookie;
+
+    Sender* senders[AMOUNT_OF_THREAD];
+
+    QJsonParseError parse_error;
+    QJsonDocument doc;
+
+    bool getJsonDoc(QNetworkReply*, Synnex, QString);
 
 public:
     QMutex mutex;
@@ -22,7 +60,8 @@ public:
 signals:
 
 public slots:
-
+    void killSender(int);
+    void getCookie(QNetworkReply*, Synnex);
 };
 
 #endif // JOBSCHEDULER_H

@@ -19,7 +19,7 @@ class Sender : public QThread
 {
     Q_OBJECT
 
-    JobScheduler job_scheduler;
+    JobScheduler* job_scheduler;
 
     int thread_id;
 
