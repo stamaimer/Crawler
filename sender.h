@@ -31,7 +31,6 @@ public:
     void run();//return type
 
 signals:
-    void finished(int);//return type
 
 public slots:
 

@@ -9,6 +9,8 @@ const QByteArray JobScheduler::password = "Adzhuang2267";
 
 const QByteArray JobScheduler::version_id = "2.5";
 
+QByteArray JobScheduler::cookie = "";
+
 JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
     QString request_url = "https://ec.synnex.com/ec-mobile-new/mobile/account.do?method=resellerLogin";//经销商登录地址
@@ -18,17 +20,17 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
     request_headers["content-type"] = "application/x-www-form-urlencoded";
 
     QByteArray request_body = "mobile_device=" + mobile_device
-                            + "&mobile_os=" + mobile_os
-                            + "&loginName=" + login_name//违反命名规则的都是sb
-                            + "&password="  + password
-                            + "&ver_id="    + version_id;//违反命名规则的都是sb
+                            + "&mobile_os="    + mobile_os
+                            + "&loginName="    + login_name//违反命名规则的都是sb
+                            + "&password="     + password
+                            + "&ver_id="       + version_id;//违反命名规则的都是sb
 
     synnexs.append(Synnex(request_url, request_headers, request_body, 0));
 
     for(int i = 0; i < AMOUNT_OF_THREAD; ++i)
     {
         senders[i] = new Sender(this);
-        senders[i]->start(i);
+        senders[i]->start(i + AMOUNT_OF_THREAD);//just for tidy
     }
 }
 
@@ -78,15 +80,50 @@ void JobScheduler::getCookie(QNetworkReply* reply, Synnex synnex)
 
         QList<QByteArray> fields = set_cookie.split(';');
 
-        JobScheduler::cookie = fields[0] + "; " + fields[0];
+        cookie = fields[0] + "; " + fields[0];
 
-        qDebug() << __TIME__ << __FUNCTION__ << JobScheduler::cookie;
+        qDebug() << __TIME__ << __FUNCTION__ << cookie;
+
+        //----------------------------------------------------------------------------------------------//
+
+        QString request_url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=getCategories";
+
+        QMap<QByteArray, QByteArray> request_headers;
+
+        request_headers["cookie"] = cookie;
+
+        request_headers["content-type"] = "application/x-www-form-urlencoded";
+
+        QByteArray request_body = "mobile_device=" + mobile_device + "&mobile_os=" + mobile_os;
+
+        synnexs.append(Synnex(request_url, request_headers, request_body, 1));
+
+        //----------------------------------------------------------------------------------------------//
     }
 }
 
-void JobScheduler::killSender(int thread_id)
+void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
 {
-    qDebug() << "sender" << thread_id << "stopped";
+    if(getJsonDoc(reply, synnex, __FUNCTION__))
+    {
+        QJsonObject obj = doc.object();
 
-    senders[thread_id]->deleteLater();
+        QJsonArray data = obj["data"].toArray();
+
+        for(int i = 0; i < data.size(); ++i)
+        {
+            QJsonObject family = data[i].toObject();
+
+            qDebug() << family["familyId"].toString()
+                     << family["familyDesc"].toString();
+
+            QJsonArray sub_cats = family["subCats"].toArray();
+
+            for(int j = 0; j < sub_cats.size(); ++j)
+            {
+                qDebug() << sub_cats[i].toObject()["catId"].toString()
+                         << sub_cats[i].toObject()["catDesc"].toString();
+            }
+        }
+    }
 }

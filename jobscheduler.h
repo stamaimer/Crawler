@@ -60,8 +60,8 @@ public:
 signals:
 
 public slots:
-    void killSender(int);
     void getCookie(QNetworkReply*, Synnex);
+    void getCategories(QNetworkReply*, Synnex);
 };
 
 #endif // JOBSCHEDULER_H

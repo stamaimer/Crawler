@@ -5,8 +5,6 @@ Sender::Sender(JobScheduler* job_scheduler)
     this->job_scheduler = job_scheduler;
 
     //set_stack_size?
-
-    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(killSender(int)));//implement slot
 }
 
 void Sender::start(int thread_id)
@@ -22,9 +20,9 @@ void Sender::run()
 
     QNetworkRequest request;
     QNetworkReply* reply = NULL;
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QNetworkAccessManager manager;
 
-    connect(manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
     while(true)
     {
@@ -45,7 +43,7 @@ void Sender::run()
                 request.setRawHeader(synnex.request_headers.keys()[i], synnex.request_headers.values()[i]);
             }
 
-            reply = manager->post(request, synnex.request_body);
+            reply = manager.post(request, synnex.request_body);
 
             synchronous.exec();
 
@@ -57,7 +55,7 @@ void Sender::run()
                     job_scheduler->getCookie(reply, synnex);
                 break;
                 case 1:
-
+                    job_scheduler->getCategories(reply, synnex);
                 break;
                 case 2:
 
@@ -75,14 +73,8 @@ void Sender::run()
         else
         {
             job_scheduler->mutex.unlock();
-
-            delete manager;
-
-            break;
         }
     }
-
-    emit finished(thread_id);
 }
 
 
