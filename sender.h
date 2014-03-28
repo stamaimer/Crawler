@@ -1,6 +1,7 @@
 #ifndef SENDER_H
 #define SENDER_H
 
+#include "utils.h"
 #include "jobscheduler.h"
 
 #include <QObject>

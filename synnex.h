@@ -1,6 +1,8 @@
 #ifndef SYNNEX_H
 #define SYNNEX_H
 
+#include "utils.h"
+
 #include <QObject>
 
 #include <QMap>
@@ -14,6 +16,8 @@ class Synnex : public QObject
 
 public:
 
+    RequestMethod request_method;
+
     QString request_url;
     QMap<QByteArray, QByteArray> request_headers;
     QByteArray request_body;
@@ -23,7 +27,7 @@ public:
 public:
     Synnex();
 
-    explicit Synnex(QString, QMap<QByteArray, QByteArray>, QByteArray, int);
+    explicit Synnex(RequestMethod, QString, QMap<QByteArray, QByteArray>, QByteArray, int);
 
     Synnex(const Synnex&);
 

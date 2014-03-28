@@ -1,6 +1,7 @@
 #ifndef JOBSCHEDULER_H
 #define JOBSCHEDULER_H
 
+#include "utils.h"
 #include "synnex.h"
 
 #include <QObject>

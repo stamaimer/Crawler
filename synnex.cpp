@@ -2,8 +2,10 @@
 
 Synnex::Synnex(){}
 
-Synnex::Synnex(QString request_url, QMap<QByteArray, QByteArray> request_headers, QByteArray request_body, int level)
+Synnex::Synnex(RequestMethod request_method, QString request_url, QMap<QByteArray, QByteArray> request_headers, QByteArray request_body, int level)
 {
+    this->request_method = request_method;
+
     this->request_url = request_url;
 
     this->request_headers = request_headers;
@@ -15,6 +17,8 @@ Synnex::Synnex(QString request_url, QMap<QByteArray, QByteArray> request_headers
 
 Synnex::Synnex(const Synnex& that)
 {
+    this->request_method = that.request_method;
+
     this->request_url = that.request_url;
 
     this->request_headers = that.request_headers;

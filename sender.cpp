@@ -50,7 +50,24 @@ void Sender::run()
                 request.setRawHeader(synnex.request_headers.keys()[i], synnex.request_headers.values()[i]);
             }
 
-            reply = manager.post(request, synnex.request_body);
+            switch (synnex.request_method)
+            {
+                case GET:
+
+                    reply = manager.get(request);
+
+                break;
+
+                case POST:
+
+                    reply = manager.post(request, synnex.request_body);
+
+                break;
+
+                default:
+
+                break;
+            }
 
             synchronous.exec();
 

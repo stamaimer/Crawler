@@ -29,4 +29,5 @@ HEADERS += \
     product.h \
     category.h \
     subcategory.h \
-    sender.h
+    sender.h \
+    utils.h

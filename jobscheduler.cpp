@@ -25,7 +25,7 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
                             + "&password="     + password
                             + "&ver_id="       + version_id;//违反命名规则的都是sb
 
-    synnexs.append(Synnex(request_url, request_headers, request_body, 0));
+    synnexs.append(Synnex(POST, request_url, request_headers, request_body, 0));
 
     for(int i = 0; i < AMOUNT_OF_THREAD; ++i)
     {
@@ -96,7 +96,7 @@ void JobScheduler::getCookie(QNetworkReply* reply, Synnex synnex)
 
         QByteArray request_body = "mobile_device=" + mobile_device + "&mobile_os=" + mobile_os;
 
-        synnexs.append(Synnex(request_url, request_headers, request_body, 1));
+        synnexs.append(Synnex(POST, request_url, request_headers, request_body, 1));
 
         //----------------------------------------------------------------------------------------------//
     }
@@ -117,7 +117,7 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
         request_headers["content-type"] = "application/x-www-form-urlencoded";
 
         QByteArray request_body = "mobile_device=" + mobile_device + "&mobile_os=" + mobile_os
-                                + "&available=false&begin=0&offset=30000&familyId=%1&catId=%2&spaType=VS";
+                                + "&begin=0&offset=30000&familyId=%1&catId=%2&spaType=VS";
 
         QString pattern = request_body;
 
@@ -151,7 +151,7 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
                                       .arg(sub_cats[j].toObject()["catId"].toString())
                                       .toUtf8();
 
-                synnexs.append(Synnex(request_url, request_headers, request_body, 2));
+                synnexs.append(Synnex(POST, request_url, request_headers, request_body, 2));
 
                 //-------------------------------------------------------------------/
             }
