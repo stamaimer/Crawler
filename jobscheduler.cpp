@@ -117,7 +117,7 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
         request_headers["content-type"] = "application/x-www-form-urlencoded";
 
         QByteArray request_body = "mobile_device=" + mobile_device + "&mobile_os=" + mobile_os
-                                + "&begin=0&offset=30000&familyId=%1&catId=%2&spaType=VS";
+                                + "&available=false&begin=0&offset=30000&familyId=%1&catId=%2&spaType=VS";
 
         QString pattern = request_body;
 
@@ -161,6 +161,23 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
 
 void JobScheduler::getSKU(QNetworkReply* reply, Synnex synnex)
 {
+    //----------------------------------------------------------------------------------------------//
+
+    QString request_url = "http://ec.synnex.com/ec-mobile-new/mobile/product.do?method=getDetails";
+
+    QMap<QByteArray, QByteArray> request_headers;
+
+    request_headers["cookie"] = JobScheduler::cookie;
+
+    request_headers["content-type"] = "application/x-www-form-urlencoded";
+
+    QByteArray request_body = "mobile_device=" + mobile_device + "&mobile_os=" + mobile_os
+                            + "&skuNo=%1&spaType=VS";
+
+    QString pattern = request_body;
+
+    //----------------------------------------------------------------------------------------------//
+
     if(getJsonDoc(reply, synnex, __FUNCTION__))
     {
         QJsonObject obj = doc.object();

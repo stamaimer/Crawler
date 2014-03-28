@@ -24,7 +24,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
-#define AMOUNT_OF_THREAD 100
+#define AMOUNT_OF_THREAD 10
 
 class Sender;
 

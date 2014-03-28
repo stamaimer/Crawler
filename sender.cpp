@@ -26,6 +26,7 @@ void Sender::run()
     proxy.setType(QNetworkProxy::HttpProxy);
     proxy.setHostName("localhost");
     proxy.setPort(8888);
+//    proxy.setPort(8087);
     QNetworkProxy::setApplicationProxy(proxy);
 
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
