@@ -13,11 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        spider.cpp
+        spider.cpp \
+    utility.cpp
 
 HEADERS  += spider.h \
     product.h \
     packet.h \
-    category.h
+    category.h \
+    utility.h
 
 QMAKE_CXXFLAGS += -std=c++11

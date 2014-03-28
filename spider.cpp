@@ -1,5 +1,7 @@
 #include "spider.h"
 
+QTextEdit* Spider::console = 0;
+
 Spider::Spider(QWidget* parent) : QWidget(parent)
 {
     timer.start();//启动计时
@@ -65,9 +67,9 @@ void Spider::getCategories()
 
     //ADD FOR TEST IN 03/06/14
     //========================
-    this->menus.clear();
+//    this->menus.clear();
 
-    this->menus.append(6);
+//    this->menus.append(6);
     //========================
 
     for(int i = 0; i < menus.size(); ++i)
@@ -772,15 +774,6 @@ void Spider::contract()
 
 
 
-void Spider::redirect(QtMsgType type, const QMessageLogContext& context, const QString& msg)
-{
-    console->append(msg);
-}
-
-
-
-
-
 void Spider::stop(int tid)
 {
     static int count = 0;
@@ -795,7 +788,7 @@ void Spider::stop(int tid)
 
         //ADD FOR CHECKOUT IN 03/01/14
 
-        QFile file("d:/spider.log");
+        QFile file("c:/downloads/spider.log");
 
         file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 

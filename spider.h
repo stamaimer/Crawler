@@ -63,7 +63,7 @@ class Spider : public QWidget
 
     QElapsedTimer timer;
 
-    QTextEdit* console;
+    //static QTextEdit* console;
 
     QTreeWidget* tree;
 
@@ -122,7 +122,7 @@ public:
 
     void getProducts(QNetworkReply*, Packet);//CThread
 
-    void redirect(QtMsgType, const QMessageLogContext&, const QString&);
+    static QTextEdit* console;
     //==================================================================
 
 private slots:
@@ -277,17 +277,6 @@ public:
         }
 
         emit finished(tid);
-    }
-
-public slots:
-
-    void addReply(QNetworkReply* reply)
-    {
-        spider->mutex.lock();
-
-        spider->replys.append(reply);
-
-        spider->mutex.unlock();
     }
 
 signals:
