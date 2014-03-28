@@ -158,3 +158,17 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
         }
     }
 }
+
+void JobScheduler::getSKU(QNetworkReply* reply, Synnex synnex)
+{
+    if(getJsonDoc(reply, synnex, __FUNCTION__))
+    {
+        QJsonObject obj = doc.object();
+
+        QJsonObject data = obj["data"].toObject();
+
+        QString size = data["resultSize"].toString();
+
+        qDebug() << size;
+    }
+}

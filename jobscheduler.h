@@ -60,6 +60,7 @@ public:
 signals:
 
 public slots:
+    void getSKU(QNetworkReply*, Synnex);
     void getCookie(QNetworkReply*, Synnex);
     void getCategories(QNetworkReply*, Synnex);
 };

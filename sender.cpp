@@ -23,10 +23,10 @@ void Sender::run()
     QNetworkReply* reply = NULL;
     QNetworkAccessManager manager;
 
-//    proxy.setType(QNetworkProxy::HttpProxy);
-//    proxy.setHostName("localhost");
-//    proxy.setPort(8888);
-//    QNetworkProxy::setApplicationProxy(proxy);
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName("localhost");
+    proxy.setPort(8888);
+    QNetworkProxy::setApplicationProxy(proxy);
 
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
@@ -64,7 +64,7 @@ void Sender::run()
                     job_scheduler->getCategories(reply, synnex);
                 break;
                 case 2:
-
+                    job_scheduler->getSKU(reply, synnex);
                 break;
                 case 3:
 
