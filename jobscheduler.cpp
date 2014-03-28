@@ -1,8 +1,8 @@
 #include "jobscheduler.h"
 #include "sender.h"
 
-const QByteArray JobScheduler::mobile_os = "6E970F33-57E6-4F35-B729-C54B947AA3BE";
-const QByteArray JobScheduler::mobile_device = "iPhone4S-7.0.4";
+const QByteArray JobScheduler::mobile_device = "6E970F33-57E6-4F35-B729-C54B947AA3BE";
+const QByteArray JobScheduler::mobile_os = "iPhone4S-7.0.4";
 
 const QByteArray JobScheduler::login_name = "erightechgroup@gmail.com";
 const QByteArray JobScheduler::password = "Adzhuang2267";
@@ -110,8 +110,6 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
 
         QJsonArray data = obj["data"].toArray();
 
-        qDebug() << obj;
-
         for(int i = 0; i < data.size(); ++i)
         {
             QJsonObject family = data[i].toObject();
@@ -123,8 +121,8 @@ void JobScheduler::getCategories(QNetworkReply* reply, Synnex synnex)
 
             for(int j = 0; j < sub_cats.size(); ++j)
             {
-                qDebug() << sub_cats[i].toObject()["catId"].toString()
-                         << sub_cats[i].toObject()["catDesc"].toString();
+                qDebug() << '\t' << sub_cats[j].toObject()["catId"].toString()
+                         << sub_cats[j].toObject()["catDesc"].toString();
             }
         }
     }
