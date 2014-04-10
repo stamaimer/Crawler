@@ -82,6 +82,8 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                 QString name = item["name"].toString();
 
+                QString category = item["category"].toString();
+
                 QJsonArray tmp =  item["parentCategories"].toArray();
 
                 QStringList parent_categories;
@@ -91,14 +93,10 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                //qDebug() << name << parent_categories;
-
-                this->menus.append(Menu(name, parent_categories));
+                this->menus.append(Menu(name, category, parent_categories));
 
                 if(item.contains("browseToken"))
                 {
-                    //qDebug() << "merchandise" << name << parent_categories;
-
                     QString browse_token = item["browseToken"].toString();
 
                     QString request_url = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=0&p5=20").arg(browse_token);
