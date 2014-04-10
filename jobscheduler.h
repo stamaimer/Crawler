@@ -1,7 +1,6 @@
 #ifndef JOBSCHEDULER_H
 #define JOBSCHEDULER_H
 
-#include "utils.h"
 #include "walmart.h"
 
 #include "menu.h"
@@ -17,9 +16,7 @@
 #include <QElapsedTimer>
 
 #include <QString>
-#include <QByteArray>
 
-#include <QList>
 #include <QVector>
 #include <QStringList>
 

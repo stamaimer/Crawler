@@ -7,15 +7,15 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
     walmarts.append(new Walmart("Electronics", request_url));
 
-    request_url = "http://api.mobile.walmart.com/taxonomy/departments/7815b575f44ce887a8a23d06704cf765bfb0502c";
+            request_url = "http://api.mobile.walmart.com/taxonomy/departments/7815b575f44ce887a8a23d06704cf765bfb0502c";
 
     walmarts.append(new Walmart("Office", request_url));
 
-    request_url = "http://api.mobile.walmart.com/taxonomy/departments/09440c9a919015c0343ae111e4726432aacbb30f";
+            request_url = "http://api.mobile.walmart.com/taxonomy/departments/09440c9a919015c0343ae111e4726432aacbb30f";
 
     walmarts.append(new Walmart("Toys", request_url));
 
-    request_url = "http://api.mobile.walmart.com/taxonomy/departments/d12bf578c2846aee54b8bafc892baabd1d37c97e";
+            request_url = "http://api.mobile.walmart.com/taxonomy/departments/d12bf578c2846aee54b8bafc892baabd1d37c97e";
 
     walmarts.append(new Walmart("Video Games", request_url));
 
@@ -48,6 +48,8 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         else
         {
             qDebug() << walmart->name << parse_result.error << parse_result.errorString();
+
+            qDebug() << reply_body;
 
             return false;
         }
@@ -121,7 +123,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
         }
         else
         {
-            qDebug() << __FUNCTION__ << "structure of reply invalidation";
+            qDebug() << "47 structure of reply invalidation";
         }
     }
 }
@@ -138,7 +140,7 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
         }
         else
         {
-            qDebug() << __FUNCTION__ << "structure of reply invalidation";
+            qDebug() << "47 structure of reply invalidation";
         }
     }
 }
