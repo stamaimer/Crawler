@@ -3,6 +3,10 @@
 
 class Merchandise
 {
+    QString merchandise_id;
+    QString merchandise_name;
+    QString merchandise_price;
+
 public:
     Merchandise();
 };
