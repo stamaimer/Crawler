@@ -19,9 +19,9 @@ public:
 
     Menu(QString id, QString name, QString category, QStringList parent_categories)
     {
-        this->id = id;
-        this->name = name;
-        this->category = category;
+        this->id                = id;
+        this->name              = name;
+        this->category          = category;
         this->parent_categories = parent_categories;
     }
 

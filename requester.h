@@ -16,14 +16,12 @@
 
 class Requester : QThread
 {
-    JobScheduler* job_scheduler;
-
     int tid;
 
-public:
-    Requester(JobScheduler*);
+    JobScheduler* job_scheduler;
 
-    void start(int);
+public:
+    Requester(int, JobScheduler*);
 
     void run();
 };

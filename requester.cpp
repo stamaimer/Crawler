@@ -1,15 +1,9 @@
 #include "requester.h"
 
-Requester::Requester(JobScheduler* job_scheduler)
+Requester::Requester(int tid, JobScheduler* job_scheduler)
 {
+    this->tid           = tid;
     this->job_scheduler = job_scheduler;
-}
-
-void Requester::start(int tid)
-{
-    this->tid = tid;
-
-    QThread::start();
 }
 
 void Requester::run()

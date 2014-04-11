@@ -15,9 +15,9 @@ JobScheduler::JobScheduler()
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(this);
+        requesters[i] = new Requester(i, this);
 
-        requesters[i]->start(i + AMOUNT_OF_THREADS);
+        requesters[i]->start();
     }
 }
 
