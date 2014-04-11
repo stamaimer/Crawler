@@ -14,7 +14,7 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
-class Requester : QThread
+class Requester : public QThread
 {
     int tid;
 
