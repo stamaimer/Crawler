@@ -25,8 +25,6 @@ void Requester::run()
 
     while(true)
     {
-        this->sleep(2);
-
         job_scheduler->mutex.lock();
 
         if(job_scheduler->walmarts.size() != 0)
