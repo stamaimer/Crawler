@@ -7,12 +7,12 @@ class Walmart
 {
 public:
     Walmart();
-    Walmart(QString, QString);
     Walmart(const Walmart&);
+    Walmart(QString, QString);
     Walmart operator = (const Walmart&);
 
-    QString request_url;
     QString name;
+    QString request_url;
 };
 
 #endif // WALMART_H

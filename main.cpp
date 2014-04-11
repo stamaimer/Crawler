@@ -3,9 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication coreapp(argc, argv);
 
     JobScheduler job_scheduler;
 
-    return a.exec();
+    return coreapp.exec();
 }

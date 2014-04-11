@@ -12,6 +12,7 @@ Walmart::Walmart(QString name, QString request_url)
 
 Walmart::Walmart(const Walmart& that)
 {
+    this->name = that.name;
     this->request_url = that.request_url;
 }
 

@@ -1,7 +1,7 @@
 #include "jobscheduler.h"
 #include "requester.h"
 
-JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
+JobScheduler::JobScheduler()
 {
     QString request_url = "http://api.mobile.walmart.com/taxonomy/departments/bdc5bab64b1f84fa7b6b301c26fdf439af96a3a0";
 
@@ -80,6 +80,8 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
             {
                 item =  menus[i].toObject();
 
+                QString id = item["id"].toString();
+
                 QString name = item["name"].toString();
 
                 QString category = item["category"].toString();
@@ -93,7 +95,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                this->menus.append(Menu(name, category, parent_categories));
+                this->menus.append(Menu(id, name, category, parent_categories));
 
                 if(item.contains("browseToken"))
                 {
@@ -134,7 +136,16 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
     {
         if(doc->isObject())
         {
-            qDebug() << walmart->name << doc->object()["totalCount"].toString();
+            QJsonArray items = doc->object()["item"].toArray();
+
+            QJsonObject item;
+
+            for(int i = 0; i < items.size(); ++i)
+            {
+                 item =  items[i].toObject();
+
+                 qDebug() << item["name"].toString() << item["cRRNumReviews"].toString();
+            }
         }
         else
         {

@@ -6,14 +6,7 @@
 #include "menu.h"
 #include "merchandise.h"
 
-#include <QObject>
-
 #include <QMutex>
-
-#include <QNetworkReply>
-
-#include <QDebug>
-#include <QElapsedTimer>
 
 #include <QString>
 
@@ -25,14 +18,16 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
+#include <QDebug>
+#include <QElapsedTimer>
+
 #define AMOUNT_OF_THREADS 100
 
 class Requester;
+class QNetworkReply;
 
-class JobScheduler : public QObject
+class JobScheduler
 {
-    Q_OBJECT
-
     QElapsedTimer timer;
 
     Requester* requesters[AMOUNT_OF_THREADS];
@@ -50,11 +45,8 @@ public:
 
     QVector<QString> completed;
 
-    explicit JobScheduler(QObject *parent = 0);
+    JobScheduler();
 
-signals:
-
-public slots:
     void getMenus(QNetworkReply*, Walmart*);
     void getMerchandise(QNetworkReply*, Walmart*);
 };
