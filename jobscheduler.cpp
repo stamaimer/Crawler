@@ -3,21 +3,15 @@
 
 JobScheduler::JobScheduler()
 {
-    QString request_url = "http://api.mobile.walmart.com/taxonomy/departments/bdc5bab64b1f84fa7b6b301c26fdf439af96a3a0";
+    menus.append(Menu("bdc5bab64b1f84fa7b6b301c26fdf439af96a3a0", "Electronics", "3944", QStringList()));
+    menus.append(Menu("d12bf578c2846aee54b8bafc892baabd1d37c97e", "Video Games", "2636", QStringList()));
+    menus.append(Menu("7815b575f44ce887a8a23d06704cf765bfb0502c", "Office", "546952", QStringList()));
+    menus.append(Menu("09440c9a919015c0343ae111e4726432aacbb30f", "Toys", "4171", QStringList()));
 
-    walmarts.append(new Walmart("Electronics", request_url));
-
-            request_url = "http://api.mobile.walmart.com/taxonomy/departments/7815b575f44ce887a8a23d06704cf765bfb0502c";
-
-    walmarts.append(new Walmart("Office", request_url));
-
-            request_url = "http://api.mobile.walmart.com/taxonomy/departments/09440c9a919015c0343ae111e4726432aacbb30f";
-
-    walmarts.append(new Walmart("Toys", request_url));
-
-            request_url = "http://api.mobile.walmart.com/taxonomy/departments/d12bf578c2846aee54b8bafc892baabd1d37c97e";
-
-    walmarts.append(new Walmart("Video Games", request_url));
+    for(int i = 0; i < menus.size(); ++i)
+    {
+        walmarts.append(new Walmart(menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
+    }
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
