@@ -45,6 +45,8 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             qDebug() << walmart->name << parse_status.error << parse_status.errorString();
 
+            delete walmart;
+
             return false;
         }
     }
@@ -119,6 +121,8 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     }
                 }
             }
+
+            delete walmart;
         }
         else
         {
@@ -127,7 +131,6 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
     }
 
     delete doc;
-    delete walmart;
 }
 
 void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
@@ -162,6 +165,8 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
                  this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
             }
+
+            delete walmart;
         }
         else
         {
@@ -170,5 +175,4 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
     }
 
     delete doc;
-    delete walmart;
 }
