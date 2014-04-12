@@ -125,6 +125,9 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
             qDebug() << "47 structure of doc invalidation";
         }
     }
+
+    delete doc;
+    delete walmart;
 }
 
 void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
@@ -165,4 +168,7 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
             qDebug() << "47 structure of doc invalidation";
         }
     }
+
+    delete doc;
+    delete walmart;
 }
