@@ -19,6 +19,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
+#include <QFile>
 #include <QDebug>
 #include <QElapsedTimer>
 

@@ -39,6 +39,11 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             completed.append(walmart->request_url);
 
+            if(net_error_statistics.contains(walmart))
+            {
+                net_error_statistics.remove(walmart);
+            }
+
             return true;
         }
         else
@@ -63,9 +68,16 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
             net_error_statistics.insert(walmart, 1);
         }
 
+        QFile file("c:/downloads/net_error_statistics.log");
+
+        file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+
+        QTextStream out(&file);
+
         for(Walmart* key : net_error_statistics.keys())
         {
             qDebug() << key->name << net_error_statistics[key];
+            out << key->name << net_error_statistics[key];
         }
 
         return false;
