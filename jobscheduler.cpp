@@ -43,14 +43,14 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         }
         else
         {
-            qDebug() << walmart->name << parse_status.error << parse_status.errorString();
+            qDebug() << "\e[1;33m" << walmart->name << parse_status.error << parse_status.errorString();
 
             return false;
         }
     }
     else
     {
-        qDebug() << walmart->name << reply->error() << reply->errorString();
+        qDebug() << "\e[1;33m" << walmart->name << reply->error() << reply->errorString();
 
         walmarts.append(walmart);
 
@@ -122,7 +122,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
         }
         else
         {
-            qDebug() << "47 structure of doc invalidation";
+            qDebug() << "\e[1;33m" << "47 structure of doc invalidation";
         }
     }
 }
@@ -162,7 +162,7 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
         }
         else
         {
-            qDebug() << "47 structure of doc invalidation";
+            qDebug() << "\e[1;33m" << "47 structure of doc invalidation";
         }
     }
 }
