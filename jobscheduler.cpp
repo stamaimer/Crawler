@@ -131,6 +131,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
     }
 
     delete doc;
+    reply->deleteLater();
 }
 
 void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
@@ -175,4 +176,5 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
     }
 
     delete doc;
+    reply->deleteLater();
 }
