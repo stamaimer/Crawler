@@ -54,6 +54,20 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
 
         walmarts.append(walmart);
 
+        if(net_error_statistics.contains(walmart))
+        {
+            net_error_statistics[walmart]++;
+        }
+        else
+        {
+            net_error_statistics.insert(walmart, 1);
+        }
+
+        for(Walmart* key : net_error_statistics.keys())
+        {
+            qDebug() << key->name << net_error_statistics[key];
+        }
+
         return false;
     }
 }

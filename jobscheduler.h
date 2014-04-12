@@ -10,6 +10,7 @@
 
 #include <QString>
 
+#include <QHash>
 #include <QVector>
 #include <QStringList>
 
@@ -30,6 +31,14 @@ class JobScheduler
 {
     QElapsedTimer timer;
 
+    QVector<Menu> menus;
+
+    QVector<Merchandise> merchandises;
+
+    QVector<QString> completed;
+
+    QHash<Walmart*, int> net_error_statistics;
+
     Requester* requesters[AMOUNT_OF_THREADS];
 
     bool getJsonDoc(QNetworkReply*, Walmart*, QJsonDocument*);
@@ -38,12 +47,6 @@ public:
     QMutex mutex;
 
     QVector<Walmart*> walmarts;
-
-    QVector<Menu> menus;
-
-    QVector<Merchandise> merchandises;
-
-    QVector<QString> completed;
 
     JobScheduler();
 

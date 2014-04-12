@@ -27,3 +27,5 @@ HEADERS += \
     utils.h \
     menu.h \
     merchandise.h
+
+QMAKE_CXXFLAGS += -std=c++11
