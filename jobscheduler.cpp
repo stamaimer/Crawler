@@ -50,7 +50,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-        qDebug() << walmart->name << reply->error() << reply->errorString();
+//        qDebug() << walmart->name << reply->error() << reply->errorString();
 
         walmarts.append(walmart);
 
@@ -89,10 +89,10 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-//                qDebug() << id                << '\t'
-//                         << name              << '\t'
-//                         << category          << '\t'
-//                         << parent_categories << '\t';
+                qDebug() << id                << '\t'
+                         << name              << '\t'
+                         << category          << '\t'
+                         << parent_categories;
 
                 this->menus.append(Menu(id, name, category, parent_categories));
 
@@ -100,7 +100,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                 {
                     QString browse_token = menu["browseToken"].toString();
 
-                    QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=0&p5=20").arg(browse_token);
+                    QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=0&p5=5000000").arg(browse_token);
 
                     if(!completed.contains(request_url))
                     {
@@ -150,14 +150,12 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString stock   = item["addableToCart"].toString();
                  QString reviews = item["cRRNumReviews"].toString();
 
-//                 qDebug() << id      << '\t'
-//                          << name    << '\t'
-//                          << msrp    << '\t'
-//                          << price   << '\t'
-//                          << stock   << '\t'
-//                          << reviews << '\t';
-
-                 qDebug() << item["totalCount"].toDouble();
+                 qDebug() << id      << '\t'
+                          << name    << '\t'
+                          << msrp    << '\t'
+                          << price   << '\t'
+                          << stock   << '\t'
+                          << reviews;
 
                  this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
             }
