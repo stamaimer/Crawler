@@ -89,10 +89,10 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                qDebug() << id                << '\t'
-                         << name              << '\t'
-                         << category          << '\t'
-                         << parent_categories << '\t';
+//                qDebug() << id                << '\t'
+//                         << name              << '\t'
+//                         << category          << '\t'
+//                         << parent_categories << '\t';
 
                 this->menus.append(Menu(id, name, category, parent_categories));
 
@@ -150,12 +150,14 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString stock   = item["addableToCart"].toString();
                  QString reviews = item["cRRNumReviews"].toString();
 
-                 qDebug() << id      << '\t'
-                          << name    << '\t'
-                          << msrp    << '\t'
-                          << price   << '\t'
-                          << stock   << '\t'
-                          << reviews << '\t';
+//                 qDebug() << id      << '\t'
+//                          << name    << '\t'
+//                          << msrp    << '\t'
+//                          << price   << '\t'
+//                          << stock   << '\t'
+//                          << reviews << '\t';
+
+                 qDebug() << item["totalCount"].toDouble();
 
                  this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
             }

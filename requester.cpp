@@ -10,9 +10,9 @@ void Requester::run()
 {
     QEventLoop synchronous;
 
-    QNetworkProxy proxy;
-    QNetworkRequest request;
-    QNetworkReply* reply = NULL;
+    QNetworkProxy         proxy;
+    QNetworkRequest       request;
+    QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
     proxy.setType(QNetworkProxy::HttpProxy);
