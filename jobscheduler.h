@@ -10,7 +10,6 @@
 
 #include <QString>
 
-#include <QHash>
 #include <QVector>
 #include <QStringList>
 
@@ -19,7 +18,6 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
-#include <QFile>
 #include <QDebug>
 #include <QElapsedTimer>
 
@@ -37,8 +35,6 @@ class JobScheduler
     QVector<Merchandise> merchandises;
 
     QVector<QString> completed;
-
-    QHash<Walmart*, int> net_error_statistics;
 
     Requester* requesters[AMOUNT_OF_THREADS];
 
