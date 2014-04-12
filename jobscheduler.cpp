@@ -89,6 +89,11 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
+                qDebug() << id                << '\t'
+                         << name              << '\t'
+                         << category          << '\t'
+                         << parent_categories << '\t';
+
                 this->menus.append(Menu(id, name, category, parent_categories));
 
                 if(menu.contains("browseToken"))
@@ -138,10 +143,21 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
             {
                  item =  items[i].toObject();
 
-                 QString id      = item["id"].toString();
+                 QString id      = item["iD"].toString();
                  QString name    = item["name"].toString();
+                 QString msrp    = item["pricingInformation"].toObject()["listPrice"].toString();
                  QString price   = item["price"].toString();
-                 QString reviews = item["crrnumreviews"].toString();
+                 QString stock   = item["addableToCart"].toString();
+                 QString reviews = item["cRRNumReviews"].toString();
+
+                 qDebug() << id      << '\t'
+                          << name    << '\t'
+                          << msrp    << '\t'
+                          << price   << '\t'
+                          << stock   << '\t'
+                          << reviews << '\t';
+
+                 this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
             }
         }
         else
