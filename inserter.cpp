@@ -27,9 +27,9 @@ void Inserter::insert(Menu menu)
     QString sql = "INSERT IGNORE INTO menu VALUES (\"%1\", \"%2\", %3, \"%4\")";
 
     sql = sql.arg(menu.getId())
-             .arg(menu.getName().toHtmlEscaped())
-             .arg(menu.getCategory().toInt())
-             .arg(menu.getParentCategories().join(","));
+             .arg(menu.getName())
+             .arg(menu.getCategory())
+             .arg(menu.getParentCategories());
 
 
     qDebug() << sql;
@@ -44,5 +44,22 @@ void Inserter::insert(Menu menu)
 
 void Inserter::insert(Merchandise merchandise)
 {
+    QString sql = "INSERT IGNORE INTO merchan_info VALUES (%1, \"%2\", %3, %4, %5, %6, %7)";
 
+    sql = sql.arg(merchandise.getId())
+             .arg(merchandise.getName())
+             .arg(merchandise.getMSRP())
+             .arg(merchandise.getPrice())
+             .arg(merchandise.getStock())
+             .arg(merchandise.getReviews())
+             .arg(QDate::currentDate().toString(Qt::ISODate));
+
+    qDebug() << sql;
+
+    if(!query->exec(sql))
+    {
+        qDebug() << query->lastError().text();
+
+        exit(1);
+    }
 }

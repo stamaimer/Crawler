@@ -32,17 +32,17 @@ public:
 
     QString getName()
     {
-        return name;
+        return name.toHtmlEscaped();
     }
 
-    QString getCategory()
+    int getCategory()
     {
-        return category;
+        return category.toInt();
     }
 
-    QStringList getParentCategories()
+    QString getParentCategories()
     {
-        return parent_categories;
+        return parent_categories.join(',');
     }
 };
 

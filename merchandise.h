@@ -30,21 +30,21 @@ public:
         this->reviews = reviews;
     }
 
-    QString getId()
+    int getId()
     {
-        return id;
+        return id.toInt();
     }
 
     QString getName()
     {
-        return name;
+        return name.toHtmlEscaped();
     }
 
     QString getMSRP()
     {
         if(msrp.isEmpty())
         {
-            getPrice();
+            return getPrice();
         }
         else
         {
@@ -57,14 +57,14 @@ public:
         return price;
     }
 
-    QString getStock()
+    int getStock()
     {
-        return stock;
+        return "true" == stock ? 1 : 0;
     }
 
-    QString getReviews()
+    int getReviews()
     {
-        return reviews;
+        return reviews.toInt();
     }
 };
 
