@@ -7,6 +7,7 @@
 class Merchandise
 {
     QString id;
+    QString url;
     QString name;
     QString msrp;
     QString price;
@@ -17,6 +18,7 @@ public:
     Merchandise(){}
 
     Merchandise(QString id,
+                QString url,
                 QString name,
                 QString msrp,
                 QString price,
@@ -24,6 +26,7 @@ public:
                 QString reviews)
     {
         this->id      = id;
+        this->url     = url;
         this->name    = name;
         this->msrp    = msrp;
         this->price   = price;
@@ -34,6 +37,11 @@ public:
     int getId()
     {
         return id.toInt();
+    }
+
+    QString getURL()
+    {
+        return url;
     }
 
     QString getName()
@@ -49,13 +57,13 @@ public:
         }
         else
         {
-            return msrp.replace(QRegExp("$"), "").toDouble();
+            return msrp.toDouble();
         }
     }
 
     double getPrice()
     {
-        return price.replace(QRegExp("$"), "").toDouble();
+        return price.toDouble();
     }
 
     int getStock()

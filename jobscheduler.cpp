@@ -93,13 +93,12 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                qDebug() //<< id                << '\t'
-                         //<< name              << '\t'
-                         //<< category          << '\t'
-                         //<< parent_categories
-                         ;
+//                qDebug() << id                << '\t'
+//                         << name              << '\t'
+//                         << category          << '\t'
+//                         << parent_categories;
 
-                this->menus.append(Menu(id, name, category, parent_categories));
+//                this->menus.append(Menu(id, name, category, parent_categories));
 
 //                inserter->insert(this->menus.last());
 
@@ -156,6 +155,7 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  item =  items[i].toObject();
 
                  QString id      = item["iD"].toString();
+                 QString url     = item["url"].toString();
                  QString name    = item["name"].toString();
                  QString msrp    = item["pricingInformation"].toObject()["listPrice"].toString();
                  QString price   = item["price"].toString();
@@ -163,15 +163,16 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString reviews = item["cRRNumReviews"].toString();
 
 //                 qDebug() << id      << '\t'
+//                          << url     << '\t'
 //                          << name    << '\t'
 //                          << msrp    << '\t'
 //                          << price   << '\t'
 //                          << stock   << '\t'
 //                          << reviews;
 
-                 this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
+//                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
 
-                 inserter->insert(this->merchandises.last());
+//                 inserter->insert(this->merchandises.last());
             }
 
             delete walmart;
