@@ -3,6 +3,7 @@
 
 #include <QRegExp>
 #include <QString>
+#include <QStringList>
 
 class Merchandise
 {
@@ -57,13 +58,31 @@ public:
         }
         else
         {
-            return msrp.toDouble();
+            QStringList strs = msrp.split('$');
+
+            QString str = strs[1];
+
+            if(str.contains(','))
+            {
+                str.replace(',', '');
+            }
+
+            return str.toDouble();
         }
     }
 
     double getPrice()
     {
-        return price.toDouble();
+        QStringList strs = price.split('$');
+
+        QString str = strs[1];
+
+        if(str.contains(','))
+        {
+            str.replace(',', '');
+        }
+
+        return str.toDouble();
     }
 
     int getStock()

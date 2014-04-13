@@ -22,7 +22,7 @@ JobScheduler::JobScheduler()
         requesters[i]->start();
     }
 
-    inserter = new Inserter();
+//    inserter = new Inserter();
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
