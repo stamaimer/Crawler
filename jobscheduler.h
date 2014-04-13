@@ -2,6 +2,7 @@
 #define JOBSCHEDULER_H
 
 #include "walmart.h"
+#include "inserter.h"
 
 #include "menu.h"
 #include "merchandise.h"
@@ -35,6 +36,8 @@ class JobScheduler
     QVector<Merchandise> merchandises;
 
     QVector<QString> completed;
+
+    Inserter inserter;
 
     Requester* requesters[AMOUNT_OF_THREADS];
 

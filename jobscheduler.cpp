@@ -21,6 +21,8 @@ JobScheduler::JobScheduler()
 
         requesters[i]->start();
     }
+
+    inserter = Inserter();
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -45,9 +47,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             qDebug() << walmart->name << parse_status.error << parse_status.errorString();
 
-            delete walmart;
-
-            exit(1);
+            walmarts.append(walmart);
 
             return false;
         }
@@ -93,13 +93,15 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                qDebug() << id                << '\t'
+                qDebug() //<< id                << '\t'
                          //<< name              << '\t'
                          //<< category          << '\t'
                          //<< parent_categories
                          ;
 
                 this->menus.append(Menu(id, name, category, parent_categories));
+
+                inserter.insert(this->menus.last());
 
                 if(menu.contains("browseToken"))
                 {

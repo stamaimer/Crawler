@@ -18,7 +18,8 @@ TEMPLATE = app
 SOURCES += main.cpp \
     jobscheduler.cpp \
     requester.cpp \
-    walmart.cpp
+    walmart.cpp \
+    inserter.cpp
 
 HEADERS += \
     jobscheduler.h \
@@ -26,6 +27,7 @@ HEADERS += \
     walmart.h \
     utils.h \
     menu.h \
-    merchandise.h
+    merchandise.h \
+    inserter.h
 
 QMAKE_CXXFLAGS += -std=c++11
