@@ -5,66 +5,66 @@
 
 class Merchandise
 {
-    QString merchandise_id;
-    QString merchandise_name;
-    QString merchandise_msrp;
-    QString merchandise_price;
-    QString merchandise_stock;
-    QString merchandise_reviews;
+    QString id;
+    QString name;
+    QString msrp;
+    QString price;
+    QString stock;
+    QString reviews;
 
 public:
     Merchandise(){}
 
-    Merchandise(QString merchandise_id,
-                QString merchandise_name,
-                QString merchandise_msrp,
-                QString merchandise_price,
-                QString merchandise_stock,
-                QString merchandise_reviews)
+    Merchandise(QString id,
+                QString name,
+                QString msrp,
+                QString price,
+                QString stock,
+                QString reviews)
     {
-        this->merchandise_id      = merchandise_id;
-        this->merchandise_name    = merchandise_name;
-        this->merchandise_msrp    = merchandise_msrp;
-        this->merchandise_price   = merchandise_price;
-        this->merchandise_stock   = merchandise_stock;
-        this->merchandise_reviews = merchandise_reviews;
+        this->id      = id;
+        this->name    = name;
+        this->msrp    = msrp;
+        this->price   = price;
+        this->stock   = stock;
+        this->reviews = reviews;
     }
 
-    QString getMerchandiseId()
+    QString getId()
     {
-        return merchandise_id;
+        return id;
     }
 
-    QString getMerchandiseName()
+    QString getName()
     {
-        return merchandise_name;
+        return name;
     }
 
-    QString getMerchandiseMSRP()
+    QString getMSRP()
     {
-        if(merchandise_msrp.isEmpty())
+        if(msrp.isEmpty())
         {
-            getMerchandisePrice();
+            getPrice();
         }
         else
         {
-            return merchandise_msrp;
+            return msrp;
         }
     }
 
-    QString getMerchandisePrice()
+    QString getPrice()
     {
-        return merchandise_price;
+        return price;
     }
 
-    QString getMerchandiseStock()
+    QString getStock()
     {
-        return merchandise_stock;
+        return stock;
     }
 
-    QString getMerchandiseReviews()
+    QString getReviews()
     {
-        return merchandise_reviews;
+        return reviews;
     }
 };
 

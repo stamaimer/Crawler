@@ -47,6 +47,8 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
 
             delete walmart;
 
+            exit(1);
+
             return false;
         }
     }
@@ -92,9 +94,10 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                 }
 
                 qDebug() << id                << '\t'
-                         << name              << '\t'
-                         << category          << '\t'
-                         << parent_categories;
+                         //<< name              << '\t'
+                         //<< category          << '\t'
+                         //<< parent_categories
+                         ;
 
                 this->menus.append(Menu(id, name, category, parent_categories));
 
@@ -157,12 +160,12 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString stock   = item["addableToCart"].toString();
                  QString reviews = item["cRRNumReviews"].toString();
 
-                 qDebug() << id      << '\t'
-                          << name    << '\t'
-                          << msrp    << '\t'
-                          << price   << '\t'
-                          << stock   << '\t'
-                          << reviews;
+//                 qDebug() << id      << '\t'
+//                          << name    << '\t'
+//                          << msrp    << '\t'
+//                          << price   << '\t'
+//                          << stock   << '\t'
+//                          << reviews;
 
                  this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
             }

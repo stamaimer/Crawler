@@ -15,11 +15,11 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("localhost");
-    proxy.setPort(8888);
+//    proxy.setType(QNetworkProxy::HttpProxy);
+//    proxy.setHostName("localhost");
+//    proxy.setPort(8888);
 
-    QNetworkProxy::setApplicationProxy(proxy);
+//    QNetworkProxy::setApplicationProxy(proxy);
 
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
