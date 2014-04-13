@@ -162,15 +162,16 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString stock   = item["addableToCart"].toString();
                  QString reviews = item["cRRNumReviews"].toString();
 
-                 qDebug() //<< id      << '\t'
+//                 qDebug() << id      << '\t'
 //                          << name    << '\t'
 //                          << msrp    << '\t'
 //                          << price   << '\t'
-                          << stock   << '\t'
-//                          << reviews
-                          ;
+//                          << stock   << '\t'
+//                          << reviews;
 
                  this->merchandises.append(Merchandise(id, name, msrp, price, stock, reviews));
+
+                 inserter->insert(this->merchandises.last());
             }
 
             delete walmart;
