@@ -15,14 +15,14 @@
 class Inserter
 {
     QSqlDatabase db_connection;
-    QSqlQuery query;
+    QSqlQuery* query;
 
 public:
     Inserter();
 
-    bool insert(Menu);
+    void insert(Menu);
 
-    bool insert(Merchandise);
+    void insert(Merchandise);
 };
 
 #endif // INSERTER_H

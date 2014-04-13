@@ -15,25 +15,34 @@ Inserter::Inserter()
     if(!db_connection.open())
     {
         qDebug() << db_connection.lastError();
+
+        exit(1);
     }
+
+    query = new QSqlQuery();
 }
 
-bool Inserter::insert(Menu menu)
+void Inserter::insert(Menu menu)
 {
-    QString sql = "INSERT INTO menu VALUES (\"%1\", \"%2\", %3, \"%4\")";
+    QString sql = "INSERT IGNORE INTO menu VALUES (\"%1\", \"%2\", %3, \"%4\")";
 
     sql = sql.arg(menu.getId())
-             .arg(menu.getName())
+             .arg(menu.getName().toHtmlEscaped())
              .arg(menu.getCategory().toInt())
              .arg(menu.getParentCategories().join(","));
 
 
     qDebug() << sql;
 
-    query.exec(sql);
+    if(!query->exec(sql))
+    {
+        qDebug() << query->lastError().text();
+
+        exit(1);
+    }
 }
 
-bool Inserter::insert(Merchandise merchandise)
+void Inserter::insert(Merchandise merchandise)
 {
 
 }

@@ -37,7 +37,7 @@ class JobScheduler
 
     QVector<QString> completed;
 
-    Inserter inserter;
+    Inserter* inserter;
 
     Requester* requesters[AMOUNT_OF_THREADS];
 

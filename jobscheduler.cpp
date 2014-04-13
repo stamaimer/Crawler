@@ -22,7 +22,7 @@ JobScheduler::JobScheduler()
         requesters[i]->start();
     }
 
-    inserter = Inserter();
+    inserter = new Inserter();
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -101,7 +101,7 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                 this->menus.append(Menu(id, name, category, parent_categories));
 
-                inserter.insert(this->menus.last());
+                inserter->insert(this->menus.last());
 
                 if(menu.contains("browseToken"))
                 {
