@@ -30,16 +30,7 @@ bool Inserter::insert(Menu menu)
 
     qDebug() << sql;
 
-    if(!query.exec(sql))
-    {
-        qDebug() << query.lastError().text();
-
-        exit(1);
-    }
-    else
-    {
-        return true;
-    }
+    query.exec(sql);
 }
 
 bool Inserter::insert(Merchandise merchandise)
