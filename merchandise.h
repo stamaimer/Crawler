@@ -1,6 +1,7 @@
 #ifndef MERCHANDISE_H
 #define MERCHANDISE_H
 
+#include <QRegExp>
 #include <QString>
 
 class Merchandise
@@ -40,7 +41,7 @@ public:
         return name.toHtmlEscaped();
     }
 
-    QString getMSRP()
+    double getMSRP()
     {
         if(msrp.isEmpty())
         {
@@ -48,13 +49,13 @@ public:
         }
         else
         {
-            return msrp;
+            return msrp.replace(QRegExp("$"), "").toDouble();
         }
     }
 
-    QString getPrice()
+    double getPrice()
     {
-        return price;
+        return price.replace(QRegExp("$"), "").toDouble();
     }
 
     int getStock()

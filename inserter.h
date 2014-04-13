@@ -4,6 +4,8 @@
 #include "menu.h"
 #include "merchandise.h"
 
+#include <QDate>
+
 #include <QDebug>
 
 #include <QString>
