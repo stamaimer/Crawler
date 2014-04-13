@@ -47,6 +47,7 @@ void Inserter::insert(Merchandise merchandise)
     QString sql = "INSERT IGNORE INTO merchan_info VALUES (%1, \"%2\", %3, %4, %5, %6, %7)";
 
     sql = sql.arg(merchandise.getId())
+             .arg(merchandise.getURL())
              .arg(merchandise.getName())
              .arg(merchandise.getMSRP())
              .arg(merchandise.getPrice())
