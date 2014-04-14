@@ -172,7 +172,7 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
                  this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
 
-                 inserter->insert(this->merchandises.last());
+//                 inserter->insert(this->merchandises.last());
             }
 
             delete walmart;

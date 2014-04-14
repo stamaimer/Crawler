@@ -17,7 +17,6 @@
 class Inserter
 {
     QSqlDatabase db_connection;
-    QSqlQuery* query;
 
 public:
     Inserter();

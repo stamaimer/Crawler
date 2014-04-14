@@ -18,8 +18,6 @@ Inserter::Inserter()
 
         exit(1);
     }
-
-    query = new QSqlQuery();
 }
 
 void Inserter::insert(Menu menu)
@@ -34,9 +32,11 @@ void Inserter::insert(Menu menu)
 
     qDebug() << sql;
 
-    if(!query->exec(sql))
+    QSqlQuery query;
+
+    if(!query.exec(sql))
     {
-        qDebug() << query->lastError().text();
+        qDebug() << query.lastError().text();
 
         exit(1);
     }
@@ -57,9 +57,11 @@ void Inserter::insert(Merchandise merchandise)
 
     qDebug() << sql;
 
-    if(!query->exec(sql))
+    QSqlQuery query;
+
+    if(!query.exec(sql))
     {
-        qDebug() << query->lastError().text();
+        qDebug() << query.lastError().text();
 
         exit(1);
     }
