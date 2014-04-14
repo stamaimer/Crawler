@@ -58,13 +58,11 @@ public:
         }
         else
         {
-            QStringList strs = msrp.split('$');
-
-            QString str = strs[1];
+            QString str = msrp.split('$')[1];
 
             if(str.contains(','))
             {
-                str.remove(str.indexOf(','));
+                str.remove(',');
             }
 
             return str.toDouble();
@@ -73,13 +71,11 @@ public:
 
     double getPrice()
     {
-        QStringList strs = price.split('$');
-
-        QString str = strs[1];
+        QString str = price.split('$')[1];
 
         if(str.contains(','))
         {
-            str.remove(str.indexOf(','));
+            str.remove(',');
         }
 
         return str.toDouble();

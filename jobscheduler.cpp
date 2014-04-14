@@ -175,8 +175,6 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 //                          << stock   << '\t'
 //                          << reviews;
 
-                 qDebug() << item;
-
                  this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
 
                  inserter->insert(this->merchandises.last());
