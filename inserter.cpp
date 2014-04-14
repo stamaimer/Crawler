@@ -18,6 +18,8 @@ Inserter::Inserter()
 
         exit(1);
     }
+
+    query = QSqlQuery();
 }
 
 void Inserter::insert(Menu menu)
@@ -31,8 +33,6 @@ void Inserter::insert(Menu menu)
 
 
     qDebug() << sql;
-
-    QSqlQuery query;
 
     if(!query.exec(sql))
     {
@@ -56,8 +56,6 @@ void Inserter::insert(Merchandise merchandise)
              .arg(QDate::currentDate().toString(Qt::ISODate));
 
     qDebug() << sql;
-
-    QSqlQuery query;
 
     if(!query.exec(sql))
     {
