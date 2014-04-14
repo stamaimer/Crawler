@@ -1,6 +1,7 @@
 #ifndef MERCHANDISE_H
 #define MERCHANDISE_H
 
+#include <QDebug>
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
@@ -58,6 +59,8 @@ public:
         }
         else
         {
+            qDebug() << msrp;
+
             QString str = msrp.split('$')[1];
 
             if(str.contains(','))
@@ -71,6 +74,8 @@ public:
 
     double getPrice()
     {
+        qDebug() << price;
+
         QString str = price.split('$')[1];
 
         if(str.contains(','))

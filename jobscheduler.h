@@ -29,8 +29,6 @@ class QNetworkReply;
 
 class JobScheduler
 {
-    QElapsedTimer timer;
-
     QVector<Menu> menus;
 
     QVector<QString> completed;
@@ -41,6 +39,8 @@ class JobScheduler
 
 public:
     QMutex mutex;
+
+    QElapsedTimer timer;
 
     QVector<Walmart*> walmarts;
 

@@ -17,11 +17,11 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
-//    proxy.setType(QNetworkProxy::HttpProxy);
-//    proxy.setHostName("localhost");
-//    proxy.setPort(8888);
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName("localhost");
+    proxy.setPort(8888);
 
-//    QNetworkProxy::setApplicationProxy(proxy);
+    QNetworkProxy::setApplicationProxy(proxy);
 
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
@@ -29,9 +29,11 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(5000 == count)
+        if(500 == count)
         {
             qDebug() << "beg of insert merchandise";
+
+            job_scheduler->timer.start();
 
             for(Merchandise merchandise : job_scheduler->merchandises)
             {
@@ -41,6 +43,8 @@ void Requester::run()
             count = 0;
 
             job_scheduler->merchandises.empty();
+
+            qDebug() << job_scheduler->timer.elapsed() / 1000 << "elapsed";
 
             qDebug() << "end of insert merchandise";
         }
