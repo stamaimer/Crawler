@@ -162,6 +162,11 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                  QString stock   = item["addableToCart"].toString();
                  QString reviews = item["cRRNumReviews"].toString();
 
+                 if(price.contains('-') || price.contains("store") || price.isEmpty())
+                 {
+                     continue;
+                 }
+
 //                 qDebug() << id      << '\t'
 //                          << url     << '\t'
 //                          << name    << '\t'
@@ -169,6 +174,8 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 //                          << price   << '\t'
 //                          << stock   << '\t'
 //                          << reviews;
+
+                 qDebug() << item;
 
                  this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
 
