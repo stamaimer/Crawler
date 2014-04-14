@@ -31,6 +31,8 @@ void Requester::run()
 
         if(5000 == count)
         {
+            qDebug() << "beg of insert merchandise";
+
             for(Merchandise merchandise : job_scheduler->merchandises)
             {
                 job_scheduler->inserter->insert(merchandise);
@@ -39,6 +41,8 @@ void Requester::run()
             count = 0;
 
             job_scheduler->merchandises.empty();
+
+            qDebug() << "end of insert merchandise";
         }
 
         if(job_scheduler->walmarts.size() != 0)

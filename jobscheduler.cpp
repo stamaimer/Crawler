@@ -170,13 +170,13 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                      continue;
                  }
 
-                 qDebug() << id      << '\t'
-                          << url     << '\t'
-                          << name    << '\t'
-                          << msrp    << '\t'
-                          << price   << '\t'
-                          << stock   << '\t'
-                          << reviews;
+//                 qDebug() << id      << '\t'
+//                          << url     << '\t'
+//                          << name    << '\t'
+//                          << msrp    << '\t'
+//                          << price   << '\t'
+//                          << stock   << '\t'
+//                          << reviews;
 
                  mutex.lock();
                  this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
