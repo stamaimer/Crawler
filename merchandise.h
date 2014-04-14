@@ -64,7 +64,7 @@ public:
 
             if(str.contains(','))
             {
-                str.replace(',', '');
+                str.remove(str.indexOf(','));
             }
 
             return str.toDouble();
@@ -79,7 +79,7 @@ public:
 
         if(str.contains(','))
         {
-            str.replace(',', '');
+            str.remove(str.indexOf(','));
         }
 
         return str.toDouble();

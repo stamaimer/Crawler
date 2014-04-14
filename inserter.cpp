@@ -44,7 +44,7 @@ void Inserter::insert(Menu menu)
 
 void Inserter::insert(Merchandise merchandise)
 {
-    QString sql = "INSERT IGNORE INTO merchan_info VALUES (%1, \"%2\", %3, %4, %5, %6, %7)";
+    QString sql = "INSERT IGNORE INTO merchan_info VALUES (%1, \"%2\", \"%3\", %4, %5, %6, %7, %8)";
 
     sql = sql.arg(merchandise.getId())
              .arg(merchandise.getURL())
