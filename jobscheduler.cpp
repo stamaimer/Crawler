@@ -91,10 +91,10 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                qDebug() << id                << '\t'
-                         << name              << '\t'
-                         << category          << '\t'
-                         << parent_categories;
+//                qDebug() << id                << '\t'
+//                         << name              << '\t'
+//                         << category          << '\t'
+//                         << parent_categories;
 
                 mutex.lock();
                 inserter->insert(Menu(id, name, category, parent_categories));
