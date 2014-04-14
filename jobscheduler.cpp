@@ -22,7 +22,7 @@ JobScheduler::JobScheduler()
         requesters[i]->start();
     }
 
-//    inserter = new Inserter();
+    inserter = new Inserter();
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -54,7 +54,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-//        qDebug() << walmart->name << reply->error() << reply->errorString();
+        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
         walmarts.append(walmart);
 
@@ -98,9 +98,9 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
-//                this->menus.append(Menu(id, name, category, parent_categories));
+                this->menus.append(Menu(id, name, category, parent_categories));
 
-//                inserter->insert(this->menus.last());
+                inserter->insert(this->menus.last());
 
                 if(menu.contains("browseToken"))
                 {
@@ -170,9 +170,9 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 //                          << stock   << '\t'
 //                          << reviews;
 
-//                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
+                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
 
-//                 inserter->insert(this->merchandises.last());
+                 inserter->insert(this->merchandises.last());
             }
 
             delete walmart;
