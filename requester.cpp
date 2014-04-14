@@ -29,16 +29,20 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(500 == count)
+        if(100 == count)
         {
             qDebug() << "beg of insert merchandise";
 
             job_scheduler->timer.start();
 
+            QSqlDatabase::database().transaction();
+
             for(Merchandise merchandise : job_scheduler->merchandises)
             {
                 job_scheduler->inserter->insert(merchandise);
             }
+
+            QSqlDatabase::database().commit();
 
             count = 0;
 
