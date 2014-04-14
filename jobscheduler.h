@@ -33,11 +33,7 @@ class JobScheduler
 
     QVector<Menu> menus;
 
-    QVector<Merchandise> merchandises;
-
     QVector<QString> completed;
-
-    Inserter* inserter;
 
     Requester* requesters[AMOUNT_OF_THREADS];
 
@@ -47,6 +43,10 @@ public:
     QMutex mutex;
 
     QVector<Walmart*> walmarts;
+
+    QVector<Merchandise> merchandises;
+
+    Inserter* inserter;
 
     JobScheduler();
 

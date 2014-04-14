@@ -141,7 +141,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
     return false;
 }
 
-void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
+bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 {
     QJsonDocument* doc = new QJsonDocument();
 

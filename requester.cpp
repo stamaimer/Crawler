@@ -29,6 +29,18 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
+        if(5000 == count)
+        {
+            for(Merchandise merchandise : job_scheduler->merchandises)
+            {
+                job_scheduler->inserter->insert(merchandise);
+            }
+
+            count = 0;
+
+            job_scheduler->merchandises.empty();
+        }
+
         if(job_scheduler->walmarts.size() != 0)
         {
             Walmart* walmart = job_scheduler->walmarts.first();
