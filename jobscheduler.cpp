@@ -3,8 +3,6 @@
 
 JobScheduler::JobScheduler()
 {
-    timer.start();
-
     menus.append(Menu("bdc5bab64b1f84fa7b6b301c26fdf439af96a3a0", "Electronics", "3944", QStringList()));
     menus.append(Menu("d12bf578c2846aee54b8bafc892baabd1d37c97e", "Video Games", "2636", QStringList()));
     menus.append(Menu("7815b575f44ce887a8a23d06704cf765bfb0502c", "Office", "546952", QStringList()));
@@ -62,7 +60,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
 }
 
-void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
+bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 {
     QJsonDocument* doc = new QJsonDocument();
 
@@ -98,9 +96,9 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
-                this->menus.append(Menu(id, name, category, parent_categories));
-
-                inserter->insert(this->menus.last());
+                mutex.lock();
+                inserter->insert(Menu(id, name, category, parent_categories));
+                mutex.unlock();
 
                 if(menu.contains("browseToken"))
                 {
@@ -126,16 +124,21 @@ void JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                 }
             }
 
+            delete doc;
             delete walmart;
+            reply->deleteLater();
+            return true;
         }
         else
         {
             qDebug() << "47 structure of doc invalidation";
+            this->walmarts.append(walmart);
         }
     }
 
     delete doc;
     reply->deleteLater();
+    return false;
 }
 
 void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
@@ -167,27 +170,32 @@ void JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                      continue;
                  }
 
-//                 qDebug() << id      << '\t'
-//                          << url     << '\t'
-//                          << name    << '\t'
-//                          << msrp    << '\t'
-//                          << price   << '\t'
-//                          << stock   << '\t'
-//                          << reviews;
+                 qDebug() << id      << '\t'
+                          << url     << '\t'
+                          << name    << '\t'
+                          << msrp    << '\t'
+                          << price   << '\t'
+                          << stock   << '\t'
+                          << reviews;
 
+                 mutex.lock();
                  this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
-
-                 inserter->insert(this->merchandises.last());
+                 mutex.unlock();
             }
 
+            delete doc;
             delete walmart;
+            reply->deleteLater();
+            return true;
         }
         else
         {
             qDebug() << "47 structure of doc invalidation";
+            this->walmarts.append(walmart);
         }
     }
 
     delete doc;
     reply->deleteLater();
+    return false;
 }

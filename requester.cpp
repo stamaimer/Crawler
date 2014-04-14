@@ -1,5 +1,7 @@
 #include "requester.h"
 
+int Requester::count = 0;
+
 Requester::Requester(int tid, JobScheduler* job_scheduler)
 {
     this->tid           = tid;
@@ -41,7 +43,7 @@ void Requester::run()
 
             synchronous.exec();
 
-            job_scheduler->mutex.lock();
+//            job_scheduler->mutex.lock();
 
             if(walmart->request_url.contains("taxonomy"))
             {
@@ -49,10 +51,13 @@ void Requester::run()
             }
             else
             {
-                job_scheduler->getMerchandise(reply, walmart);
+                if(job_scheduler->getMerchandise(reply, walmart))
+                {
+                    count++;
+                }
             }
 
-            job_scheduler->mutex.unlock();
+//            job_scheduler->mutex.unlock();
         }
         else
         {

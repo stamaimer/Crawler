@@ -16,6 +16,8 @@
 
 class Requester : public QThread
 {
+    static int count;
+
     int tid;
 
     JobScheduler* job_scheduler;

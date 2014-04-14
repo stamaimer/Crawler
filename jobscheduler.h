@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QElapsedTimer>
 
-#define AMOUNT_OF_THREADS 100
+#define AMOUNT_OF_THREADS 200
 
 class Requester;
 class QNetworkReply;
@@ -50,8 +50,8 @@ public:
 
     JobScheduler();
 
-    void getMenus(QNetworkReply*, Walmart*);
-    void getMerchandise(QNetworkReply*, Walmart*);
+    bool getMenus(QNetworkReply*, Walmart*);
+    bool getMerchandise(QNetworkReply*, Walmart*);
 };
 
 #endif // JOBSCHEDULER_H
