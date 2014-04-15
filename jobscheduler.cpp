@@ -91,14 +91,14 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                     parent_categories << tmp[i].toString();
                 }
 
-                qDebug() << id                << '\t'
-                         << name              << '\t'
-                         << category          << '\t'
-                         << parent_categories;
+//                qDebug() << id                << '\t'
+//                         << name              << '\t'
+//                         << category          << '\t'
+//                         << parent_categories;
 
-//                mutex.lock();
-//                inserter->insert(Menu(id, name, category, parent_categories));
-//                mutex.unlock();
+                mutex.lock();
+                inserter->insert(Menu(id, name, category, parent_categories));
+                mutex.unlock();
 
                 if(menu.contains("browseToken"))
                 {
@@ -170,17 +170,17 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
                      continue;
                  }
 
-                 qDebug() << id      << '\t'
-                          << url     << '\t'
-                          << name    << '\t'
-                          << msrp    << '\t'
-                          << price   << '\t'
-                          << stock   << '\t'
-                          << reviews;
+//                 qDebug() << id      << '\t'
+//                          << url     << '\t'
+//                          << name    << '\t'
+//                          << msrp    << '\t'
+//                          << price   << '\t'
+//                          << stock   << '\t'
+//                          << reviews;
 
-//                 mutex.lock();
-//                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
-//                 mutex.unlock();
+                 mutex.lock();
+                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
+                 mutex.unlock();
             }
 
             delete doc;

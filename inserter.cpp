@@ -42,18 +42,27 @@ void Inserter::insert(Menu menu)
     }
 }
 
-void Inserter::insert(Merchandise merchandise)
+void Inserter::insert(QVector<Merchandise> merchandises)
 {
-    QString sql = "INSERT IGNORE INTO merchan_info VALUES (%1, \"%2\", \"%3\", %4, %5, %6, %7, \"%8\")";
+    QString sql = "INSERT IGNORE INTO merchan_info VALUES ";
 
-    sql = sql.arg(merchandise.getId())
-             .arg(merchandise.getURL())
-             .arg(merchandise.getName())
-             .arg(merchandise.getMSRP())
-             .arg(merchandise.getPrice())
-             .arg(merchandise.getStock())
-             .arg(merchandise.getReviews())
-             .arg(QDate::currentDate().toString(Qt::ISODate));
+    QString pattern = "(%1, \"%2\", \"%3\", %4, %5, %6, %7, \"%8\")";
+
+    QStringList rows;
+
+    for(Merchandise merchandise : merchandises)
+    {
+        rows << pattern.arg(merchandise.getId())
+                       .arg(merchandise.getURL())
+                       .arg(merchandise.getName())
+                       .arg(merchandise.getMSRP())
+                       .arg(merchandise.getPrice())
+                       .arg(merchandise.getStock())
+                       .arg(merchandise.getReviews())
+                       .arg(QDate::currentDate().toString(Qt::ISODate));
+    }
+
+    sql = sql + rows.join(',')
 
     qDebug() << sql;
 

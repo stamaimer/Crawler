@@ -8,6 +8,8 @@
 
 #include <QDebug>
 
+#include <QVector>
+
 #include <QString>
 
 #include <QSqlError>
@@ -25,7 +27,7 @@ public:
 
     void insert(Menu);
 
-    void insert(Merchandise);
+    void insert(QVector<Merchandise>);
 };
 
 #endif // INSERTER_H

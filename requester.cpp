@@ -18,8 +18,8 @@ void Requester::run()
     QNetworkAccessManager manager;
 
     proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("localhost");
-    proxy.setPort(8888);
+    proxy.setHostName("110.80.71.13");
+    proxy.setPort(18186);
 
     QNetworkProxy::setApplicationProxy(proxy);
 
@@ -29,29 +29,26 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-//        if(100 == count)
-//        {
-//            qDebug() << "beg of insert merchandise";
+        if(1 == count)
+        {
+            qDebug() << "beg of insert merchandise";
 
-//            job_scheduler->timer.start();
+            job_scheduler->timer.start();
 
-//            QSqlDatabase::database().transaction();
+            QSqlDatabase::database().transaction();
 
-//            for(Merchandise merchandise : job_scheduler->merchandises)
-//            {
-//                job_scheduler->inserter->insert(merchandise);
-//            }
+            job_scheduler->inserter->insert(job_scheduler->merchandises);
 
-//            QSqlDatabase::database().commit();
+            QSqlDatabase::database().commit();
 
-//            count = 0;
+            count = 0;
 
-//            job_scheduler->merchandises.empty();
+            job_scheduler->merchandises.empty();
 
-//            qDebug() << job_scheduler->timer.elapsed() / 1000 << "elapsed";
+            qDebug() << job_scheduler->timer.elapsed() / 1000 << "elapsed";
 
-//            qDebug() << "end of insert merchandise";
-//        }
+            qDebug() << "end of insert merchandise";
+        }
 
         if(job_scheduler->walmarts.size() != 0)
         {
