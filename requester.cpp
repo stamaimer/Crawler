@@ -1,4 +1,5 @@
 #include "requester.h"
+#include "utils.h"
 
 int Requester::count = 0;
 
@@ -12,16 +13,9 @@ void Requester::run()
 {
     QEventLoop synchronous;
 
-    QNetworkProxy         proxy;
     QNetworkRequest       request;
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
-
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("110.80.71.13");
-    proxy.setPort(18186);
-
-    QNetworkProxy::setApplicationProxy(proxy);
 
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
@@ -29,7 +23,7 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(1 == count)
+        if(2 == count)
         {
             qDebug() << "beg of insert merchandise";
 
@@ -45,7 +39,7 @@ void Requester::run()
 
             job_scheduler->merchandises.empty();
 
-            qDebug() << job_scheduler->timer.elapsed() / 1000 << "elapsed";
+            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
 
             qDebug() << "end of insert merchandise";
         }
@@ -57,6 +51,8 @@ void Requester::run()
             job_scheduler->walmarts.remove(0);
 
             job_scheduler->mutex.unlock();
+
+            toggle(job_scheduler->ips, job_scheduler->proxy);
 
             request.setUrl(QUrl(walmart->request_url));
 

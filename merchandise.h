@@ -59,7 +59,7 @@ public:
         }
         else
         {
-            qDebug() << msrp;
+//            qDebug() << msrp;
 
             QString str = msrp.split('$')[1];
 
@@ -74,7 +74,7 @@ public:
 
     double getPrice()
     {
-        qDebug() << price;
+//        qDebug() << price;
 
         QString str = price.split('$')[1];
 

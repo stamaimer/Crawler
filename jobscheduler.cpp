@@ -21,6 +21,8 @@ JobScheduler::JobScheduler()
     }
 
     inserter = new Inserter();
+
+    getProxyInfo();
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -198,4 +200,18 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
     delete doc;
     reply->deleteLater();
     return false;
+}
+
+void JobScheduler::getProxyInfo()
+{
+    QFile file("c:/downloads/ip.txt");
+
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QTextStream in(&file);
+
+    while(!in.atEnd())
+    {
+        ips.append(in.readLine());
+    }
 }

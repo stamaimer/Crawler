@@ -62,9 +62,11 @@ void Inserter::insert(QVector<Merchandise> merchandises)
                        .arg(QDate::currentDate().toString(Qt::ISODate));
     }
 
-    sql = sql + rows.join(',')
+    sql = sql + rows.join(',');
 
     qDebug() << sql;
+
+    qDebug() << merchandises.size() << "rows";
 
     if(!query.exec(sql))
     {

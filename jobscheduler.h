@@ -7,7 +7,11 @@
 #include "menu.h"
 #include "merchandise.h"
 
+#include <QFile>
+
 #include <QMutex>
+
+#include <QNetworkProxy>
 
 #include <QString>
 
@@ -35,6 +39,8 @@ class JobScheduler
 
     Requester* requesters[AMOUNT_OF_THREADS];
 
+    void getProxyInfo();
+
     bool getJsonDoc(QNetworkReply*, Walmart*, QJsonDocument*);
 
 public:
@@ -42,11 +48,15 @@ public:
 
     QElapsedTimer timer;
 
+    QVector<QString> ips;
+
     QVector<Walmart*> walmarts;
 
     QVector<Merchandise> merchandises;
 
     Inserter* inserter;
+
+    QNetworkProxy proxy;
 
     JobScheduler();
 
