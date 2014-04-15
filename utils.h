@@ -9,23 +9,28 @@
 #include <stdlib.h>
 #include <time.h>
 
-void toggle(QVector<QString> ips, QNetworkProxy proxy)
+class Utils
 {
-    srand(time(NULL));
+public:
 
-    int index = rand() % ips.size();
+    static void toggle(QVector<QString> ips, QNetworkProxy proxy)
+    {
+        srand(time(NULL));
 
-    QString ip   = ips[index].split(':')[0];
-    QString port = ips[index].split(':')[1];
+        int index = rand() % ips.size();
 
-    qDebug() << "current ip:port" << ip << ':' << port;
+        QString ip   = ips[index].split(':')[0];
+        QString port = ips[index].split(':')[1];
 
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName(ip);
-    proxy.setPort(port.toInt());
+        qDebug() << "current ip:port" << ip << ':' << port;
 
-    QNetworkProxy::setApplicationProxy(proxy);
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(ip);
+        proxy.setPort(port.toInt());
 
-}
+        QNetworkProxy::setApplicationProxy(proxy);
+
+    }
+};
 
 #endif // UTILS_H

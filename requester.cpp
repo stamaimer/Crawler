@@ -23,7 +23,7 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(2 == count)
+        if(1 == count)
         {
             qDebug() << "beg of insert merchandise";
 
@@ -42,6 +42,8 @@ void Requester::run()
             qDebug() << job_scheduler->timer.elapsed() << "elapsed";
 
             qDebug() << "end of insert merchandise";
+
+            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
         }
 
         if(job_scheduler->walmarts.size() != 0)
@@ -52,15 +54,13 @@ void Requester::run()
 
             job_scheduler->mutex.unlock();
 
-            toggle(job_scheduler->ips, job_scheduler->proxy);
-
             request.setUrl(QUrl(walmart->request_url));
 
             reply = manager.get(request);
 
             synchronous.exec();
 
-//            job_scheduler->mutex.lock();
+            job_scheduler->mutex.lock();
 
             if(walmart->request_url.contains("taxonomy"))
             {
@@ -74,7 +74,7 @@ void Requester::run()
                 }
             }
 
-//            job_scheduler->mutex.unlock();
+            job_scheduler->mutex.unlock();
         }
         else
         {

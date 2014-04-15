@@ -1,5 +1,6 @@
 #include "jobscheduler.h"
 #include "requester.h"
+#include "utils.h"
 
 JobScheduler::JobScheduler()
 {
@@ -23,6 +24,8 @@ JobScheduler::JobScheduler()
     inserter = new Inserter();
 
     getProxyInfo();
+
+    Utils::toggle(ips, proxy);
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -54,7 +57,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
+        qDebug() << walmart->name << reply->error() << reply->errorString().split('-')[1].remove(0, 1);
 
         walmarts.append(walmart);
 
@@ -98,9 +101,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
-                mutex.lock();
                 inserter->insert(Menu(id, name, category, parent_categories));
-                mutex.unlock();
 
                 if(menu.contains("browseToken"))
                 {
@@ -134,7 +135,8 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
         else
         {
             qDebug() << "47 structure of doc invalidation";
-            this->walmarts.append(walmart);
+
+            walmarts.append(walmart);
         }
     }
 
@@ -180,9 +182,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 //                          << stock   << '\t'
 //                          << reviews;
 
-                 mutex.lock();
-                 this->merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
-                 mutex.unlock();
+                 merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
             }
 
             delete doc;
@@ -193,7 +193,8 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
         else
         {
             qDebug() << "47 structure of doc invalidation";
-            this->walmarts.append(walmart);
+
+            walmarts.append(walmart);
         }
     }
 
@@ -208,10 +209,15 @@ void JobScheduler::getProxyInfo()
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    QTextStream in(&file);
-
-    while(!in.atEnd())
+    while(!file.atEnd())
     {
-        ips.append(in.readLine());
+        ips.append(file.readLine());
     }
+
+    for(int i = 0; i < ips.size(); ++i)
+    {
+        qDebug() << ips[i];
+    }
+
+    file.close();
 }
