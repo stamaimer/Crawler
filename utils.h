@@ -19,10 +19,10 @@ public:
 
         int index = rand() % ips.size();
 
+        qDebug() << ips.size() << index << ips[index];
+
         QString ip   = ips[index].split(':')[0];
         QString port = ips[index].split(':')[1];
-
-        qDebug() << "current ip:port" << ip << ':' << port;
 
         proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(ip);

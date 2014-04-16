@@ -31,15 +31,14 @@ void Inserter::insert(Menu menu)
              .arg(menu.getCategory())
              .arg(menu.getParentCategories());
 
-
-    qDebug() << sql;
-
     if(!query.exec(sql))
     {
         qDebug() << query.lastError().text();
 
         exit(1);
     }
+
+    qDebug() << sql;
 }
 
 void Inserter::insert(QVector<Merchandise> merchandises)
@@ -64,14 +63,14 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
     sql = sql + rows.join(',');
 
-    qDebug() << sql;
-
-    qDebug() << merchandises.size() << "rows";
-
     if(!query.exec(sql))
     {
         qDebug() << query.lastError().text();
 
         exit(1);
     }
+
+    qDebug() << sql;
+
+    qDebug() << merchandises.size() << "rows";
 }

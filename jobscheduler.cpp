@@ -24,8 +24,6 @@ JobScheduler::JobScheduler()
     inserter = new Inserter();
 
     getProxyInfo();
-
-    Utils::toggle(ips, proxy);
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -57,7 +55,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-        qDebug() << walmart->name << reply->error() << reply->errorString().split('-')[1].remove(0, 1);
+        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
         walmarts.append(walmart);
 
@@ -212,11 +210,6 @@ void JobScheduler::getProxyInfo()
     while(!file.atEnd())
     {
         ips.append(file.readLine());
-    }
-
-    for(int i = 0; i < ips.size(); ++i)
-    {
-        qDebug() << ips[i];
     }
 
     file.close();
