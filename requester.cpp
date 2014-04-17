@@ -25,8 +25,6 @@ void Requester::run()
 
         if(1 == count)
         {
-            qDebug() << "beg of insert merchandise";
-
             job_scheduler->timer.start();
 
             QSqlDatabase::database().transaction();
@@ -41,13 +39,7 @@ void Requester::run()
 
             qDebug() << job_scheduler->timer.elapsed() << "elapsed";
 
-            qDebug() << "end of insert merchandise";
-
-            qDebug() << "beg of toggle proxy";
-
             Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
-
-            qDebug() << "end of toggle proxy";
         }
 
         if(job_scheduler->walmarts.size() != 0)

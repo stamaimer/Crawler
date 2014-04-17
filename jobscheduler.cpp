@@ -207,9 +207,11 @@ void JobScheduler::getProxyInfo()
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    while(!file.atEnd())
+    QTextStream in(&file);
+
+    while(!in.atEnd())
     {
-        ips.append(file.readLine());
+        ips.append(in.readLine());
     }
 
     file.close();
