@@ -11,7 +11,7 @@ JobScheduler::JobScheduler()
 
     for(int i = 0; i < menus.size(); ++i)
     {
-        walmarts.append(new Walmart(menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
+        walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
     }
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
@@ -109,7 +109,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                     if(!completed.contains(request_url))
                     {
-                        walmarts.append(new Walmart(name, request_url));
+                        walmarts.append(new Walmart(id, name, request_url));
                     }
                 }
                 else
@@ -120,7 +120,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                     if(!completed.contains(request_url))
                     {
-                        walmarts.append(new Walmart(name, request_url));
+                        walmarts.append(new Walmart(id, name, request_url));
                     }
                 }
             }
@@ -180,7 +180,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 //                          << stock   << '\t'
 //                          << reviews;
 
-                 merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews));
+                 merchandises.append(Merchandise(id, url, name, msrp, price, stock, reviews, walmart->id));
             }
 
             delete doc;

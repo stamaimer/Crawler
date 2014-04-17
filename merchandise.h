@@ -15,6 +15,7 @@ class Merchandise
     QString price;
     QString stock;
     QString reviews;
+    QString parent;
 
 public:
     Merchandise(){}
@@ -25,7 +26,8 @@ public:
                 QString msrp,
                 QString price,
                 QString stock,
-                QString reviews)
+                QString reviews,
+                QString parent)
     {
         this->id      = id;
         this->url     = url;
@@ -34,6 +36,7 @@ public:
         this->price   = price;
         this->stock   = stock;
         this->reviews = reviews;
+        this->parent  = parent;
     }
 
     int getId()
@@ -94,6 +97,11 @@ public:
     int getReviews()
     {
         return reviews.toInt();
+    }
+
+    QString getParent()
+    {
+        return parent;
     }
 };
 
