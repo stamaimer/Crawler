@@ -43,34 +43,46 @@ void Inserter::insert(Menu menu)
 
 void Inserter::insert(QVector<Merchandise> merchandises)
 {
-    QString sql = "INSERT IGNORE INTO merchan_info VALUES ";
+    QString sql_base = "INSERT IGNORE INTO merchan_base VALUES ";
 
-    QString pattern = "(%1, \"%2\", \"%3\", %4, %5, %6, %7, \"%8\")";
+    QString sql_info = "INSERT IGNORE INTO merchan_info VALUES ";
 
-    QStringList rows;
+    QString pattern_base = "(%1)";
+
+    QString pattern_info = "(%1, \"%2\", \"%3\", %4, %5, %6, %7, \"%8\")";
+
+    QStringList rows_base;
+
+    QStringList rows_info;
 
     for(Merchandise merchandise : merchandises)
     {
-        rows << pattern.arg(merchandise.getId())
-                       .arg(merchandise.getURL())
-                       .arg(merchandise.getName())
-                       .arg(merchandise.getMSRP())
-                       .arg(merchandise.getPrice())
-                       .arg(merchandise.getStock())
-                       .arg(merchandise.getReviews())
-                       .arg(QDate::currentDate().toString(Qt::ISODate));
+        rows_base << pattern_base.arg(merchandise.getId());
+
+        rows_info << pattern_info.arg(merchandise.getId())
+                                 .arg(merchandise.getURL())
+                                 .arg(merchandise.getName())
+                                 .arg(merchandise.getMSRP())
+                                 .arg(merchandise.getPrice())
+                                 .arg(merchandise.getStock())
+                                 .arg(merchandise.getReviews())
+                                 .arg(QDate::currentDate().toString(Qt::ISODate));
     }
 
-    sql = sql + rows.join(',');
+    sql_base = sql_base + rows_base.join(',');
 
-    if(!query.exec(sql))
+    sql_info = sql_info + rows_info.join(',');
+
+    if(!query.exec(sql_base) && !query.exec(sql_info))
     {
         qDebug() << query.lastError().text();
 
         exit(1);
     }
 
-    qDebug() << sql;
+    qDebug() << sql_base;
+
+    qDebug() << sql_info;
 
     qDebug() << merchandises.size() << "rows";
 }
