@@ -12,6 +12,8 @@
 
 #include <QMutex>
 
+#include <QObject>
+
 #include <QNetworkProxy>
 
 #include <QString>
@@ -32,7 +34,7 @@
 class Requester;
 class QNetworkReply;
 
-class JobScheduler
+class JobScheduler : public QObject
 {
     Q_OBJECT
 

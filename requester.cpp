@@ -85,7 +85,7 @@ void Requester::run()
             {
                 job_scheduler->mutex.unlock();
 
-                sleep(2);
+                sleep(10);
 
                 sleeped = true;
             }

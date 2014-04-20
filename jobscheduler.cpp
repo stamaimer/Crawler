@@ -230,7 +230,7 @@ void JobScheduler::finished(int tid)
 
     qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED";
 
-    requesters[tid]->deleteLater();
+//    requesters[tid]->deleteLater();
 
     if(AMOUNT_OF_THREADS == count++)
     {
