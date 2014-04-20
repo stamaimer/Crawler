@@ -15,6 +15,8 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
+#define SLEEP_TIME 10
+
 class Requester : public QThread
 {
     Q_OBJECT

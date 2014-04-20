@@ -89,7 +89,7 @@ void Requester::run()
 
                 sleeped = true;
 
-                sleep(10);
+                sleep(SLEEP_TIME);
 
                 qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "WAKE UP";
             }
