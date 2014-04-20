@@ -53,8 +53,6 @@ public:
 
     QVector<Walmart*> walmarts;
 
-//    int count_of_walmart;
-
     QVector<Merchandise> merchandises;
 
     Inserter* inserter;

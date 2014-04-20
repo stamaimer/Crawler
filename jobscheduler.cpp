@@ -21,8 +21,6 @@ JobScheduler::JobScheduler()
         requesters[i]->start();
     }
 
-//    count_of_walmart = walmarts.size();
-
     inserter = new Inserter();
 
     getProxyInfo();
