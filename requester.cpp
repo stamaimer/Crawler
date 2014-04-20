@@ -1,7 +1,7 @@
 #include "requester.h"
 #include "utils.h"
 
-int Requester::count = 0;
+int Requester::final_menu_count = 0;
 
 Requester::Requester(int tid, JobScheduler* job_scheduler)
 {
@@ -23,7 +23,7 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(1 == count)
+        if(1 == final_menu_count)
         {
             job_scheduler->timer.start();
 
@@ -33,7 +33,7 @@ void Requester::run()
 
             QSqlDatabase::database().commit();
 
-            count = 0;
+            final_menu_count = 0;
 
             job_scheduler->merchandises.empty();
 
@@ -66,7 +66,7 @@ void Requester::run()
             {
                 if(job_scheduler->getMerchandise(reply, walmart))
                 {
-                    count++;
+                    final_menu_count++;
                 }
             }
 

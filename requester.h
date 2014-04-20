@@ -16,7 +16,7 @@
 
 class Requester : public QThread
 {
-    static int count;
+    static int final_menu_count;
 
     int tid;
 
