@@ -3,6 +3,7 @@
 
 #include "jobscheduler.h"
 
+#include <QObject>
 #include <QThread>
 
 #include <QEventLoop>

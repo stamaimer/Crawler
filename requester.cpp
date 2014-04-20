@@ -7,8 +7,6 @@ Requester::Requester(int tid, JobScheduler* job_scheduler):sleeped(false)
 {
     this->tid           = tid;
     this->job_scheduler = job_scheduler;
-
-    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)));
 }
 
 void Requester::run()
@@ -19,6 +17,7 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
+    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)));
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
     while(true)
