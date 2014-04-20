@@ -7,6 +7,8 @@ Requester::Requester(int tid, JobScheduler* job_scheduler):sleeped(false)
 {
     this->tid           = tid;
     this->job_scheduler = job_scheduler;
+
+    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)));
 }
 
 void Requester::run()
@@ -46,7 +48,7 @@ void Requester::run()
 
             job_scheduler->walmarts.remove(0);
 
-            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
+//            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
 
             job_scheduler->mutex.unlock();
 
@@ -84,10 +86,12 @@ void Requester::run()
             {
                 job_scheduler->mutex.unlock();
 
-                sleep(10);
+                sleep(2);
 
                 sleeped = true;
             }
         }
     }
+
+    emit finished(tid);
 }

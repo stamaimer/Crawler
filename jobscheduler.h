@@ -34,6 +34,8 @@ class QNetworkReply;
 
 class JobScheduler
 {
+    Q_OBJECT
+
     QVector<Menu> menus;
 
     QVector<QString> completed;
@@ -63,6 +65,9 @@ public:
 
     bool getMenus(QNetworkReply*, Walmart*);
     bool getMerchandise(QNetworkReply*, Walmart*);
+
+private slots:
+    void finished(int);
 };
 
 #endif // JOBSCHEDULER_H

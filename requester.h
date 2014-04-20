@@ -16,6 +16,8 @@
 
 class Requester : public QThread
 {
+    Q_OBJECT
+
     static int final_menu_count;
 
     bool sleeped;
@@ -28,6 +30,9 @@ public:
     Requester(int, JobScheduler*);
 
     void run();
+
+signals:
+    void finished(int);
 };
 
 #endif // REQUESTER_H

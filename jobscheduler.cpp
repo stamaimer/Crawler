@@ -23,9 +23,9 @@ JobScheduler::JobScheduler()
 
     inserter = new Inserter();
 
-    getProxyInfo();
+//    getProxyInfo();
 
-    Utils::toggle(ips, proxy);
+//    Utils::toggle(ips, proxy);
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -50,7 +50,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             qDebug() << walmart->name << parse_status.error << parse_status.errorString();
 
-            walmarts.append(walmart);
+            //walmarts.append(walmart);
 
             return false;
         }
@@ -59,7 +59,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     {
         qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
-        walmarts.append(walmart);
+        //walmarts.append(walmart);
 
         return false;
     }
@@ -222,4 +222,20 @@ void JobScheduler::getProxyInfo()
     }
 
     file.close();
+}
+
+void JobScheduler::finished(int tid)
+{
+    static int count = 0;
+
+    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED";
+
+    requesters[tid]->deleteLater();
+
+    if(AMOUNT_OF_THREADS == count++)
+    {
+        qDebug() << "EXIT...";
+
+        exit(0);
+    }
 }
