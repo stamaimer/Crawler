@@ -21,9 +21,13 @@ JobScheduler::JobScheduler()
         requesters[i]->start();
     }
 
+//    count_of_walmart = walmarts.size();
+
     inserter = new Inserter();
 
     getProxyInfo();
+
+    Utils::toggle(ips, proxy);
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -212,6 +216,11 @@ void JobScheduler::getProxyInfo()
     while(!in.atEnd())
     {
         ips.append(in.readLine());
+    }
+
+    for(int i = 0; i < ips.size(); ++i)
+    {
+        qDebug() << ips[i];
     }
 
     file.close();

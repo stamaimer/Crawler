@@ -19,14 +19,14 @@ public:
 
         int index = rand() % ips.size();
 
-        qDebug() << ips.size() << index << ips[index];
-
         QString ip   = ips[index].split(':')[0];
         QString port = ips[index].split(':')[1];
 
         proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(ip);
         proxy.setPort(port.toInt());
+
+        qDebug() << ips.size() << index << "current" << proxy.hostName() << proxy.port();
 
         QNetworkProxy::setApplicationProxy(proxy);
 

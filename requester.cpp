@@ -38,8 +38,6 @@ void Requester::run()
             job_scheduler->merchandises.empty();
 
             qDebug() << job_scheduler->timer.elapsed() << "elapsed";
-
-            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
         }
 
         if(job_scheduler->walmarts.size() != 0)
@@ -48,7 +46,12 @@ void Requester::run()
 
             job_scheduler->walmarts.remove(0);
 
+            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
+
             job_scheduler->mutex.unlock();
+
+            request.setRawHeader("refer", "http://www.google.com");
+            request.setRawHeader("x-forwarded-for", "127.0.0.1");
 
             request.setUrl(QUrl(walmart->request_url));
 
