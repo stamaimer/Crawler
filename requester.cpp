@@ -50,9 +50,6 @@ void Requester::run()
 
             job_scheduler->mutex.unlock();
 
-            request.setRawHeader("refer", "http://www.google.com");
-            request.setRawHeader("x-forwarded-for", "127.0.0.1");
-
             request.setUrl(QUrl(walmart->request_url));
 
             reply = manager.get(request);
