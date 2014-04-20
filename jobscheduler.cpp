@@ -234,7 +234,7 @@ void JobScheduler::finished(int tid)
 
     qDebug() << count + 1;
 
-    if(AMOUNT_OF_THREADS == count++)
+    if(AMOUNT_OF_THREADS == ++count)
     {
         qDebug() << "EXIT...";
 
