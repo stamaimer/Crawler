@@ -3,7 +3,7 @@
 
 int Requester::final_menu_count = 0;
 
-Requester::Requester(int tid, JobScheduler* job_scheduler)
+Requester::Requester(int tid, JobScheduler* job_scheduler):sleeped(false)
 {
     this->tid           = tid;
     this->job_scheduler = job_scheduler;
@@ -74,7 +74,20 @@ void Requester::run()
         }
         else
         {
-            job_scheduler->mutex.unlock();
+            if(sleeped)
+            {
+                job_scheduler->mutex.unlock();
+
+                break;
+            }
+            else
+            {
+                job_scheduler->mutex.unlock();
+
+                sleep(10);
+
+                sleeped = true;
+            }
         }
     }
 }

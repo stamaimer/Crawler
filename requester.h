@@ -18,6 +18,8 @@ class Requester : public QThread
 {
     static int final_menu_count;
 
+    bool sleeped;
+
     int tid;
 
     JobScheduler* job_scheduler;
