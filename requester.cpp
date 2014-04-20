@@ -83,11 +83,13 @@ void Requester::run()
             }
             else
             {
+                qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "SLEEPING";
+
                 job_scheduler->mutex.unlock();
 
-                sleep(10);
-
                 sleeped = true;
+
+                sleep(10);
             }
         }
     }
