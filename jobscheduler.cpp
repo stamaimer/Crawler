@@ -4,6 +4,8 @@
 
 JobScheduler::JobScheduler()
 {
+    timer.start();
+
     menus.append(Menu("bdc5bab64b1f84fa7b6b301c26fdf439af96a3a0", "Electronics", "3944", QStringList()));
     menus.append(Menu("d12bf578c2846aee54b8bafc892baabd1d37c97e", "Video Games", "2636", QStringList()));
     menus.append(Menu("7815b575f44ce887a8a23d06704cf765bfb0502c", "Office", "546952", QStringList()));
@@ -237,6 +239,8 @@ void JobScheduler::finished(int tid)
     if(AMOUNT_OF_THREADS == ++count)
     {
         qDebug() << "EXIT...";
+
+        qDebug() << timer.elapsed() / 1000 << "elapsed";
 
         exit(0);
     }

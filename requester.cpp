@@ -26,7 +26,7 @@ void Requester::run()
 
         if(1 == final_menu_count)
         {
-            job_scheduler->timer.start();
+//            job_scheduler->timer.start();
 
             QSqlDatabase::database().transaction();
 
@@ -38,7 +38,7 @@ void Requester::run()
 
             job_scheduler->merchandises.empty();
 
-            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
+//            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
         }
 
         if(job_scheduler->walmarts.size() != 0)
