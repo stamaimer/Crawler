@@ -59,7 +59,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
+//        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
         //walmarts.append(walmart);
 
@@ -230,7 +230,7 @@ void JobScheduler::finished(int tid)
 {
     static int count = 0;
 
-    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << count + 1;
+//    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << count + 1;
 
     requesters[tid]->exit();
 

@@ -17,7 +17,7 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
-    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)));
+    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)), Qt::DirectConnection);
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
     while(true)
@@ -75,25 +75,17 @@ void Requester::run()
         }
         else
         {
+            job_scheduler->mutex.unlock();
+
             if(sleeped)
             {
-                job_scheduler->mutex.unlock();
-
-                qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "TO EXIT";
-
                 break;
             }
             else
             {
-                qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "SLEEPING";
-
-                job_scheduler->mutex.unlock();
-
                 sleeped = true;
 
                 sleep(SLEEP_TIME);
-
-                qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "WAKE UP";
             }
         }
     }
