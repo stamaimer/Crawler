@@ -79,6 +79,8 @@ void Requester::run()
             {
                 job_scheduler->mutex.unlock();
 
+                qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "TO EXIT";
+
                 break;
             }
             else

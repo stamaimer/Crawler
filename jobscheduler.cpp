@@ -230,11 +230,9 @@ void JobScheduler::finished(int tid)
 {
     static int count = 0;
 
-    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED";
+    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << count + 1;
 
     requesters[tid]->exit();
-
-    qDebug() << count + 1;
 
     if(AMOUNT_OF_THREADS == ++count)
     {
