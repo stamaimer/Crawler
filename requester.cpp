@@ -47,7 +47,7 @@ void Requester::run()
 
             job_scheduler->walmarts.remove(0);
 
-//            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
+            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
 
             job_scheduler->mutex.unlock();
 
