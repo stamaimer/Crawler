@@ -16,7 +16,7 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
-    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)), Qt::QueuedConnection);
+    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)), Qt::DirectConnection);
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
     while(true)
@@ -54,7 +54,7 @@ void Requester::run()
 
             synchronous.exec();
 
-//            job_scheduler->mutex.lock();
+            job_scheduler->mutex.lock();
 
             if(walmart->request_url.contains("taxonomy"))
             {
@@ -68,7 +68,7 @@ void Requester::run()
                 }
             }
 
-//            job_scheduler->mutex.unlock();
+            job_scheduler->mutex.unlock();
         }
         else
         {

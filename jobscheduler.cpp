@@ -102,9 +102,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
-                mutex.lock();
                 inserter->insert(Menu(id, name, category, parent_categories));
-                mutex.unlock();
 
                 if(menu.contains("browseToken"))
                 {
