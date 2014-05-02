@@ -1,5 +1,4 @@
 #include "requester.h"
-#include "utils.h"
 
 int Requester::final_menu_count = 0;
 
@@ -17,7 +16,7 @@ void Requester::run()
     QNetworkReply*        reply = NULL;
     QNetworkAccessManager manager;
 
-    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)), Qt::DirectConnection);
+    connect(this, SIGNAL(finished(int)), job_scheduler, SLOT(finished(int)), Qt::QueuedConnection);
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
 
     while(true)
@@ -36,7 +35,7 @@ void Requester::run()
 
             final_menu_count = 0;
 
-            job_scheduler->merchandises.empty();
+            job_scheduler->merchandises.clear();
 
 //            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
         }
@@ -47,8 +46,6 @@ void Requester::run()
 
             job_scheduler->walmarts.remove(0);
 
-            Utils::toggle(job_scheduler->ips, job_scheduler->proxy);
-
             job_scheduler->mutex.unlock();
 
             request.setUrl(QUrl(walmart->request_url));
@@ -57,7 +54,7 @@ void Requester::run()
 
             synchronous.exec();
 
-            job_scheduler->mutex.lock();
+//            job_scheduler->mutex.lock();
 
             if(walmart->request_url.contains("taxonomy"))
             {
@@ -71,7 +68,7 @@ void Requester::run()
                 }
             }
 
-            job_scheduler->mutex.unlock();
+//            job_scheduler->mutex.unlock();
         }
         else
         {

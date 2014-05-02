@@ -1,6 +1,5 @@
 #include "jobscheduler.h"
 #include "requester.h"
-#include "utils.h"
 
 JobScheduler::JobScheduler()
 {
@@ -16,6 +15,8 @@ JobScheduler::JobScheduler()
         walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
     }
 
+//    utils.toggle(proxy);
+
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
         requesters[i] = new Requester(i, this);
@@ -24,10 +25,6 @@ JobScheduler::JobScheduler()
     }
 
     inserter = new Inserter();
-
-    getProxyInfo();
-
-    Utils::toggle(ips, proxy);
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
@@ -59,6 +56,8 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
+//        utils.toggle(proxy);
+
         qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
         //walmarts.append(walmart);
@@ -103,7 +102,9 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
+                mutex.lock();
                 inserter->insert(Menu(id, name, category, parent_categories));
+                mutex.unlock();
 
                 if(menu.contains("browseToken"))
                 {
@@ -205,41 +206,28 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
     return false;
 }
 
-void JobScheduler::getProxyInfo()
-{
-    QFile file("c:/downloads/ip.txt");
-
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-
-    QTextStream in(&file);
-
-    while(!in.atEnd())
-    {
-        ips.append(in.readLine());
-    }
-
-    for(int i = 0; i < ips.size(); ++i)
-    {
-        qDebug() << ips[i];
-    }
-
-    file.close();
-}
-
 void JobScheduler::finished(int tid)
 {
     static int count = 0;
 
-    qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count + 1;
-
     requesters[tid]->exit();
+
+    mutex.lock();
 
     if(AMOUNT_OF_THREADS == ++count)
     {
+        qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
+
         qDebug() << "EXIT...";
 
         qDebug() << timer.elapsed() / 1000 << "elapsed";
 
         exit(0);
+    }
+    else
+    {
+        qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
+
+        mutex.unlock();
     }
 }

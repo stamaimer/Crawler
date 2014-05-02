@@ -5,6 +5,8 @@
 
 #include "inserter.h"
 
+#include "utils.h"
+
 #include "menu.h"
 #include "merchandise.h"
 
@@ -38,13 +40,13 @@ class JobScheduler : public QObject
 {
     Q_OBJECT
 
+//    Utils utils;
+
     QVector<Menu> menus;
 
     QVector<QString> completed;
 
     Requester* requesters[AMOUNT_OF_THREADS];
-
-    void getProxyInfo();
 
     bool getJsonDoc(QNetworkReply*, Walmart*, QJsonDocument*);
 
@@ -52,8 +54,6 @@ public:
     QMutex mutex;
 
     QElapsedTimer timer;
-
-    QVector<QString> ips;
 
     QVector<Walmart*> walmarts;
 

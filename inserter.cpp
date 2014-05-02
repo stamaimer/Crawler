@@ -35,6 +35,8 @@ void Inserter::insert(Menu menu)
     {
         qDebug() << query.lastError().text();
 
+        qDebug() << query.lastQuery();
+
         exit(1);
     }
 
@@ -77,6 +79,8 @@ void Inserter::insert(QVector<Merchandise> merchandises)
     if(!query.exec(sql_base) && !query.exec(sql_info))
     {
         qDebug() << query.lastError().text();
+
+        qDebug() << query.lastQuery();
 
         exit(1);
     }
