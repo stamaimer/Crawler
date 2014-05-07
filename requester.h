@@ -10,7 +10,6 @@
 
 #include <QUrl>
 
-#include <QNetworkProxy>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>

@@ -15,8 +15,6 @@ JobScheduler::JobScheduler()
         walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
     }
 
-//    utils.toggle(proxy);
-
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
         requesters[i] = new Requester(i, this);
@@ -56,8 +54,6 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-//        utils.toggle(proxy);
-
         qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
 
         //walmarts.append(walmart);
@@ -218,7 +214,7 @@ void JobScheduler::finished(int tid)
 
         qDebug() << "EXIT...";
 
-        qDebug() << timer.elapsed() / 1000 << "elapsed";
+        qDebug() << timer.elapsed() / 60000 << "mins elapsed";
 
         exit(0);
     }

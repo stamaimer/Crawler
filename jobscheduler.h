@@ -16,8 +16,6 @@
 
 #include <QObject>
 
-#include <QNetworkProxy>
-
 #include <QString>
 
 #include <QVector>
@@ -40,8 +38,6 @@ class JobScheduler : public QObject
 {
     Q_OBJECT
 
-//    Utils utils;
-
     QVector<Menu> menus;
 
     QVector<QString> completed;
@@ -60,8 +56,6 @@ public:
     QVector<Merchandise> merchandises;
 
     Inserter* inserter;
-
-    QNetworkProxy proxy;
 
     JobScheduler();
 
