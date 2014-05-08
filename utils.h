@@ -12,58 +12,57 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
-//class Utils
-//{
-//    //Q_OBJECT
+class Utils : public QObject
+{
+    Q_OBJECT
 
-//    static QNetworkRequest       request;
-//    static QNetworkReply*        reply;
-//    static QNetworkAccessManager manager;
+    QNetworkProxy         proxy;
+    QNetworkReply*        reply;
+    QNetworkRequest       request;
+    QNetworkAccessManager manager;
 
-//    static QEventLoop synchronous;
+    QEventLoop synchronous;
 
-//public:
+public:
+    Utils()
+    {
+        connect(&manager, SIGNAL(finished(QNetworkReply*)), &synchronous, SLOT(quit()));
+    }
 
-//    static void toggle(QNetworkProxy proxy)
-//    {
-//        request.setUrl(QUrl("http://www.iphai.com/getapi.ashx?ddh=633291215059316&num=1&port=&yys=1&am=0&guolv=y&mt=0&fm=text&spt=%"));
+    void toggle()
+    {
+        request.setUrl(QUrl("http://net.iphai.com/getapi.ashx?ddh=633291215059316&num=1&yys=1&am=0&guolv=y&mt=6&fm=text"));
 
-//        request.setRawHeader("user-agent", "stamaimer");
+        request.setRawHeader("user-agent", "stamaimer");
 
-//        reply = manager.get(request);
+        reply = manager.get(request);
 
-//        synchronous.exec();
+        synchronous.exec();
 
-//        QByteArray reply_body;
+        QByteArray reply_body;
 
-//        if(reply->error() == QNetworkReply::NoError)
-//        {
-//            reply_body = reply->readAll();
+        if(reply->error() == QNetworkReply::NoError)
+        {
+            reply_body = reply->readAll();
 
 //            qDebug() << reply_body;
-//        }
-//        else
-//        {
-//            qDebug() << reply->error() << reply->errorString();
-//        }
+        }
+        else
+        {
+            qDebug() << reply->error() << reply->errorString();
+        }
 
-//        QString ip   ;
-//        QString port ;
+        QString ip   = reply_body.split(':')[0];
+        QString port = reply_body.split(':')[1];
 
-//        proxy.setType(QNetworkProxy::HttpProxy);
-//        proxy.setHostName(ip);
-//        proxy.setPort(port.toInt());
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(ip);
+        proxy.setPort(port.toInt());
 
-//        qDebug() << "CURRENT" << proxy.hostName() << proxy.port();
+        qDebug() << "CURRENT" << proxy.hostName() << proxy.port();
 
-//        QNetworkProxy::setApplicationProxy(proxy);
-//    }
-//};
-
-//QEventLoop Utils::synchronous = QEventLoop();
-
-//QNetworkRequest       Utils::request = QNetworkRequest();
-//QNetworkReply*        Utils::reply = NULL;
-//QNetworkAccessManager Utils::manager = QNetworkAccessManager();
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
+};
 
 #endif // UTILS_H

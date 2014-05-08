@@ -5,7 +5,7 @@
 
 #include "inserter.h"
 
-#include "utils.h"
+#include"utils.h"
 
 #include "menu.h"
 #include "merchandise.h"
@@ -56,6 +56,8 @@ public:
     QVector<Merchandise> merchandises;
 
     Inserter* inserter;
+
+    Utils utils;
 
     JobScheduler();
 

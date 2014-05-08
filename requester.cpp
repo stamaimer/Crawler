@@ -50,6 +50,8 @@ void Requester::run()
 
             request.setUrl(QUrl(walmart->request_url));
 
+//            job_scheduler->utils.toggle();
+
             reply = manager.get(request);
 
             synchronous.exec();
