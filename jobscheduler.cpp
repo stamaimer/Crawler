@@ -104,7 +104,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
                 {
                     QString browse_token = menu["browseToken"].toString();
 
-                    QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=0&p5=5000000").arg(browse_token);
+                    QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=0&p5=100").arg(browse_token);
 
                     if(!completed.contains(request_url))
                     {
