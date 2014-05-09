@@ -31,7 +31,7 @@ public:
 
     void toggle()
     {
-        request.setUrl(QUrl("http://net.iphai.com/getapi.ashx?ddh=633291215059316&num=1&yys=1&am=0&guolv=y&mt=6&fm=text"));
+        request.setUrl(QUrl("http://net.iphai.com/getapi.ashx?ddh=633291215059316&num=1&yys=6&am=3&guolv=y&mt=6&fm=text"));
 
         request.setRawHeader("user-agent", "stamaimer");
 

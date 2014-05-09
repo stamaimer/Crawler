@@ -24,6 +24,8 @@ class Requester : public QThread
 
     bool sleeped;
 
+    int sleep_time;
+
     int tid;
 
     JobScheduler* job_scheduler;
