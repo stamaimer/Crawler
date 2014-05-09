@@ -15,7 +15,7 @@ JobScheduler::JobScheduler()
         walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
     }
 
-    utils.toggle();
+//    utils.toggle();
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {

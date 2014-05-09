@@ -43,7 +43,7 @@ void Requester::run()
 
         if(5000 == request_count)
         {
-            qDebug() << "SLEEPING";
+            qDebug() << "ALL SLEEPING";
 
             sleep(10);
         }
@@ -107,6 +107,8 @@ void Requester::run()
             }
             else
             {
+                qDebug() << tid + AMOUNT_OF_THREADS << "SLEEPING";
+
                 sleep(sleep_time);
 
                 sleep_time++;
