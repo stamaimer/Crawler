@@ -87,7 +87,7 @@ void Requester::run()
 //                sleep(SLEEP_TIME);
 //            }
 
-            if(20 == sleep_time)
+            if(60 == sleep_time)
             {
                 break;
             }
