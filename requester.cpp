@@ -48,6 +48,8 @@ void Requester::run()
             sleep(10);
         }
 
+        qDebug() << job_scheduler->walmarts.size();
+
         if(job_scheduler->walmarts.size() != 0)
         {
             Walmart* walmart = job_scheduler->walmarts.first();

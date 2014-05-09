@@ -186,7 +186,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
             int total_count = doc->object()["totalCount"].toString().toInt();
 
-            if(total_count > 100)
+            if(total_count > 100 && reply->url().toString().contains("p4=0"))
             {
                 int page_count = total_count / 100 + 1;
 
