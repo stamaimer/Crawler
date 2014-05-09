@@ -22,6 +22,8 @@ class Requester : public QThread
 
     static int final_menu_count;
 
+    static int request_count;
+
     bool sleeped;
 
     int sleep_time;

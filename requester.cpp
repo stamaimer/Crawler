@@ -1,6 +1,7 @@
 #include "requester.h"
 
 int Requester::final_menu_count = 0;
+int Requester::request_count    = 0;
 
 Requester::Requester(int tid, JobScheduler* job_scheduler):sleeped(false), sleep_time(10)
 {
@@ -40,6 +41,13 @@ void Requester::run()
 //            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
         }
 
+        if(5000 == request_count)
+        {
+            qDebug() << "SLEEPING";
+
+            sleep(10);
+        }
+
         if(job_scheduler->walmarts.size() != 0)
         {
             Walmart* walmart = job_scheduler->walmarts.first();
@@ -69,6 +77,8 @@ void Requester::run()
                     final_menu_count++;
                 }
             }
+
+            request_count++;
 
             job_scheduler->mutex.unlock();
         }
