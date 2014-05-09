@@ -186,8 +186,6 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
             int total_count = doc->object()["totalCount"].toString().toInt();
 
-            qDebug() << "ITEM TOTAL COUNT :" << total_count;
-
             if(total_count > 100)
             {
                 int page_count = total_count / 100 + 1;
@@ -198,8 +196,6 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
                 for(int i = 1; i < page_count; ++i)
                 {
-                    qDebug() << request_url.arg(browse_token).arg(100 * i).arg(100 * (i + 1));
-
                     walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100 * (i + 1))));
                 }
             }
