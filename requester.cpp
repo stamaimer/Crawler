@@ -1,6 +1,5 @@
 #include "requester.h"
 
-int Requester::final_menu_count = 0;
 int Requester::request_count    = 0;
 
 Requester::Requester(int tid, JobScheduler* job_scheduler):sleeped(false), sleep_time(10)
@@ -24,31 +23,22 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(1 == final_menu_count)
+        if(5000 == request_count)
         {
-//            job_scheduler->timer.start();
-
-            QSqlDatabase::database().transaction();
+//            QSqlDatabase::database().transaction();
 
             job_scheduler->inserter->insert(job_scheduler->merchandises);
 
-            QSqlDatabase::database().commit();
-
-            final_menu_count = 0;
+//            QSqlDatabase::database().commit();
 
             job_scheduler->merchandises.clear();
 
-//            qDebug() << job_scheduler->timer.elapsed() << "elapsed";
-        }
-
-        if(5000 == request_count)
-        {
             qDebug() << "ALL SLEEPING";
+
+            request_count = 0;
 
             sleep(10);
         }
-
-        qDebug() << job_scheduler->walmarts.size();
 
         if(job_scheduler->walmarts.size() != 0)
         {
@@ -59,10 +49,6 @@ void Requester::run()
             job_scheduler->mutex.unlock();
 
             request.setUrl(QUrl(walmart->request_url));
-
-            request.setRawHeader("user-agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0");
-
-//            job_scheduler->utils.toggle();
 
             reply = manager.get(request);
 
@@ -76,10 +62,7 @@ void Requester::run()
             }
             else
             {
-                if(job_scheduler->getMerchandise(reply, walmart))
-                {
-                    final_menu_count++;
-                }
+                job_scheduler->getMerchandise(reply, walmart);
             }
 
             request_count++;
@@ -101,13 +84,12 @@ void Requester::run()
 //                sleep(SLEEP_TIME);
 //            }
 
-            if(60 == sleep_time)
+            if(15 == sleep_time)
             {
                 break;
             }
             else
             {
-                qDebug() << tid + AMOUNT_OF_THREADS << "SLEEPING";
 
                 sleep(sleep_time);
 

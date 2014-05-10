@@ -20,8 +20,6 @@ class Requester : public QThread
 {
     Q_OBJECT
 
-    static int final_menu_count;
-
     static int request_count;
 
     bool sleeped;

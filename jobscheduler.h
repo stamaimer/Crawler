@@ -38,6 +38,8 @@ class JobScheduler : public QObject
 {
     Q_OBJECT
 
+    QVector<int> tids;
+
     QVector<Menu> menus;
 
     QVector<QString> completed;

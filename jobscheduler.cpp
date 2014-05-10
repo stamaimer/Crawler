@@ -15,13 +15,15 @@ JobScheduler::JobScheduler()
         walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
     }
 
-//    utils.toggle();
+    utils.toggle();
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
         requesters[i] = new Requester(i, this);
 
         requesters[i]->start();
+
+        tids.append(i);
     }
 
     inserter = new Inserter();
@@ -196,7 +198,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
                 for(int i = 1; i < page_count; ++i)
                 {
-                    walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100 * (i + 1))));
+                    walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100)));
                 }
             }
 
@@ -223,6 +225,10 @@ void JobScheduler::finished(int tid)
     static int count = 0;
 
     requesters[tid]->exit();
+
+    tids.remove(tids.indexOf(tid));
+
+    qDebug() << tids;
 
     mutex.lock();
 
