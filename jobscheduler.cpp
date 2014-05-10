@@ -12,7 +12,7 @@ JobScheduler::JobScheduler()
 
     for(int i = 0; i < menus.size(); ++i)
     {
-        walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId())));
+        walmarts.append(new Walmart(menus[i].getId(), menus[i].getName(), QString("http://api.mobile.walmart.com/taxonomy/departments/%1").arg(menus[i].getId()), 0));
     }
 
     utils.toggle();
@@ -34,6 +34,8 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     QByteArray      reply_body;
     QJsonParseError parse_status;
 
+    walmart->request_count++;
+
     if(reply->error() == QNetworkReply::NoError)
     {
 
@@ -51,16 +53,27 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             qDebug() << walmart->name << parse_status.error << parse_status.errorString();
 
-            //walmarts.append(walmart);
+            if(walmart->request_count < 5)
+            {
+                walmarts.append(walmart);
+            }
 
             return false;
         }
     }
     else
     {
-        qDebug() << walmart->name << reply->error() /*<< reply->errorString()*/;
+        qDebug() << walmart->name << reply->error() << reply->errorString();
 
-        //walmarts.append(walmart);
+        if(reply->error() == 301 && walmart->request_url.contains("browseByToken"))
+        {
+            walmart->request_url.replace("browseByToken", "browseByTokenFiltered");
+        }
+
+        if(walmart->request_count < 5)
+        {
+            walmarts.append(walmart);
+        }
 
         return false;
     }
@@ -112,7 +125,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                     if(!completed.contains(request_url))
                     {
-                        walmarts.append(new Walmart(id, name, request_url));
+                        walmarts.append(new Walmart(id, name, request_url, 0));
                     }
                 }
                 else
@@ -123,7 +136,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                     if(!completed.contains(request_url))
                     {
-                        walmarts.append(new Walmart(id, name, request_url));
+                        walmarts.append(new Walmart(id, name, request_url, 0));
                     }
                 }
             }
@@ -198,7 +211,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
                 for(int i = 1; i < page_count; ++i)
                 {
-                    walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100)));
+                    walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100), 0));
                 }
             }
 
