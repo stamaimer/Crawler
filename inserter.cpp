@@ -85,9 +85,9 @@ void Inserter::insert(QVector<Merchandise> merchandises)
         exit(1);
     }
 
-    qDebug() << sql_base;
+//    qDebug() << sql_base;
 
-    qDebug() << sql_info;
+//    qDebug() << sql_info;
 
     qDebug() << merchandises.size() << "rows";
 }
