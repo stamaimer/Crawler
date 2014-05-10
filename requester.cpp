@@ -23,21 +23,19 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(5000 == request_count)
+        if(500 == request_count)
         {
-//            QSqlDatabase::database().transaction();
+            qDebug() << "INSERT AND SLEEP";
+
+            QSqlDatabase::database().transaction();
 
             job_scheduler->inserter->insert(job_scheduler->merchandises);
 
-//            QSqlDatabase::database().commit();
+            QSqlDatabase::database().commit();
 
             job_scheduler->merchandises.clear();
 
-            qDebug() << "ALL SLEEPING";
-
             request_count = 0;
-
-            sleep(10);
         }
 
         if(job_scheduler->walmarts.size() != 0)
@@ -84,7 +82,7 @@ void Requester::run()
 //                sleep(SLEEP_TIME);
 //            }
 
-            if(15 == sleep_time)
+            if(20 == sleep_time)
             {
                 break;
             }
