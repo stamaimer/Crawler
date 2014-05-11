@@ -65,7 +65,10 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     {
         qDebug() << walmart->name << reply->error()/* << reply->errorString()*/;
 
-        if(reply->error() == 301 && walmart->request_url.contains("browseByToken"))
+        if(reply->error() == 301
+                && walmart->request_url.contains("p4=0")
+                && walmart->request_url.contains("browseByToken")
+                && !walmart->request_url.contains("browseByTokenFiltered"))
         {
             walmart->request_url.replace("browseByToken", "browseByTokenFiltered");
         }
