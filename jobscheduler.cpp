@@ -63,7 +63,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
     }
     else
     {
-        qDebug() << walmart->name << reply->error() << reply->errorString();
+        qDebug() << walmart->name << reply->error()/* << reply->errorString()*/;
 
         if(reply->error() == 301 && walmart->request_url.contains("browseByToken"))
         {
