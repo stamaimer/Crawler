@@ -130,7 +130,19 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << category          << '\t'
 //                         << parent_categories;
 
-                if(name == "Teen (T)") continue;
+                if(name == "Teen (T)"
+                        || name == "Hampers"
+                        || name == "Playards"
+                        || name == "Dressers"
+                        || name == "Strollers"
+                        || name == "Bed Rails"
+                        || name == "Gaming Desktops"
+                        || name == "Changing Tables"
+                        || name == "Storage Cabinets"
+                        || name == "Storage Solutions"
+                        || name == "Toddler Underwear"
+                        || name == "Armoires & Hutches"
+                        || name == "Bassinets, Sleepers & Moses Baskets") continue;
 
                 inserter->insert(Menu(id, name, category, parent_categories));
 
@@ -262,8 +274,6 @@ void JobScheduler::finished(int tid)
     static int count = 0;
 
     requesters[tid]->exit();
-
-    requesters[tid]->deleteLater();
 
     tids.remove(tids.indexOf(tid));
 
