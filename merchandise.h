@@ -51,7 +51,7 @@ public:
 
     QString getName()
     {
-        return name.toHtmlEscaped();
+        return name.toHtmlEscaped().remove("\\");
     }
 
     double getMSRP()
