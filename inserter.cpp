@@ -45,7 +45,7 @@ void Inserter::insert(Menu menu)
 
 void Inserter::insert(QVector<Merchandise> merchandises)
 {
-    QString sql_base = "INSERT IGNORE INTO merchan_base VALUES ";
+    QString sql_base = "INSERT IGNORE INTO merchan_base (id) VALUES ";
 
     QString sql_info = "INSERT IGNORE INTO merchan_info VALUES ";
 
