@@ -218,17 +218,24 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
             int total_count = doc->object()["totalCount"].toString().toInt();
 
-            if(total_count > 100 && reply->url().toString().contains("p4=0"))
+            if(total_count > 1000000)
             {
-                int page_count = total_count / 100 + 1;
-
-                QString browse_token = walmart->request_url.split("&")[2].split("=")[1];
-
-                QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=%2&p5=%3");
-
-                for(int i = 1; i < page_count; ++i)
+                qDebug() << "EXCEPTION MENU" << walmart->name << "TOTAL COUNT" << total_count;
+            }
+            else
+            {
+                if(total_count > 100 && reply->url().toString().contains("p4=0"))
                 {
-                    walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100), 0));
+                    int page_count = total_count / 100 + 1;
+
+                    QString browse_token = walmart->request_url.split("&")[2].split("=")[1];
+
+                    QString request_url  = QString("http://mobile.walmart.com/m/j?service=Browse&method=browseByToken&p1=%1&p2=All&p3=RELEVANCE&p4=%2&p5=%3");
+
+                    for(int i = 1; i < page_count; ++i)
+                    {
+                        walmarts.append(new Walmart(walmart->id, walmart->name, request_url.arg(browse_token).arg(100 * i).arg(100), 0));
+                    }
                 }
             }
 
