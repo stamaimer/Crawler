@@ -23,7 +23,7 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(500 == request_count)
+        if(500 < request_count)
         {
             qDebug() << "INSERT AND SLEEP";
 
