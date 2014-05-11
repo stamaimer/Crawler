@@ -108,9 +108,16 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 
                 QStringList parent_categories;
 
-                for(int i = 0; i < tmp.size(); ++i)
+                if(menu.contains("browseToken"))
                 {
-                    parent_categories << tmp[i].toString();
+                    parent_categories << category;
+                }
+                else
+                {
+                    for(int i = 0; i < tmp.size(); ++i)
+                    {
+                        parent_categories << tmp[i].toString();
+                    }
                 }
 
 //                qDebug() << id                << '\t'
