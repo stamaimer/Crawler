@@ -37,7 +37,7 @@ void Inserter::insert(Menu menu)
 
         qDebug() << query.lastQuery();
 
-        exit(1);
+//        exit(1);
     }
 
     qDebug() << sql;
@@ -76,14 +76,24 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
     sql_info = sql_info + rows_info.join(',');
 
-    if(!query.exec(sql_base) && !query.exec(sql_info))
+    if(!query.exec(sql_base))
     {
         qDebug() << query.lastError().text();
 
         qDebug() << query.lastQuery();
 
-        exit(1);
+//        exit(1);
     }
+
+    if(!query.exec(sql_info))
+    {
+        qDebug() << query.lastError().text();
+
+        qDebug() << query.lastQuery();
+
+//        exit(1);
+    }
+
 
 //    qDebug() << sql_base;
 
