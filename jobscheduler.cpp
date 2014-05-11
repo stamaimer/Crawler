@@ -27,6 +27,11 @@ JobScheduler::JobScheduler()
     }
 
     inserter = new Inserter();
+
+    for(int i = 0; i < menus.size(); ++i)
+    {
+        inserter->insert(menus[i]);
+    }
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocument* doc)
