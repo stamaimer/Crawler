@@ -220,7 +220,7 @@ bool JobScheduler::getMerchandise(QNetworkReply* reply, Walmart* walmart)
 
             if(total_count > 1000000)
             {
-                qDebug() << "EXCEPTION MENU" << walmart->name << "TOTAL COUNT" << total_count;
+                qDebug() << "EXCEPTIONAL MENU" << walmart->name << "TOTAL COUNT" << total_count;
             }
             else
             {
