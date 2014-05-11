@@ -239,6 +239,8 @@ void JobScheduler::finished(int tid)
 
     requesters[tid]->exit();
 
+    requesters[tid]->deleteLater();
+
     tids.remove(tids.indexOf(tid));
 
     qDebug() << tids;
@@ -252,6 +254,8 @@ void JobScheduler::finished(int tid)
         qDebug() << "EXIT...";
 
         qDebug() << (double) (timer.elapsed() / 60000) << "mins elapsed";
+
+        delete inserter;
 
         exit(0);
     }
