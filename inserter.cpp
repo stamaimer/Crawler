@@ -40,7 +40,7 @@ void Inserter::insert(Menu menu)
 //        exit(1);
     }
 
-    qDebug() << sql;
+//    qDebug() << sql;
 }
 
 void Inserter::insert(QVector<Merchandise> merchandises)
