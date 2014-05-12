@@ -47,6 +47,8 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 {
     static int total_count = 0;
 
+    static int num_rows_affected = 0;
+
     total_count = total_count + merchandises.size();
 
     QString sql_base = "INSERT IGNORE INTO merchan_base (id) VALUES ";
@@ -100,10 +102,11 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 //        exit(1);
     }
 
+    num_rows_affected = num_rows_affected + query.numRowsAffected();
 
 //    qDebug() << sql_base;
 
 //    qDebug() << sql_info;
 
-    qDebug() << merchandises.size() << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set";
+    qDebug() << query.numRowsAffected(); << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set," << num_rows_affected << "rows affected";
 }
