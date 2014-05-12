@@ -105,5 +105,5 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
 //    qDebug() << sql_info;
 
-    qDebug() << merchandises.size() << "rows inserted" << timer.elapsed() / 1000 << "secs elapsed" << total_count << "rows in set";
+    qDebug() << merchandises.size() << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set";
 }
