@@ -58,7 +58,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
         {
             qDebug() << walmart->name << parse_status.error << parse_status.errorString();
 
-            if(walmart->request_count < 10)
+            if(walmart->request_count < 20)
             {
                 walmarts.append(walmart);
             }
@@ -78,7 +78,7 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, Walmart* walmart, QJsonDocum
             walmart->request_url.replace("browseByToken", "browseByTokenFiltered");
         }
 
-        if(walmart->request_count < 10)
+        if(walmart->request_count < 20)
         {
             walmarts.append(walmart);
         }
@@ -275,11 +275,11 @@ void JobScheduler::finished(int tid)
 
     requesters[tid]->exit();
 
+    mutex.lock();
+
     tids.remove(tids.indexOf(tid));
 
     qDebug() << tids;
-
-    mutex.lock();
 
     if(AMOUNT_OF_THREADS == ++count)
     {
