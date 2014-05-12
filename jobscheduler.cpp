@@ -131,17 +131,20 @@ bool JobScheduler::getMenus(QNetworkReply* reply, Walmart* walmart)
 //                         << parent_categories;
 
                 if(name == "Teen (T)"
+                        || name == "Toshiba"
                         || name == "Hampers"
                         || name == "Playards"
                         || name == "Dressers"
                         || name == "Strollers"
                         || name == "Bed Rails"
+                        || name == "Star Wars"
                         || name == "Gaming Desktops"
                         || name == "Changing Tables"
                         || name == "Storage Cabinets"
                         || name == "Storage Solutions"
                         || name == "Toddler Underwear"
                         || name == "Armoires & Hutches"
+                        || name == "Top Toshiba Laptops"
                         || name == "Bassinets, Sleepers & Moses Baskets") continue;
 
                 inserter->insert(Menu(id, name, category, parent_categories));

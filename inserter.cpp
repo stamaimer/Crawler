@@ -93,6 +93,8 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 //        exit(1);
     }
 
+    query.clear();
+
     if(!query.exec(sql_info))
     {
         qDebug() << query.lastError().text();
@@ -108,5 +110,5 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
 //    qDebug() << sql_info;
 
-    qDebug() << query.numRowsAffected(); << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set," << num_rows_affected << "rows affected";
+    qDebug() << query.numRowsAffected() << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set," << num_rows_affected << "rows affected";
 }
