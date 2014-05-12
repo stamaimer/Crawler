@@ -45,6 +45,10 @@ void Inserter::insert(Menu menu)
 
 void Inserter::insert(QVector<Merchandise> merchandises)
 {
+    static int total_count = 0;
+
+    total_count = total_count + merchandises.size();
+
     QString sql_base = "INSERT IGNORE INTO merchan_base (id) VALUES ";
 
     QString sql_info = "INSERT IGNORE INTO merchan_info VALUES ";
@@ -76,6 +80,8 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
     sql_info = sql_info + rows_info.join(',');
 
+    timer.start();
+
     if(!query.exec(sql_base))
     {
         qDebug() << query.lastError().text();
@@ -99,5 +105,5 @@ void Inserter::insert(QVector<Merchandise> merchandises)
 
 //    qDebug() << sql_info;
 
-    qDebug() << merchandises.size() << "rows";
+    qDebug() << merchandises.size() << "rows inserted" << timer.elapsed() / 1000 << "secs elapsed" << total_count << "rows in set";
 }

@@ -16,8 +16,12 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 
+#include <QElapsedTimer>
+
 class Inserter
 {
+    QElapsedTimer timer;
+
     QSqlDatabase db_connection;
 
     QSqlQuery query;
