@@ -286,6 +286,12 @@ void JobScheduler::finished(int tid)
 
     if(AMOUNT_OF_THREADS == ++count)
     {
+        QSqlDatabase::database().transaction();
+
+        inserter->insert(merchandises);
+
+        QSqlDatabase::database().commit();
+
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
         qDebug() << "EXIT...";
