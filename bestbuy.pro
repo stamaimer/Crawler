@@ -17,8 +17,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     jobscheduler.cpp \
-    bestbuy.cpp
+    bestbuy.cpp \
+    inserter.cpp \
+    requester.cpp
 
 HEADERS += \
     jobscheduler.h \
-    bestbuy.h
+    bestbuy.h \
+    inserter.h \
+    requester.h
