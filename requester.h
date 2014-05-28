@@ -1,15 +1,40 @@
 #ifndef REQUESTER_H
 #define REQUESTER_H
 
-#include <QObject>
+#include "jobscheduler.h"
 
-class requester : public QObject
+#include <QObject>
+#include <QThread>
+
+#include <QEventLoop>
+
+#include <QUrl>
+
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+
+#define SLEPP_TIME 10
+
+class requester : public QThread
 {
     Q_OBJECT
+
+    static int send_count;
+
+    int sleep_time;
+
+    int tid;
+
+    JobScheduler* job_scheduler;
+
 public:
-    explicit requester(QObject *parent = 0);
+    requester(int, JobScheduler*);
+
+    void run();
 
 signals:
+    void finished(int);
 
 public slots:
 

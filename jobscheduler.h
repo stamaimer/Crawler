@@ -25,10 +25,12 @@
 #include <QDebug>
 #include <QElapsedTimer>
 
+#include <QNetworkReply>
+
 #define AMOUNT_OF_THREADS 200
+#define MAX_REQUEST_COUNT 20
 
 class Requester;
-class QNetworkReply;
 
 class JobScheduler : public QObject
 {
@@ -40,11 +42,12 @@ class JobScheduler : public QObject
 
     QVector<QString> completed;//记录已经发送过的URL
 
-    Requester* requesters[AMOUNT_OF_THREADS];
+    Requester* requesters[AMOUNT_OF_THREADS];//请求线程数组
 
     Utils utils;
 
     bool getJsonDoc(QNetworkReply*, BestBuy*, QJsonDocument*);
+
 public:
     QMutex mutex;
 
@@ -52,7 +55,9 @@ public:
 
     QVector<BestBuy*> bestbuys;
 
+    QVector<Merchandise> merchandises;
 
+    Inserter* inserter;
 
     explicit JobScheduler(QObject *parent = 0);
 
@@ -62,7 +67,7 @@ public:
 signals:
 
 public slots:
-
+    void finished(int);
 };
 
 #endif // JOBSCHEDULER_H
