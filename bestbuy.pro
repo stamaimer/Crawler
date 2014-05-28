@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network sql
 
 QT       -= gui
 
@@ -19,10 +19,16 @@ SOURCES += main.cpp \
     jobscheduler.cpp \
     bestbuy.cpp \
     inserter.cpp \
-    requester.cpp
+    requester.cpp \
+    menu.cpp \
+    merchandise.cpp \
+    utils.cpp
 
 HEADERS += \
     jobscheduler.h \
     bestbuy.h \
     inserter.h \
-    requester.h
+    requester.h \
+    menu.h \
+    merchandise.h \
+    utils.h
