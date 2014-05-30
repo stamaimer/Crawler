@@ -3,16 +3,10 @@
 
 #include <QObject>
 
-class Menu : public QObject
+class Menu
 {
-    Q_OBJECT
 public:
-    explicit Menu(QObject *parent = 0);
-
-signals:
-
-public slots:
-
+    explicit Menu();
 };
 
 #endif // MENU_H

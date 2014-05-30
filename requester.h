@@ -15,8 +15,9 @@
 #include <QNetworkAccessManager>
 
 #define SLEPP_TIME 10
+#define MAX_SLEEP_TIME 20
 
-class requester : public QThread
+class Requester : public QThread
 {
     Q_OBJECT
 
@@ -29,7 +30,7 @@ class requester : public QThread
     JobScheduler* job_scheduler;
 
 public:
-    requester(int, JobScheduler*);
+    Requester(int, JobScheduler*);
 
     void run();
 

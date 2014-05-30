@@ -11,11 +11,11 @@ class BestBuy : public QObject
 public:
     explicit BestBuy(QObject *parent = 0);
              BestBuy(const BestBuy&);
-             BestBuy(QString, QString, QString, int);
+             BestBuy(/*QString, QString, */QString, int);
              BestBuy operator = (const BestBuy&);
 
-    QString id;
-    QString name;
+//    QString id;
+//    QString name;
     QString request_url;
     int     request_count;
 

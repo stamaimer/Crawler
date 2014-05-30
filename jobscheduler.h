@@ -27,8 +27,10 @@
 
 #include <QNetworkReply>
 
-#define AMOUNT_OF_THREADS 200
+#define AMOUNT_OF_THREADS 1
 #define MAX_REQUEST_COUNT 20
+
+#define API_KEY 4pj6ws82bq85vafs2369bdeu
 
 class Requester;
 
@@ -38,11 +40,11 @@ class JobScheduler : public QObject
 
     QVector<int> tids;//用于检查哪个线程没有死亡
 
-    QVector<Menu> menus;
-
     QVector<QString> completed;//记录已经发送过的URL
 
     Requester* requesters[AMOUNT_OF_THREADS];//请求线程数组
+
+    QElapsedTimer timer;
 
     Utils utils;
 
@@ -51,9 +53,9 @@ class JobScheduler : public QObject
 public:
     QMutex mutex;
 
-    QElapsedTimer timer;
-
     QVector<BestBuy*> bestbuys;
+
+    QVector<Menu> menus;
 
     QVector<Merchandise> merchandises;
 

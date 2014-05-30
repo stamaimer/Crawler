@@ -3,16 +3,10 @@
 
 #include <QObject>
 
-class Merchandise : public QObject
+class Merchandise
 {
-    Q_OBJECT
 public:
-    explicit Merchandise(QObject *parent = 0);
-
-signals:
-
-public slots:
-
+    explicit Merchandise();
 };
 
 #endif // MERCHANDISE_H

@@ -32,7 +32,7 @@ class Inserter : public QObject
 public:
     explicit Inserter(QObject *parent = 0);
 
-    void insert(Menu);
+    void insert(QVector<Menu>);
 
     void insert(QVector<Merchandise>);
 

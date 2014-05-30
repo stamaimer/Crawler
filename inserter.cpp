@@ -22,7 +22,7 @@ Inserter::Inserter(QObject *parent) : QObject(parent)
     query = QSqlQuery();
 }
 
-void Inserter::insert(Menu menu)
+void Inserter::insert(QVector<Menu> menus)
 {
 
 }
