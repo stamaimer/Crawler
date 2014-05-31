@@ -93,8 +93,6 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            QJsonArray categories = result["categories"].toArray();
-
             if(!bestbuy->request_url.contains("page=1"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
@@ -108,13 +106,33 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
             }
 
             //数据处理
-            //qDebug() << categories;
-            qDebug() << "IN GET MENUS" << bestbuy->request_url;
+
+            QJsonArray categories = result["categories"].toArray();
+
+            QJsonObject category;
+
+            for(int i = 0; i < categories.size(); ++i)
+            {
+                category = categories[i].toObject();
+
+                QString id   = categories["id"].toString();
+                QString name = categories["name"].toString();
+
+                QJsonArray tmp = categories["path"].toArray();
+
+                QStringList path;
+
+                for(int j = 0; j < tmp.size(); ++j)
+                {
+                    path << tmp[i].toObject()["id"].toString();
+                }
+
+                menus.append(Menu(id, name, path));
+            }
 
             delete doc;
             delete bestbuy;
             reply->deleteLater();
-            qDebug() << "處理完成";
             return true;
         }
     }
@@ -136,8 +154,6 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            QJsonArray products = result["products"].toArray();
-
             if(!bestbuy->request_url.contains("page=1"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
@@ -151,13 +167,45 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
             }
 
             //数据处理
-            //qDebug() << products;
-            qDebug() << "IN GET MERCH" << bestbuy->request_url;
+
+            QJsonArray products = result["products"].toArray();
+
+            QJsonObject product;
+
+            for(int i = 0; i < product.size(); ++i)
+            {
+                product = products[i].toObject();
+
+                QString src     = product["source"].toString();
+
+                QString upc     = product["upc"].toString();
+                QString sku     = product["sku"].toString();
+                QString url     = product["url"].toString();
+                QString name    = product["name"].toString();
+                QString date    = product["startDate"].toString();
+                QString msrp    = product["regularPrice"].toString();
+                QString price   = product["salePrice"].toString();
+                QString stock   = product["onlineAvailability"].toString();
+                QString reviews = product["customerReviewCount"].toString();
+
+                QJsonArray tmp = product["categoryPath"].toArray();
+
+                QStringList path;
+
+                for(int j = 0; j < tmp.size(); ++j)
+                {
+                    path << tmp[i].toObject()["id"].toString();
+                }
+
+                if(src.contains("bestbuy"))
+                {
+                    merchandises.append(Merchandise(upc, sku, url, name, date, msrp, path, price, stock, reviews));
+                }
+            }
 
             delete doc;
             delete bestbuy;
             reply->deleteLater();
-            qDebug() << "處理完成";
             return true;
         }
     }
