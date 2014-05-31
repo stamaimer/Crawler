@@ -5,6 +5,8 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
     timer.start();
 
+    qDebug() << "计时器启动";
+
 //    inserter = new Inserter();
 
     //添加目錄種子
@@ -12,6 +14,8 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
     //添加商品種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+
+    qDebug() << "添加种子链接";
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
@@ -21,6 +25,8 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
         tids.append(i);
     }
+
+    qDebug() << "启动多个线程";
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocument* doc)
@@ -56,6 +62,10 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocum
     if(bestbuy->request_count < MAX_REQUEST_COUNT)
     {
         bestbuys.append(bestbuy);
+    }
+    else
+    {
+        delete bestbuy;
     }
 
     return false;

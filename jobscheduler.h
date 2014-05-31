@@ -27,7 +27,7 @@
 
 #include <QNetworkReply>
 
-#define AMOUNT_OF_THREADS 1
+#define AMOUNT_OF_THREADS 5
 #define MAX_REQUEST_COUNT 20
 
 #define API_KEY 4pj6ws82bq85vafs2369bdeu

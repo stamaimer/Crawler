@@ -23,9 +23,9 @@ void Requester::run()
     {
         job_scheduler->mutex.lock();
 
-        if(500 < send_count)
-        {
-            qDebug() << "INSERTING...";
+//        if(500 < send_count)
+//        {
+//            qDebug() << "INSERTING...";
 
 //            QSqlDatabase::database().transaction();
 
@@ -37,8 +37,8 @@ void Requester::run()
 //            job_scheduler->menus.clear();
 //            job_scheduler->merchandises.clear();
 
-            send_count = 0;
-        }
+//            send_count = 0;
+//        }
 
         if(job_scheduler->bestbuys.size() != 0)
         {
