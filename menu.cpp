@@ -19,5 +19,5 @@ QString Menu::getName()
 
 QString Menu::getPath()
 {
-    return path.join("<<");
+    return path.join(">>");
 }
