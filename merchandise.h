@@ -5,6 +5,9 @@
 
 class Merchandise
 {
+    QString upc;
+    QString sku;
+    QString name;
 public:
     explicit Merchandise();
 };

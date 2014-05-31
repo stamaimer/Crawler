@@ -10,10 +10,10 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     //添加商品種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,name,source,startDate,customerReviewCount,regularPrice,salePrice,onlineAvailability,url,categoryPath&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     qDebug() << "添加种子链接";
 
@@ -99,7 +99,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 int totalPages = result["totalPages"].toInt();
 
-                QString pattern = "http://api.remix.bestbuy.com/v1/categories?show=id,name,path&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
+                QString pattern = "http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
 
                 for(int i = 2; i <= totalPages; ++i)
                 {
@@ -142,7 +142,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 int totalPages = result["totalPages"].toInt();
 
-                QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,name,source,startDate,customerReviewCount,regularPrice,salePrice,onlineAvailability,url,categoryPath&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
+                QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
 
                 for(int i = 2; i < totalPages; ++i)
                 {
