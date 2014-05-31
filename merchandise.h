@@ -20,6 +20,7 @@ class Merchandise
     QStringList path;
 
 public:
+    Merchandise(){}
     Merchandise(QString, QString, QString,
                 QString, QString, QString,
                 QString, QString, QString,

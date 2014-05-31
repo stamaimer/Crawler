@@ -13,6 +13,7 @@ class Menu
     QStringList path;
 
 public:
+    Menu(){}
     Menu(QString, QString, QStringList);
 
     QString getId();

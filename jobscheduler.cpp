@@ -115,10 +115,10 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 category = categories[i].toObject();
 
-                QString id   = categories["id"].toString();
-                QString name = categories["name"].toString();
+                QString id   = category["id"].toString();
+                QString name = category["name"].toString();
 
-                QJsonArray tmp = categories["path"].toArray();
+                QJsonArray tmp = category["path"].toArray();
 
                 QStringList path;
 
@@ -199,7 +199,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
                 if(src.contains("bestbuy"))
                 {
-                    merchandises.append(Merchandise(upc, sku, url, name, date, msrp, path, price, stock, reviews));
+                    merchandises.append(Merchandise(upc, sku, url, name, date, msrp, price, stock, reviews, path));
                 }
             }
 
