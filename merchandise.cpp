@@ -40,7 +40,7 @@ QString Merchandise::getURL()
 
 QString Merchandise::getName()
 {
-    return name;
+    return name.toHtmlEscaped().remove("\\");
 }
 
 QString Merchandise::getDate()

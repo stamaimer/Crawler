@@ -14,7 +14,7 @@ QString Menu::getId()
 
 QString Menu::getName()
 {
-    return name.toHtmlEscaped();
+    return name.toHtmlEscaped().remove("\\");
 }
 
 QString Menu::getPath()
