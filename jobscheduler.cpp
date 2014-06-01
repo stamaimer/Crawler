@@ -10,10 +10,10 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     //添加商品種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     qDebug() << "添加种子链接";
 
@@ -93,7 +93,10 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            if(!bestbuy->request_url.contains("page=1"))//what about page=10,page=100,page=1000
+            if(bestbuy->request_url.contains("page=1")
+                    && !bestbuy->request_url.contains("page=10")
+                    && !bestbuy->request_url.contains("page=100")
+                    && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
 
@@ -127,6 +130,8 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
                     path << tmp[i].toObject()["id"].toString();
                 }
 
+                qDebug() << id << name << path;
+
                 menus.append(Menu(id, name, path));
             }
 
@@ -154,7 +159,10 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            if(!bestbuy->request_url.contains("page=1"))//what about page=10,page=100,page=1000
+            if(!bestbuy->request_url.contains("page=1")
+                    && !bestbuy->request_url.contains("page=10")
+                    && !bestbuy->request_url.contains("page=100")
+                    && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
 
@@ -196,6 +204,8 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                 {
                     path << tmp[i].toObject()["id"].toString();
                 }
+
+                qDebug() << upc << sku << name << date << msrp << price << stock << reviews << path;
 
                 if(src.contains("bestbuy"))
                 {
