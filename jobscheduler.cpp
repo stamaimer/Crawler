@@ -10,7 +10,7 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     //添加商品種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
@@ -159,11 +159,13 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            if(!bestbuy->request_url.contains("page=1")
+            if(bestbuy->request_url.contains("page=1")
                     && !bestbuy->request_url.contains("page=10")
                     && !bestbuy->request_url.contains("page=100")
                     && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
             {
+                qDebug() << "添加后续页数";
+
                 int totalPages = result["totalPages"].toInt();
 
                 QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
@@ -202,7 +204,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int j = 0; j < tmp.size(); ++j)
                 {
-                    path << tmp[i].toObject()["id"].toString();
+                    path << tmp[j].toObject()["id"].toString();
                 }
 
                 qDebug() << upc << sku << name << date << msrp << price << stock << reviews << path;
