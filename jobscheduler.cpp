@@ -104,7 +104,10 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int i = 2; i <= totalPages; ++i)
                 {
-                    bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                    if(!completed.contains(pattern.arg(i)))
+                    {
+                        bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                    }
                 }
             }
 
@@ -172,7 +175,10 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int i = 2; i < totalPages; ++i)
                 {
-                    bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                    if(!completed.contains(pattern.arg(i)))
+                    {
+                        bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                    }
                 }
             }
 
