@@ -127,7 +127,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int j = 0; j < tmp.size(); ++j)
                 {
-                    path << tmp[i].toObject()["id"].toString();
+                    path << tmp[j].toObject()["id"].toString();
                 }
 
                 qDebug() << id << name << path;
@@ -180,7 +180,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
             QJsonObject product;
 
-            for(int i = 0; i < product.size(); ++i)
+            for(int i = 0; i < products.size(); ++i)
             {
                 product = products[i].toObject();
 
