@@ -27,7 +27,7 @@
 
 #include <QNetworkReply>
 
-#define AMOUNT_OF_THREADS 20
+#define AMOUNT_OF_THREADS 30
 #define MAX_REQUEST_COUNT 20
 
 class Requester;
