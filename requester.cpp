@@ -49,7 +49,7 @@ void Requester::run()
 
             job_scheduler->mutex.unlock();
 
-            request.setUrl(QUrl(bestbuy->request_url.append(apikey)));
+            request.setUrl(QUrl(bestbuy->request_url.arg(apikey)));
 
             reply = manager.get(request);
 

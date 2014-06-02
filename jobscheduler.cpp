@@ -29,10 +29,10 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=", 0));
+    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     //添加商品種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
@@ -96,10 +96,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            if(bestbuy->request_url.contains("page=1")
-                    && !bestbuy->request_url.contains("page=10")
-                    && !bestbuy->request_url.contains("page=100")
-                    && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
+            if(bestbuy->request_url.contains("page=1&"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
 
@@ -107,9 +104,9 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int i = 2; i <= totalPages; ++i)
                 {
-                    if(!completed.contains(pattern.arg(i)))
+                    if(!completed.contains(pattern.arg(i).append("%1")))
                     {
-                        bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                        bestbuys.append(new BestBuy(pattern.arg(i).append("%1"), 0));
                     }
                 }
             }
@@ -163,10 +160,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
         {
             QJsonObject result = doc->object();
 
-            if(bestbuy->request_url.contains("page=1")
-                    && !bestbuy->request_url.contains("page=10")
-                    && !bestbuy->request_url.contains("page=100")
-                    && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
+            if(bestbuy->request_url.contains("page=1&"))//what about page=10,page=100,page=1000
             {
                 int totalPages = result["totalPages"].toInt();
 
@@ -174,9 +168,9 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
                 for(int i = 2; i < totalPages; ++i)
                 {
-                    if(!completed.contains(pattern.arg(i)))
+                    if(!completed.contains(pattern.arg(i).append("%1")))
                     {
-                        bestbuys.append(new BestBuy(pattern.arg(i), 0));
+                        bestbuys.append(new BestBuy(pattern.arg(i).append("%1"), 0));
                     }
                 }
             }
@@ -192,9 +186,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                 product = products[i].toObject();
 
                 QString src     = product["source"].toString();
-
                 QString upc     = product["upc"].toString();
-                int sku     = product["sku"].toInt();
                 QString url     = product["url"].toString();
                 QString name    = product["name"].toString();
                 QString date    = product["startDate"].toString();
@@ -212,7 +204,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                     path << tmp[j].toObject()["id"].toString();
                 }
 
-                qDebug() << upc << sku << name << date << msrp << price << stock << reviews << path;
+                qDebug() << upc << name << date << msrp << price << stock << reviews << path;
 
                 if(src.contains("bestbuy"))
                 {
@@ -258,7 +250,7 @@ void JobScheduler::finished(int tid)
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
 
-        delete inserter;
+//        delete inserter;
 
         exit(0);
     }
