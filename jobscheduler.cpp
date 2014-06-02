@@ -5,17 +5,13 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
     timer.start();
 
-    qDebug() << "计时器启动";
-
 //    inserter = new Inserter();
 
     //添加目錄種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     //添加商品種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
-
-    qDebug() << "添加种子链接";
+    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
@@ -25,8 +21,6 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
         tids.append(i);
     }
-
-    qDebug() << "启动多个线程";
 }
 
 bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocument* doc)
@@ -41,16 +35,10 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocum
     {
         reply_body = reply->readAll();
 
-        qDebug() << "获取响应信息";
-
         *doc = QJsonDocument::fromJson(QString(reply_body).toUtf8(), &parse_status);
-
-        qDebug() << "使用响应信息构造JsonDocument";
 
         if(parse_status.error == QJsonParseError::NoError)
         {
-            qDebug() << "成功构造JsonDocument";
-
             completed.append(bestbuy->request_url);
 
             return true;
@@ -67,14 +55,10 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocum
 
     if(bestbuy->request_count < MAX_REQUEST_COUNT)
     {
-        qDebug() << "重新添加错误条目";
-
         bestbuys.append(bestbuy);
     }
     else
     {
-        qDebug() << "条目错误词数过多,舍弃";
-
         delete bestbuy;
     }
 
@@ -84,8 +68,6 @@ bool JobScheduler::getJsonDoc(QNetworkReply* reply, BestBuy* bestbuy, QJsonDocum
 bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 {
     QJsonDocument* doc = new QJsonDocument();
-
-    qDebug() << "新建JsonDocument对象";
 
     if(getJsonDoc(reply, bestbuy, doc))
     {
@@ -135,7 +117,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 
                 qDebug() << id << name << path;
 
-                menus.append(Menu(id, name, path));
+                //menus.append(Menu(id, name, path));
             }
 
             delete doc;
@@ -154,8 +136,6 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 {
     QJsonDocument* doc = new QJsonDocument();
 
-    qDebug() << "新建JsonDocument对象";
-
     if(getJsonDoc(reply, bestbuy, doc))
     {
         if(doc->isObject())
@@ -167,8 +147,6 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                     && !bestbuy->request_url.contains("page=100")
                     && !bestbuy->request_url.contains("page=1000"))//what about page=10,page=100,page=1000
             {
-                qDebug() << "添加后续页数";
-
                 int totalPages = result["totalPages"].toInt();
 
                 QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
@@ -217,7 +195,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
 
                 if(src.contains("bestbuy"))
                 {
-                    merchandises.append(Merchandise(upc, sku, url, name, date, msrp, price, stock, reviews, path));
+                    //merchandises.append(Merchandise(upc, sku, url, name, date, msrp, price, stock, reviews, path));
                 }
             }
 
@@ -247,11 +225,11 @@ void JobScheduler::finished(int tid)
 
     if(AMOUNT_OF_THREADS == ++count)
     {
-        QSqlDatabase::database().transaction();
+//        QSqlDatabase::database().transaction();
 
-        inserter->insert(merchandises);
+//        inserter->insert(merchandises);
 
-        QSqlDatabase::database().commit();
+//        QSqlDatabase::database().commit();
 
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
