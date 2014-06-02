@@ -2,9 +2,10 @@
 
 int Requester::send_count = 0;
 
-Requester::Requester(int tid, JobScheduler* job_scheduler):sleep_time(SLEPP_TIME)
+Requester::Requester(int tid, QString apikey, JobScheduler* job_scheduler):sleep_time(SLEPP_TIME)
 {
     this->tid           = tid;
+    this->apikey        = apikey;
     this->job_scheduler = job_scheduler;
 }
 
@@ -48,7 +49,7 @@ void Requester::run()
 
             job_scheduler->mutex.unlock();
 
-            request.setUrl(QUrl(bestbuy->request_url));
+            request.setUrl(QUrl(bestbuy->request_url.append(apikey)));
 
             reply = manager.get(request);
 

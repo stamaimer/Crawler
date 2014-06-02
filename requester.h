@@ -27,10 +27,12 @@ class Requester : public QThread
 
     int tid;
 
+    QString apikey;
+
     JobScheduler* job_scheduler;
 
 public:
-    Requester(int, JobScheduler*);
+    Requester(int, QString, JobScheduler*);
 
     void run();
 

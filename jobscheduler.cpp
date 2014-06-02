@@ -5,17 +5,38 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
     timer.start();
 
+    apikeys.append("4pj6ws82bq85vafs2369bdeu");
+    apikeys.append("u72crv2skdzyp5nqy7ennku8");
+    apikeys.append("6xahv45r4smxyrw2wx96n66z");
+    apikeys.append("j5mtfebugzwtz28rafxv8kva");
+    apikeys.append("drmxqjgmdqc9ayrjezytz5qn");
+    apikeys.append("a2uh8n3ehabw7b5qumsswcey");
+    apikeys.append("2svry3naj58a89uzbhrwgusx");
+    apikeys.append("k5cqemwxdmfmkhqwtd3vtx6h");
+    apikeys.append("kwf7gz2rbkyzvtb5mhm45wru");
+    apikeys.append("9h3tjmnkgu8a7ephq2xmbs8s");
+    apikeys.append("3qpv23xtm5wy9ypwcf5r9tpv");
+    apikeys.append("9e8eyabbk2pcztteqcsy4vna");
+    apikeys.append("m963nacae9kspgjbw3nj3zhc");
+    apikeys.append("2qf4mnss3pzev3mu9zxyjny9");
+    apikeys.append("bsk64fdk85mns4yfhx88sy8f");
+    apikeys.append("yrbyfarkhy2pa7qvfebe5e5e");
+    apikeys.append("ryphsm73kjm6acv7xxc3a53h");
+    apikeys.append("5dach4tzku6hx3gcmsndx6zt");
+    apikeys.append("af6t883wgqdf67n2pue6vyub");
+    apikeys.append("d2vrhup2ag5v5xnux2umgxvq");
+
 //    inserter = new Inserter();
 
     //添加目錄種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=", 0));
 
     //添加商品種子
-    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=4pj6ws82bq85vafs2369bdeu", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=", 0));
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(i, this);
+        requesters[i] = new Requester(i, apikeys[i], this);
 
         requesters[i]->start();
 
@@ -82,7 +103,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 int totalPages = result["totalPages"].toInt();
 
-                QString pattern = "http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
+                QString pattern = "http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=%1&apiKey=";
 
                 for(int i = 2; i <= totalPages; ++i)
                 {
@@ -149,7 +170,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 int totalPages = result["totalPages"].toInt();
 
-                QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=%1&apiKey=4pj6ws82bq85vafs2369bdeu";
+                QString pattern = "http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=%1&apiKey=";
 
                 for(int i = 2; i < totalPages; ++i)
                 {
@@ -173,14 +194,14 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                 QString src     = product["source"].toString();
 
                 QString upc     = product["upc"].toString();
-                QString sku     = product["sku"].toString();
+                int sku     = product["sku"].toInt();
                 QString url     = product["url"].toString();
                 QString name    = product["name"].toString();
                 QString date    = product["startDate"].toString();
-                QString msrp    = product["regularPrice"].toString();
-                QString price   = product["salePrice"].toString();
-                QString stock   = product["onlineAvailability"].toString();
-                QString reviews = product["customerReviewCount"].toString();
+                int msrp    = product["regularPrice"].toInt();
+                int price   = product["salePrice"].toInt();
+                bool stock   = product["onlineAvailability"].toBool();
+                int reviews = product["customerReviewCount"].toInt();
 
                 QJsonArray tmp = product["categoryPath"].toArray();
 

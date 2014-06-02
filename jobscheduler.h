@@ -27,10 +27,8 @@
 
 #include <QNetworkReply>
 
-#define AMOUNT_OF_THREADS 5
+#define AMOUNT_OF_THREADS 20
 #define MAX_REQUEST_COUNT 20
-
-#define API_KEY 4pj6ws82bq85vafs2369bdeu
 
 class Requester;
 
@@ -59,9 +57,11 @@ public:
 
     QVector<Merchandise> merchandises;
 
+    QVector<QString> apikeys;
+
     Inserter* inserter;
 
-    explicit JobScheduler(QObject *parent = 0);
+    JobScheduler(QObject *parent = 0);
 
     bool getMenus(QNetworkReply*, BestBuy*);
     bool getMerchandises(QNetworkReply*, BestBuy*);
