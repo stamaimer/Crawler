@@ -28,6 +28,9 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
     apikeys.append("xtqc3kj5aevzeha8ak5tc5yj");
     apikeys.append("s4kyeuwjhh3r4zzehczfx7ms");
     apikeys.append("cphh93x6cjb954293axvtnss");
+    apikeys.append("yum5pts2rnyvtr4mc93u5gab");
+    apikeys.append("6t2t5uwcm97a7jcab83wy48a");
+    apikeys.append("66w2q8kcdvqg44cm627j3q97");
 
 //    inserter = new Inserter();
 
@@ -39,7 +42,7 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(i, apikeys[i % 9], this);
+        requesters[i] = new Requester(i, apikeys[i % 12], this);
 
         requesters[i]->start();
 

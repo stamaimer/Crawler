@@ -47,6 +47,8 @@ void Requester::run()
 
             job_scheduler->bestbuys.remove(0);
 
+            qDebug() << "THE SIZE OF BESTBUY IS" << job_scheduler->bestbuys.size();
+
             job_scheduler->mutex.unlock();
 
             request.setUrl(QUrl(bestbuy->request_url.arg(apikey)));
