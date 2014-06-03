@@ -264,6 +264,8 @@ void JobScheduler::finished(int tid)
     {
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
+        qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
+
         mutex.unlock();
     }
 }
