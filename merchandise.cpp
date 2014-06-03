@@ -1,23 +1,23 @@
 #include "merchandise.h"
 
 Merchandise::Merchandise(QString upc,
-                         QString sku,
                          QString url,
+                         QString src,
                          QString name,
                          QString date,
-                         QString msrp,
-                         QString price,
-                         QString stock,
-                         QString reviews,
+                         double msrp,
+                         double price,
+                         bool stock,
+                         int reviews,
                          QStringList path)
 {
     this->upc     = upc;
-    this->sku     = sku;
     this->url     = url;
+    this->src     = src;
     this->name    = name;
     this->date    = date;
-    this->msrp    = msrp;
     this->path    = path;
+    this->msrp    = msrp;
     this->price   = price;
     this->stock   = stock;
     this->reviews = reviews;
@@ -28,14 +28,14 @@ QString Merchandise::getUPC()
     return upc;
 }
 
-QString Merchandise::getSKU()
-{
-    return sku;
-}
-
 QString Merchandise::getURL()
 {
     return url;
+}
+
+QString Merchandise::getSRC()
+{
+    return src;
 }
 
 QString Merchandise::getName()
@@ -48,27 +48,27 @@ QString Merchandise::getDate()
     return date;
 }
 
-QString Merchandise::getMSRP()
-{
-    return msrp;
-}
-
 QString Merchandise::getPath()
 {
     return path.join(">>");
 }
 
-QString Merchandise::getPrice()
+double Merchandise::getMSRP()
+{
+    return msrp;
+}
+
+double Merchandise::getPrice()
 {
     return price;
 }
 
-QString Merchandise::getStock()
+bool Merchandise::getStock()
 {
     return stock;
 }
 
-QString Merchandise::getReviews()
+int Merchandise::getReviews()
 {
     return reviews;
 }

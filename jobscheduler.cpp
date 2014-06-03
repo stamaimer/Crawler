@@ -141,7 +141,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
 
                 qDebug() << id << name << path;
 
-                //menus.append(Menu(id, name, path));
+//                menus.append(Menu(id, name, path));
             }
 
             delete doc;
@@ -191,14 +191,18 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
             {
                 product = products[i].toObject();
 
-                QString src     = product["source"].toString();
                 QString upc     = product["upc"].toString();
                 QString url     = product["url"].toString();
+                QString src     = product["source"].toString();
+
                 QString name    = product["name"].toString();
                 QString date    = product["startDate"].toString();
-                int msrp    = product["regularPrice"].toInt();
-                int price   = product["salePrice"].toInt();
+
+                double msrp    = product["regularPrice"].toDouble();
+                double price   = product["salePrice"].toDouble();
+
                 bool stock   = product["onlineAvailability"].toBool();
+
                 int reviews = product["customerReviewCount"].toInt();
 
                 QJsonArray tmp = product["categoryPath"].toArray();
@@ -210,12 +214,9 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                     path << tmp[j].toObject()["id"].toString();
                 }
 
-                qDebug() << upc << name << date << msrp << price << stock << reviews << path;
+                qDebug() << upc << src << name << date << msrp << price << stock << reviews << path;
 
-                if(src.contains("bestbuy"))
-                {
-                    //merchandises.append(Merchandise(upc, sku, url, name, date, msrp, price, stock, reviews, path));
-                }
+//                merchandises.append(Merchandise(upc, url, src, name, date, msrp, price, stock, reviews, path));
             }
 
             delete doc;

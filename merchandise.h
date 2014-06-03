@@ -9,33 +9,31 @@
 class Merchandise
 {
     QString upc;
-    QString sku;
     QString url;
+    QString src;
     QString name;
     QString date;//上架日期
-    QString msrp;
-    QString price;
-    QString stock;
-    QString reviews;
+    double msrp;
+    double price;
+    bool stock;
+    int reviews;
     QStringList path;
 
 public:
     Merchandise(){}
-    Merchandise(QString, QString, QString,
-                QString, QString, QString,
-                QString, QString, QString,
-                QStringList);
+    Merchandise(QString, QString, QString, QString, QString,
+                double, double, bool, int, QStringList);
 
     QString getUPC();
-    QString getSKU();
     QString getURL();
+    QString getSRC();
     QString getName();
     QString getDate();
-    QString getMSRP();
     QString getPath();
-    QString getPrice();
-    QString getStock();
-    QString getReviews();
+    double getMSRP();
+    double getPrice();
+    bool getStock();
+    int getReviews();
 };
 
 #endif // MERCHANDISE_H
