@@ -5,44 +5,47 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 {
     timer.start();
 
+    //stamaimer@gmail.com
     apikeys.append("4pj6ws82bq85vafs2369bdeu");
     apikeys.append("u72crv2skdzyp5nqy7ennku8");
     apikeys.append("6xahv45r4smxyrw2wx96n66z");
-//    apikeys.append("j5mtfebugzwtz28rafxv8kva");
-//    apikeys.append("drmxqjgmdqc9ayrjezytz5qn");
-//    apikeys.append("a2uh8n3ehabw7b5qumsswcey");
-//    apikeys.append("2svry3naj58a89uzbhrwgusx");
-//    apikeys.append("k5cqemwxdmfmkhqwtd3vtx6h");
-//    apikeys.append("kwf7gz2rbkyzvtb5mhm45wru");
-//    apikeys.append("9h3tjmnkgu8a7ephq2xmbs8s");
+    //2518930466@qq.com
     apikeys.append("3qpv23xtm5wy9ypwcf5r9tpv");
     apikeys.append("9e8eyabbk2pcztteqcsy4vna");
     apikeys.append("m963nacae9kspgjbw3nj3zhc");
-//    apikeys.append("2qf4mnss3pzev3mu9zxyjny9");
-//    apikeys.append("bsk64fdk85mns4yfhx88sy8f");
-//    apikeys.append("yrbyfarkhy2pa7qvfebe5e5e");
-//    apikeys.append("ryphsm73kjm6acv7xxc3a53h");
-//    apikeys.append("5dach4tzku6hx3gcmsndx6zt");
-//    apikeys.append("af6t883wgqdf67n2pue6vyub");
-//    apikeys.append("d2vrhup2ag5v5xnux2umgxvq");
+    //stamaimer@live.com
     apikeys.append("xtqc3kj5aevzeha8ak5tc5yj");
     apikeys.append("s4kyeuwjhh3r4zzehczfx7ms");
     apikeys.append("cphh93x6cjb954293axvtnss");
+    //angelsister@163.com
     apikeys.append("yum5pts2rnyvtr4mc93u5gab");
     apikeys.append("6t2t5uwcm97a7jcab83wy48a");
     apikeys.append("66w2q8kcdvqg44cm627j3q97");
+    //spider_bestbuy_01@163.com
+    apikeys.append("aup37y5y3kry5zxpmqfcuj6g");
+    apikeys.append("g2xr6qrt2u48356ue56mnzdt");
+    apikeys.append("ae7fj8n2nx9agb8sm5mv2y32");
+    //spider_bestbuy_02@163.com
+    apikeys.append("tdf9j5z5zdbp2xvp5cq68ewh");
+    apikeys.append("7hyvbj7a438m8geb832y2vc7");
+    apikeys.append("xzuw3hay7vvzuzjheub55swn");
+    //spider_bestbuy_03@163.com
+
+
+
+
 
 //    inserter = new Inserter();
 
     //添加目錄種子
-    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     //添加商品種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(i, apikeys[i % 12], this);
+        requesters[i] = new Requester(i, apikeys[i % 18], this);
 
         requesters[i]->start();
 
