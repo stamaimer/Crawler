@@ -30,6 +30,11 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
     apikeys.append("7hyvbj7a438m8geb832y2vc7");
     apikeys.append("xzuw3hay7vvzuzjheub55swn");
     //spider_bestbuy_03@163.com
+    apikeys.append("xhb7na6kpz62uxydm9mn7bjp");
+    apikeys.append("bq2jdr5p3hw4nzntykq546fk");
+    apikeys.append("mu2tv8zgmvn3ezwy7xpkg3za");
+    //spider_bestbuy_04@163.com
+
 
 
 
@@ -38,14 +43,14 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
+    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     //添加商品種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(i, apikeys[i % 18], this);
+        requesters[i] = new Requester(i, apikeys[i % 21], this);
 
         requesters[i]->start();
 
@@ -217,7 +222,7 @@ bool JobScheduler::getMerchandises(QNetworkReply* reply, BestBuy* bestbuy)
                     path << tmp[j].toObject()["id"].toString();
                 }
 
-                qDebug() << upc << src << name << date << msrp << price << stock << reviews << path;
+                qDebug() << upc /*<< src << name << date << msrp << price << stock << reviews << path*/;
 
 //                merchandises.append(Merchandise(upc, url, src, name, date, msrp, price, stock, reviews, path));
             }
