@@ -12,6 +12,7 @@
 
 #include <QVector>
 #include <QString>
+#include <QStringList>
 
 #include <QSqlError>
 #include <QSqlQuery>

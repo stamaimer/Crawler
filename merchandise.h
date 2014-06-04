@@ -32,7 +32,7 @@ public:
     QString getPath();
     double getMSRP();
     double getPrice();
-    bool getStock();
+    int getStock();
     int getReviews();
 };
 

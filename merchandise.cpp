@@ -63,9 +63,9 @@ double Merchandise::getPrice()
     return price;
 }
 
-bool Merchandise::getStock()
+int Merchandise::getStock()
 {
-    return stock;
+    return true == stock ? 1 : 0;
 }
 
 int Merchandise::getReviews()
