@@ -43,7 +43,7 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 //    inserter = new Inserter();
 
     //添加目錄種子
-    //bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
+    bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
 
     //添加商品種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/products(sku=*)?show=upc,sku,url,name,source,startDate,salePrice,regularPrice,onlineAvailability,customerReviewCount,categoryPath.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
@@ -147,7 +147,7 @@ bool JobScheduler::getMenus(QNetworkReply* reply, BestBuy* bestbuy)
                     path << tmp[j].toObject()["id"].toString();
                 }
 
-                qDebug() << id << name << path;
+                qDebug() << id /*<< name << path*/;
 
 //                menus.append(Menu(id, name, path));
             }
