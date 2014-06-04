@@ -34,13 +34,23 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
     apikeys.append("bq2jdr5p3hw4nzntykq546fk");
     apikeys.append("mu2tv8zgmvn3ezwy7xpkg3za");
     //spider_bestbuy_04@163.com
+    apikeys.append("8cqzgh3c6dwsktcfn3k297qx");
+    apikeys.append("mnk8e467ybvs5t644mtyty75");
+    apikeys.append("b4ufbxy5xqy65qs83kx9vnd3");
+    //spider_bestbuy_05@163.com
+    apikeys.append("xc7qsde9jjhqzdvu87mwwky8");
+    apikeys.append("qukv8jexjpc762qtgk5w9srf");
+    apikeys.append("pbsrmbw2csup5t3pj327erza");
+    //spider_bestbuy_06@163.com
+    apikeys.append("crd8nbjtyw78f9hvtrxwzvu5");
+    apikeys.append("7sxbuhn7jnjpqj4xg3y5rxxq");
+    apikeys.append("gm2zzsajjhwnj9w97gfefdgx");
+    //spider_bestbuy_07@163.com
+    apikeys.append("njduq5ffjkwrzuw272nm33ps");
+    apikeys.append("zgkap9dq9t77v3w23tyypq2h");
+    apikeys.append("e9kffdc4u7zac25jy959mx4q");
 
-
-
-
-
-
-//    inserter = new Inserter();
+    inserter = new Inserter();
 
     //添加目錄種子
     bestbuys.append(new BestBuy("http://api.remix.bestbuy.com/v1/categories?show=id,name,path.id&format=json&pageSize=100&page=1&apiKey=%1", 0));
@@ -50,7 +60,7 @@ JobScheduler::JobScheduler(QObject *parent) : QObject(parent)
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
-        requesters[i] = new Requester(i, apikeys[i % 21], this);
+        requesters[i] = new Requester(i, apikeys[i % 33], this);
 
         requesters[i]->start();
 
@@ -253,11 +263,11 @@ void JobScheduler::finished(int tid)
 
     if(AMOUNT_OF_THREADS == ++count)
     {
-//        QSqlDatabase::database().transaction();
+        QSqlDatabase::database().transaction();
 
-//        inserter->insert(merchandises);
+        inserter->insert(merchandises);
 
-//        QSqlDatabase::database().commit();
+        QSqlDatabase::database().commit();
 
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
@@ -265,7 +275,7 @@ void JobScheduler::finished(int tid)
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
 
-//        delete inserter;
+        delete inserter;
 
         exit(0);
     }
