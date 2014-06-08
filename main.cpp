@@ -1,20 +1,14 @@
 #include <QCoreApplication>
 
-#include "requester.h"
-#include "extractor.h"
-#include "parser.h"
+#include "scheduler.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-//    Requester requester;
+    Scheduler scheduler;
 
-//    requester.exec();
-
-    Extractor extractor;
-
-    extractor.exec();
+    scheduler.exec();
 
     exit(0);
 

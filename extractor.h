@@ -5,9 +5,6 @@
 
 #include "utility.h"
 
-#define CATEGORIES_DIRNAME "categories.json"
-#define PRODUCTS_DIRNAME "products.json"
-
 class Extractor
 {
 public:
