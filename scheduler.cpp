@@ -6,6 +6,7 @@ Scheduler::Scheduler()
 
 void Scheduler::exec()
 {
+    timer.start();
 
     Requester requester;
 
@@ -19,5 +20,5 @@ void Scheduler::exec()
 
     parser.exec();
 
-    qDebug() << "all task finished";
+    qDebug() << "time elapsed :" << timer.elapsed();
 }

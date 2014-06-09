@@ -88,5 +88,42 @@ void Parser::dealWithCategories(QJsonDocument doc)
 
 void Parser::dealWithProducts(QJsonDocument doc)
 {
+    if(doc.isArray())
+    {
+        QJsonArray products = doc.array();
 
+        QJsonObject product;
+
+        for(int i = 0; i < products.size(); ++i)
+        {
+            product = products[i].toObject();
+
+            if(product["active"].toBool() && product["source"].toString().contains("bestbuy"))
+            {
+                QString upc = product["upc"].toString();
+                QString url = product["url"].toString();
+
+                QString name = product["name"].toString();
+                QString start_date = product["startDate"].toString();
+
+                double regular_price = product["regularPrice"].toDouble();
+                double sale_price = product["salePrice"].toDouble();
+
+                bool availability = product["onlineAvailability"].toBool();
+
+                int reviews = product["customerReviewCount"].toInt();
+
+                QJsonArray tmp = product["categoryPath"].toArray();
+
+                QStringList path;
+
+                for(int j = 0; j < tmp.size(); ++j)
+                {
+                    path << tmp[j].toObject()["id"].toString();
+                }
+
+                qDebug() << upc << url << name << start_date << regular_price << sale_price << availability << reviews << path;
+            }
+        }
+    }
 }
