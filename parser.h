@@ -8,7 +8,14 @@
 
 #include <QStringList>
 
+#include <QJsonParseError>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
 #include "utility.h"
+
+enum Type{CATEGORIES, PRODUCTS};
 
 class Parser
 {
@@ -17,8 +24,9 @@ public:
     void exec();
 
 private:
-    void getCategories();
-    void getProducts();
+    void exec(QString, Type);
+    void dealWithCategories(QJsonDocument);
+    void dealWithProducts(QJsonDocument);
 };
 
 #endif // PARSER_H
