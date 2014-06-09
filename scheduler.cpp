@@ -18,4 +18,6 @@ void Scheduler::exec()
     Parser parser;
 
     parser.exec();
+
+    qDebug() << "all task finished";
 }

@@ -6,8 +6,8 @@ Parser::Parser()
 
 void Parser::exec()
 {
-    exec(CATEGORIES_DIRNAME, CATEGORIES);
-//    exec(PRODUCTS_DIRNAME, PRODUCTS);
+    exec(CATEGORIES_DIRNAME, CATEGORY);
+//    exec(PRODUCTS_DIRNAME, PRODUCT);
 }
 
 void Parser::exec(QString dir_name, Type type)
@@ -37,13 +37,13 @@ void Parser::exec(QString dir_name, Type type)
         {
             switch (type)
             {
-                case CATEGORIES:
+                case CATEGORY:
 
                     dealWithCategories(doc);
 
                 break;
 
-                case PRODUCTS:
+                case PRODUCT:
 
                     dealWithProducts(doc);
 

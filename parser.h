@@ -15,7 +15,7 @@
 
 #include "utility.h"
 
-enum Type{CATEGORIES, PRODUCTS};
+enum Type{CATEGORY, PRODUCT};
 
 class Parser
 {
