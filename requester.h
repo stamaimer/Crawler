@@ -2,6 +2,7 @@
 #define REQUESTER_H
 
 #include <QString>
+
 #include "utility.h"
 
 #define CATEGORIES "categories"

@@ -7,9 +7,9 @@ Scheduler::Scheduler()
 void Scheduler::exec()
 {
 
-//    Requester requester;
+    Requester requester;
 
-//    requester.exec();
+    requester.exec();
 
     Extractor extractor;
 

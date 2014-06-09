@@ -20,6 +20,7 @@ void Parser::getCategories()
     for(int i = 0; i < fileinfos.size(); ++i)
     {
         //deal with categories
+        qDebug() << fileinfos[i].fileName();
     }
 }
 
