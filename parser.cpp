@@ -1,60 +1,63 @@
 #include "parser.h"
 
-Parser::Parser()
+Parser::Parser(int tid, Scheduler* scheduler)
 {
+    this->tid 		= tid;
+    this->scheduler = scheduler;
 }
 
-void Parser::exec()
+void Parser::run()
 {
-    exec(CATEGORIES_DIRNAME, CATEGORY);
-//    exec(PRODUCTS_DIRNAME, PRODUCT);
-}
+    connect(this, SIGNAL(finished(int)), scheduler, SLOT(finished(int)), Qt::DirectConnection);
 
-void Parser::exec(QString dir_name, Type type)
-{
-    QDir dir = QDir(dir_name);
-
-    dir.setNameFilters(QStringList("*.json"));
-
-    QFileInfoList file_info_list = dir.entryInfoList();
-
-    for(int i = 0; i < file_info_list.size(); ++i)
+    while(true)
     {
-//        qDebug() << file_info_list[i].fileName();
+        scheduler->mutex.lock();
 
-        QFile file(dir_name + "/" + file_info_list[i].fileName());
-
-        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if(scheduler->files.size() != 0)
         {
-            qDebug() << "file open faild!!!";
-        }
+            QString filename = scheduler->files.takeFirst();
 
-        QJsonParseError status;
+            scheduler->mutex.unlock();
 
-        QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &status);
+            QFile file(filename);
 
-        if(QJsonParseError::NoError == status.error)
-        {
-            switch (type)
+            if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
             {
-                case CATEGORY:
+                qDebug() << "file open faild!!!";
+            }
 
+            QJsonParseError status;
+
+            QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &status);
+
+            file.close();
+
+            if(QJsonParseError::NoError == status.error)
+            {
+                if(filename.contains("category"))
+                {
                     dealWithCategories(doc);
-
-                break;
-
-                case PRODUCT:
-
+                }
+                else if(filename.contains("product"))
+                {
                     dealWithProducts(doc);
-
-                break;
+                }
+            }
+            else
+            {
+                qDebug() << status.error << status.errorString();
             }
         }
         else
         {
-            qDebug() << status.error << status.errorString();
+            scheduler->mutex.unlock();
+
+            break;
         }
     }
+
+    emit finished(tid);
 }
 
 void Parser::dealWithCategories(QJsonDocument doc)

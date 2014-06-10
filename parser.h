@@ -1,32 +1,38 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <QDir>
 #include <QFile>
-#include <QFileInfo>
-#include <QFileInfoList>
-
-#include <QStringList>
 
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QThread>
+#include <QMutex>
+
 #include "utility.h"
+#include "scheduler.h"
 
-enum Type{CATEGORY, PRODUCT};
-
-class Parser
+class Parser : public QThread
 {
+    Q_OBJECT
+
+    Scheduler* scheduler;
+
+    int tid;
+
 public:
-    Parser();
-    void exec();
+    Parser(int,Scheduler*);
+
+    void run();
 
 private:
-    void exec(QString, Type);
     void dealWithCategories(QJsonDocument);
     void dealWithProducts(QJsonDocument);
+
+signals:
+    void finished(int);
 };
 
 #endif // PARSER_H

@@ -16,7 +16,9 @@ void Scheduler::exec()
 
     extractor.exec();
 
-    Parser parser;
+    PreProcessor pre_processor;
+
+    Parser parser = Parser(pre_processor.exec());
 
     parser.exec();
 
