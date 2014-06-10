@@ -9,15 +9,12 @@
 #include <QJsonArray>
 
 #include <QThread>
-#include <QMutex>
 
 #include "utility.h"
 #include "scheduler.h"
 
 class Parser : public QThread
 {
-    Q_OBJECT
-
     Scheduler* scheduler;
 
     int tid;
@@ -30,9 +27,6 @@ public:
 private:
     void dealWithCategories(QJsonDocument);
     void dealWithProducts(QJsonDocument);
-
-signals:
-    void finished(int);
 };
 
 #endif // PARSER_H

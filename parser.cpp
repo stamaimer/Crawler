@@ -57,7 +57,7 @@ void Parser::run()
         }
     }
 
-    emit finished(tid);
+    this->exit(0);
 }
 
 void Parser::dealWithCategories(QJsonDocument doc)

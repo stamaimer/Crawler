@@ -17,13 +17,13 @@ class Scheduler
 {
     QElapsedTimer timer;
 
-    QMutex mutex;
-
-    QVector<QString> files;
-
 public:
     Scheduler();
     void exec();
+
+    QMutex mutex;
+
+    QVector<QString> files;
 };
 
 #endif // SCHEDULER_H
