@@ -20,7 +20,10 @@ SOURCES += main.cpp \
     requester.cpp \
     parser.cpp \
     scheduler.cpp \
-    extractor.cpp
+    extractor.cpp \
+    preprocessor.cpp \
+    category.cpp \
+    product.cpp
 
 HEADERS += \
     inserter.h \
@@ -28,4 +31,7 @@ HEADERS += \
     parser.h \
     scheduler.h \
     extractor.h \
-    utility.h
+    utility.h \
+    preprocessor.h \
+    category.h \
+    product.h
