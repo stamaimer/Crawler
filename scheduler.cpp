@@ -18,9 +18,16 @@ void Scheduler::exec()
 
     PreProcessor pre_processor;
 
-    Parser parser = Parser(pre_processor.exec());
+    files = pre_processor.exec();
 
-    parser.exec();
+    Parser* parsers[AMOUNT_OF_THREADS];
+
+    for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
+    {
+        parsers[i] = new Parser(i, this);
+
+        parsers[i]->start();
+    }
 
     qDebug() << "time elapsed :" << timer.elapsed();
 }

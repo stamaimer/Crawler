@@ -11,6 +11,8 @@
 #include "inserter.h"
 #include "parser.h"
 
+#define AMOUNT_OF_THREADS 20
+
 class Scheduler
 {
     QElapsedTimer timer;
