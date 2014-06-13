@@ -9,19 +9,13 @@ void Scheduler::exec()
 {
     timer.start();
 
-    Requester requester;
-
     requester.exec();
-
-    Extractor extractor;
 
     extractor.exec();
 
-    PreProcessor pre_processor;
-
     files = pre_processor.exec();
 
-    Parser* parsers[AMOUNT_OF_THREADS];
+    inserter = new Inserter();
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
@@ -29,6 +23,30 @@ void Scheduler::exec()
 
         parsers[i]->start();
     }
+}
 
-    qDebug() << "time elapsed :" << timer.elapsed();
+void Scheduler::finished(int tid)
+{
+    static int count = 0;
+
+    requesters[tid]->exit();
+
+    if(AMOUNT_OF_THREADS == ++count)
+    {
+        qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
+
+        qDebug() << "EXIT...";
+
+        qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
+
+        delete inserter;
+
+        exit(0);
+    }
+    else
+    {
+        qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
+
+        qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
+    }
 }

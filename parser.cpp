@@ -10,6 +10,8 @@ void Parser::run()
 {
     while(true)
     {
+        connect(this, SIGNAL(finished(int)), scheduler, SLOT(finished(int)), Qt::DirectConnection);
+
         scheduler->mutex.lock();
 
         if(scheduler->files.size() != 0)
@@ -55,7 +57,7 @@ void Parser::run()
         }
     }
 
-    this->exit(0);
+    emit finished(tid);
 }
 
 void Parser::dealWithCategories(QJsonDocument doc)

@@ -3,6 +3,8 @@
 
 #include <QElapsedTimer>
 
+#include <QObject>
+
 #include <QMutex>
 
 #include "preprocessor.h"
@@ -12,17 +14,37 @@
 
 #define AMOUNT_OF_THREADS 20
 
-class Scheduler
+class Parser;
+
+class Scheduler : public QObject
 {
+    Q_OBJECT
+
     QElapsedTimer timer;
 
+    Requester requester;
+
+    Extractor extractor;
+
+    PreProcessor pre_processor;
+
+    Parser* parsers[AMOUNT_OF_THREADS];
+
 public:
+
     Scheduler();
+
     void exec();
+
+    Inserter* inserter;
 
     QMutex mutex;
 
     QVector<QString> files;
+
+public slots:
+
+    void finished(int);
 };
 
 #endif // SCHEDULER_H
