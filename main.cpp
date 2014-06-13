@@ -10,7 +10,5 @@ int main(int argc, char *argv[])
 
     scheduler.exec();
 
-    exit(0);
-
     return a.exec();
 }
