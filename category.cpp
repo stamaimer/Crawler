@@ -17,7 +17,7 @@ QString Category::getName()
     return name.toHtmlEscaped().remove("\\");
 }
 
-Qstring Category::getPath()
+QString Category::getPath()
 {
     return path.join(',');
 }
