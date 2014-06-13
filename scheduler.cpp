@@ -1,4 +1,5 @@
 #include "scheduler.h"
+#include "parser.h"
 
 Scheduler::Scheduler()
 {

@@ -9,7 +9,6 @@
 #include "requester.h"
 #include "extractor.h"
 #include "inserter.h"
-#include "parser.h"
 
 #define AMOUNT_OF_THREADS 20
 
