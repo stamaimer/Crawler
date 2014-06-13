@@ -8,8 +8,6 @@ Parser::Parser(int tid, Scheduler* scheduler)
 
 void Parser::run()
 {
-    connect(this, SIGNAL(finished(int)), scheduler, SLOT(finished(int)), Qt::DirectConnection);
-
     while(true)
     {
         scheduler->mutex.lock();
