@@ -29,7 +29,7 @@ void Scheduler::finished(int tid)
 {
     static int count = 0;
 
-    requesters[tid]->exit();
+    parsers[tid]->exit();
 
     if(AMOUNT_OF_THREADS == ++count)
     {
