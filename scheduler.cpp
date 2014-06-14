@@ -39,7 +39,7 @@ void Scheduler::finished(int tid)
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
 
-        delete inserter;
+//        delete inserter;
 
         exit(0);
     }

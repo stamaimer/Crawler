@@ -35,11 +35,11 @@ void Parser::run()
 
             if(QJsonParseError::NoError == status.error)
             {
-                if(filename.contains("category"))
+                if(filename.contains("categories"))
                 {
                     dealWithCategories(doc);
                 }
-                else if(filename.contains("product"))
+                else if(filename.contains("products"))
                 {
                     dealWithProducts(doc);
                 }
