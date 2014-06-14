@@ -24,7 +24,7 @@ class Parser : public QThread
     int tid;
 
 public:
-    Parser(int,Scheduler*);
+    Parser(int, Scheduler*);
 
     void run();
 
