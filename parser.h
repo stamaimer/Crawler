@@ -31,6 +31,7 @@ public:
 private:
     void dealWithCategories(QJsonDocument);
     void dealWithProducts(QJsonDocument);
+    void dealWithLargeDoc(QFile);
 
 signals:
     void finished(int);

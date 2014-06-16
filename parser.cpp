@@ -130,3 +130,8 @@ void Parser::dealWithProducts(QJsonDocument doc)
         }
     }
 }
+
+void Parser::dealWithLargeDoc(QFile file)
+{
+
+}
