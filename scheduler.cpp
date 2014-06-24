@@ -15,7 +15,7 @@ void Scheduler::exec()
 
     files = pre_processor.exec();
 
-//    inserter = new Inserter();
+    inserter = new Inserter();
 
     for(int i = 0; i < AMOUNT_OF_THREADS; ++i)
     {
@@ -39,7 +39,7 @@ void Scheduler::finished(int tid)
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
 
-//        delete inserter;
+        delete inserter;
 
         exit(0);
     }
