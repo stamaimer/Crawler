@@ -62,7 +62,7 @@ void Inserter::insert(QVector<Product> products)
 
     QString pattern_base = "(\"%1\")";
 
-    QString pattern_info = "(\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", %6, %7, %8, %9, \"%10\")";
+    QString pattern_info = "(\"%1\", \"%2\", \"%3\", \"%4\", %5, %6, %7, %8, \"%9\")";
 
     QStringList rows_base;
 
@@ -74,7 +74,6 @@ void Inserter::insert(QVector<Product> products)
 
         rows_info << pattern_info.arg(product.getUPC())
                                  .arg(product.getURL())
-                                 .arg(product.getSRC())
                                  .arg(product.getName())
                                  .arg(product.getDate())
                                  .arg(product.getMSRP())
