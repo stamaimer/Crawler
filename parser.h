@@ -10,7 +10,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QVector>
 #include <QThread>
+
+#include "category.h"
+#include "product.h"
 
 #include "utility.h"
 #include "scheduler.h"
@@ -22,6 +26,9 @@ class Parser : public QThread
     Scheduler* scheduler;
 
     int tid;
+
+    QVector<Category> categories;
+    QVector<Product> products;
 
 public:
     Parser(int, Scheduler*);

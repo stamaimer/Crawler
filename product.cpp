@@ -2,7 +2,6 @@
 
 Product::Product(QString upc,
                  QString url,
-                 QString src,
                  QString name,
                  QString date,
                  double msrp,
@@ -13,7 +12,6 @@ Product::Product(QString upc,
 {
     this->upc     = upc;
     this->url     = url;
-    this->src     = src;
     this->name    = name;
     this->date    = date;
     this->path    = path;
@@ -33,11 +31,6 @@ QString Product::getURL()
     return url;
 }
 
-QString Product::getSRC()
-{
-    return src;
-}
-
 QString Product::getName()
 {
     return name.toHtmlEscaped().remove("\\");
@@ -50,7 +43,7 @@ QString Product::getDate()
 
 QString Product::getPath()
 {
-    return path.join(">>");
+    return path.join(",");
 }
 
 double Product::getMSRP()

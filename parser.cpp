@@ -84,8 +84,18 @@ void Parser::dealWithCategories(QJsonDocument doc)
                 path << tmp[j].toObject()["id"].toString();
             }
 
-            qDebug() << id << name << path.join(',');
+//            qDebug() << id << name << path.join(',');
+
+            this->categories.append(Category(id, name, path));
         }
+
+        scheduler->mutex.lock();
+
+        scheduler->inserter->insert(this->categories);
+
+        this->categories.clear();
+
+        scheduler->mutex.unlock();
     }
 }
 
@@ -125,13 +135,60 @@ void Parser::dealWithProducts(QJsonDocument doc)
                     path << tmp[j].toObject()["id"].toString();
                 }
 
-                qDebug() << upc << url << name << start_date << regular_price << sale_price << availability << reviews << path;
+//                qDebug() << upc << url << name << start_date << regular_price << sale_price << availability << reviews << path;
+
+                this->products.append(Product(upc, url, name, start_date, regular_price, sale_price, availability, reviews, path));
             }
         }
+
+        scheduler->mutex.lock();
+
+        scheduler->inserter->insert(this->products);
+
+        this->products.clear();
+
+        scheduler->mutex.unlock();
     }
 }
 
 void Parser::dealWithLargeDoc(QFile file)
 {
+    QByteArray line = "";
 
+    for(line = file.readLine(); line != ""; line = file.readLine())
+    {
+        if(line.contains("sku"))
+        {
+            do
+            {
+                line = file.readLine();
+            }
+            while(!line.contains("name"));
+
+
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
