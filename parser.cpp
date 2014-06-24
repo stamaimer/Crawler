@@ -151,6 +151,11 @@ void Parser::dealWithProducts(QJsonDocument doc)
     }
 }
 
+/*because some file are too large to construct json object in Qt,
+ *we choose to parse these file line by line. but we remain the
+ *function unimplemented until ...
+ */
+
 void Parser::dealWithLargeDoc(QFile file)
 {
     QByteArray line = "";
