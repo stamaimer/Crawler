@@ -47,6 +47,8 @@ void Scheduler::finished(int tid)
     {
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
+        //rm categories and mv zip file
+
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
     }
 }
