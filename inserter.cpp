@@ -44,7 +44,7 @@ void Inserter::insert(QVector<Category> categories)
     {
         qDebug() << query.lastError().text();
 
-        qDebug() << query.lastQuery();
+//        qDebug() << query.lastQuery();
     }
 }
 
@@ -95,7 +95,7 @@ void Inserter::insert(QVector<Product> products)
     {
         qDebug() << query.lastError().text();
 
-        qDebug() << query.lastQuery();
+//        qDebug() << query.lastQuery();
     }
 
     query.clear();
@@ -104,7 +104,7 @@ void Inserter::insert(QVector<Product> products)
     {
         qDebug() << query.lastError().text();
 
-        qDebug() << query.lastQuery();
+//        qDebug() << query.lastQuery();
     }
 
     num_rows_affected = num_rows_affected + query.numRowsAffected();
