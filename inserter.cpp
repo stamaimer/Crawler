@@ -24,6 +24,10 @@ Inserter::Inserter()
 
 void Inserter::insert(QVector<Category> categories)
 {
+    if(0 == categories.size())
+    {
+        return;
+    }
 
     QString sql = "INSERT IGNORE INTO categories VALUES ";
 
@@ -44,12 +48,17 @@ void Inserter::insert(QVector<Category> categories)
     {
         qDebug() << query.lastError().text();
 
-//        qDebug() << query.lastQuery();
+        qDebug() << query.lastQuery();
     }
 }
 
 void Inserter::insert(QVector<Product> products)
 {
+    if(0 == products.size())
+    {
+        return;
+    }
+
     static int total_count = 0;
 
     static int num_rows_affected = 0;
@@ -95,7 +104,7 @@ void Inserter::insert(QVector<Product> products)
     {
         qDebug() << query.lastError().text();
 
-//        qDebug() << query.lastQuery();
+        qDebug() << query.lastQuery();
     }
 
     query.clear();
@@ -104,7 +113,7 @@ void Inserter::insert(QVector<Product> products)
     {
         qDebug() << query.lastError().text();
 
-//        qDebug() << query.lastQuery();
+        qDebug() << query.lastQuery();
     }
 
     num_rows_affected = num_rows_affected + query.numRowsAffected();
