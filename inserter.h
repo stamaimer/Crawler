@@ -4,8 +4,9 @@
 #include "category.h"
 #include "product.h"
 
-#include <QDebug>
 #include <QDate>
+
+#include <QDebug>
 
 #include <QVector>
 #include <QString>

@@ -12,7 +12,7 @@
 #include "extractor.h"
 #include "inserter.h"
 
-#define AMOUNT_OF_THREADS 20
+#define AMOUNT_OF_THREADS 5
 
 class Parser;
 

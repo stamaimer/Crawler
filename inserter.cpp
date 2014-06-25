@@ -62,7 +62,7 @@ void Inserter::insert(QVector<Product> products)
 
     QString pattern_base = "(\"%1\")";
 
-    QString pattern_info = "(\"%1\", \"%2\", \"%3\", \"%4\", %5, %6, %7, %8, \"%9\")";
+    QString pattern_info = "(\"%1\", \"%2\", \"%3\", \"%4\", %5, %6, %7, %8, \"%9\", \"%10\")";
 
     QStringList rows_base;
 
@@ -80,7 +80,8 @@ void Inserter::insert(QVector<Product> products)
                                  .arg(product.getPrice())
                                  .arg(product.getStock())
                                  .arg(product.getReviews())
-                                 .arg(product.getPath());
+                                 .arg(product.getPath())
+                                 .arg(QDate::currentDate().toString(Qt::ISODate));
     }
 
     sql_base = sql_base + rows_base.join(',');

@@ -9,9 +9,9 @@ void Scheduler::exec()
 {
     timer.start();
 
-    requester.exec();
+//    requester.exec();
 
-    extractor.exec();
+//    extractor.exec();
 
     files = pre_processor.exec();
 
