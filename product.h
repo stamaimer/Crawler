@@ -6,6 +6,7 @@
 
 class Product
 {
+    QString sku;
     QString upc;
     QString url;
     QString name;
@@ -18,9 +19,10 @@ class Product
 
 public:
     Product(){}
-    Product(QString, QString, QString, QString,
+    Product(QString, QString, QString, QString, QString,
                 double, double, bool, int, QStringList);
 
+    QString getSKU();
     QString getUPC();
     QString getURL();
     QString getName();

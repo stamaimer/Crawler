@@ -113,6 +113,7 @@ void Parser::dealWithProducts(QJsonDocument doc)
 
             if(product["active"].toBool() && product["source"].toString().contains("bestbuy"))
             {
+                QString sku = product["sku"].toString();
                 QString upc = product["upc"].toString();
                 QString url = product["url"].toString();
 
@@ -137,7 +138,7 @@ void Parser::dealWithProducts(QJsonDocument doc)
 
 //                qDebug() << upc << url << name << start_date << regular_price << sale_price << availability << reviews << path;
 
-                this->products.append(Product(upc, url, name, start_date, regular_price, sale_price, availability, reviews, path));
+                this->products.append(Product(sku, upc, url, name, start_date, regular_price, sale_price, availability, reviews, path));
             }
         }
 

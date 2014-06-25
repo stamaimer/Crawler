@@ -1,6 +1,7 @@
 #include "product.h"
 
-Product::Product(QString upc,
+Product::Product(QString sku,
+                 QString upc,
                  QString url,
                  QString name,
                  QString date,
@@ -10,6 +11,7 @@ Product::Product(QString upc,
                  int reviews,
                  QStringList path)
 {
+    this->sku	  = sku;
     this->upc     = upc;
     this->url     = url;
     this->name    = name;
@@ -19,6 +21,11 @@ Product::Product(QString upc,
     this->price   = price;
     this->stock   = stock;
     this->reviews = reviews;
+}
+
+QString Product::getSKU()
+{
+    return sku;
 }
 
 QString Product::getUPC()
