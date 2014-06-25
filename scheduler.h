@@ -7,10 +7,14 @@
 
 #include <QMutex>
 
+#include <QDir>
+#include <QFileInfoList>
+
 #include "preprocessor.h"
 #include "requester.h"
 #include "extractor.h"
 #include "inserter.h"
+#include "utility.h"
 
 #define AMOUNT_OF_THREADS 5
 
@@ -30,6 +34,9 @@ class Scheduler : public QObject
 
     Parser* parsers[AMOUNT_OF_THREADS];
 
+    void rm();
+
+    void rm(QString);
 public:
 
     Scheduler();

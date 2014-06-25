@@ -47,8 +47,55 @@ void Scheduler::finished(int tid)
     {
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
-        //rm categories and mv zip file
+        rm();
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
     }
 }
+
+void Scheduler::rm()
+{
+    rm(CATEGORIES_DIRNAME);
+    rm(PRODUCTS_DIRNAME);
+}
+
+void Scheduler::rm(QString dir_name)
+{
+    QDir dir = QDir(dir_name);
+
+    QFileInfoList file_info_list = dir.entryInfoList();
+
+    foreach (QFileInfo file_info, file_info_list)
+    {
+        if(file_info.isFile())
+        {
+            file_info.dir().remove(file_info.fileName());
+        }
+        else if(file_info.isDir())
+        {
+            rm(file_info.absoluteFilePath());
+        }
+    }
+
+    dir.rmpath(dir.absolutePath());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
