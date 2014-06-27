@@ -7,7 +7,10 @@
 
 #include <QMutex>
 
+#include <QDate>
+
 #include <QDir>
+#include <QFile>
 #include <QFileInfoList>
 
 #include "preprocessor.h"
