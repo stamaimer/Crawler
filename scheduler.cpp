@@ -63,6 +63,8 @@ void Scheduler::rm(QString dir_name)
 {
     QDir dir = QDir(dir_name);
 
+    dir.setNameFilters(QStringList("*.json"));
+
     QFileInfoList file_info_list = dir.entryInfoList();
 
     foreach (QFileInfo file_info, file_info_list)
