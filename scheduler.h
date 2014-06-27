@@ -36,7 +36,12 @@ class Scheduler : public QObject
 
     void rm();
 
+    void mv();
+
     void rm(QString);
+
+    void mv(QString);
+
 public:
 
     Scheduler();

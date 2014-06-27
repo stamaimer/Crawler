@@ -72,6 +72,8 @@ void Scheduler::rm(QString dir_name)
         if(file_info.isFile())
         {
             file_info.dir().remove(file_info.fileName());
+
+            qDebug() << "rm" << file_info.fileName();
         }
         else if(file_info.isDir())
         {
@@ -80,6 +82,24 @@ void Scheduler::rm(QString dir_name)
     }
 
     dir.rmpath(dir.absolutePath());
+
+    qDebug() << "rm" << dir_name;
+}
+
+void Scheduler::mv()
+{
+    mv(CATEGORIES_ZIP_FILENAME);
+    mv(PRODUCTS_ZIP_FILENAME);
+}
+
+void Scheduler::mv(QString file_name)
+{
+    QFile file = QFile(file_name);
+
+    if(file.rename(file_name + QDate::currentDate().toString(Qt::ISODate)))
+    {
+        qDebug() << "mv" << file_name << "to" << file.fileName();
+    }
 }
 
 
