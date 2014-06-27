@@ -96,7 +96,7 @@ void Scheduler::mv()
 
 void Scheduler::mv(QString file_name)
 {
-    QFile file = QFile(file_name);
+    QFile file(file_name);
 
     if(file.rename(file_name + QDate::currentDate().toString(Qt::ISODate)))
     {
