@@ -65,13 +65,13 @@ void Inserter::insert(QVector<Product> products)
 
     total_count = total_count + products.size();
 
-    QString sql_base = "INSERT IGNORE INTO products_base (id) VALUES ";
+    QString sql_base = "INSERT IGNORE INTO products_base (sku) VALUES ";
 
     QString sql_info = "INSERT IGNORE INTO products_info VALUES ";
 
-    QString pattern_base = "(\"%1\")";
+    QString pattern_base = "(%1)";
 
-    QString pattern_info = "(\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", %6, %7, %8, %9, \"%10\", \"%11\")";
+    QString pattern_info = "(%1, \"%2\", \"%3\", \"%4\", \"%5\", %6, %7, %8, %9, \"%10\", \"%11\")";
 
     QStringList rows_base;
 
@@ -79,7 +79,7 @@ void Inserter::insert(QVector<Product> products)
 
     for(Product product : products)
     {
-        rows_base << pattern_base.arg(product.getUPC());
+        rows_base << pattern_base.arg(product.getSKU());
 
         rows_info << pattern_info.arg(product.getSKU())
                                  .arg(product.getUPC())
