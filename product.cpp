@@ -1,6 +1,6 @@
 #include "product.h"
 
-Product::Product(QString sku,
+Product::Product(int sku,
                  QString upc,
                  QString url,
                  QString name,
@@ -23,7 +23,7 @@ Product::Product(QString sku,
     this->reviews = reviews;
 }
 
-QString Product::getSKU()
+int Product::getSKU()
 {
     return sku;
 }

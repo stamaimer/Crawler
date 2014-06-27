@@ -113,7 +113,8 @@ void Parser::dealWithProducts(QJsonDocument doc)
 
             if(product["active"].toBool() && product["source"].toString().contains("bestbuy"))
             {
-                QString sku = product["sku"].toString();
+                int sku = product["sku"].toInt();
+
                 QString upc = product["upc"].toString();
                 QString url = product["url"].toString();
 
