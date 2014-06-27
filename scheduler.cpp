@@ -35,6 +35,10 @@ void Scheduler::finished(int tid)
     {
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
 
+        rm();
+
+        mv();
+
         qDebug() << "EXIT...";
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
@@ -46,8 +50,6 @@ void Scheduler::finished(int tid)
     else
     {
         qDebug() << "THREAD" << tid + AMOUNT_OF_THREADS << "FINISHED" << "TOTAL:" << count;
-
-        rm();
 
         qDebug() << (double)(timer.elapsed() / 60000) << "min elapsed";
     }
