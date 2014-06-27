@@ -118,5 +118,5 @@ void Inserter::insert(QVector<Product> products)
 
     num_rows_affected = num_rows_affected + query.numRowsAffected();
 
-    qDebug() << query.numRowsAffected() << "rows inserted," << timer.elapsed() / 1000 << "secs elapsed," << total_count << "rows in set," << num_rows_affected << "rows affected";
+    qDebug() << query.numRowsAffected() << "rows inserted," << timer.elapsed() << "msecs elapsed," << total_count << "rows in set," << num_rows_affected << "rows affected";
 }
