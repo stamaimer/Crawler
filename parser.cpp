@@ -1,4 +1,7 @@
 #include "parser.h"
+#include "rapidjson/document.h"
+
+using namespace rapidjson;
 
 Parser::Parser(int tid, Scheduler* scheduler)
 {
@@ -27,9 +30,11 @@ void Parser::run()
                 qDebug() << "file open faild!!!";
             }
 
+            QByteArray json = file.readAll();
+
             QJsonParseError status;
 
-            QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &status);
+            QJsonDocument doc = QJsonDocument::fromJson(json, &status);
 
             file.close();
 
@@ -43,6 +48,10 @@ void Parser::run()
                 {
                     dealWithProducts(doc);
                 }
+            }
+            else if(QJsonParseError::DocumentTooLarge == status.error)
+            {
+                dealWithLargeDoc(json);
             }
             else
             {
@@ -158,23 +167,9 @@ void Parser::dealWithProducts(QJsonDocument doc)
  *function unimplemented until ...
  */
 
-void Parser::dealWithLargeDoc(QFile file)
+void Parser::dealWithLargeDoc(QByteArray json)
 {
-    QByteArray line = "";
 
-    for(line = file.readLine(); line != ""; line = file.readLine())
-    {
-        if(line.contains("sku"))
-        {
-            do
-            {
-                line = file.readLine();
-            }
-            while(!line.contains("name"));
-
-
-        }
-    }
 }
 
 

@@ -13,6 +13,8 @@
 #include <QVector>
 #include <QThread>
 
+#include <QByteArray>
+
 #include "category.h"
 #include "product.h"
 
@@ -38,7 +40,7 @@ public:
 private:
     void dealWithCategories(QJsonDocument);
     void dealWithProducts(QJsonDocument);
-    void dealWithLargeDoc(QFile);
+    void dealWithLargeDoc(QByteArray);
 
 signals:
     void finished(int);
