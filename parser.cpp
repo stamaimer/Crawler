@@ -169,7 +169,25 @@ void Parser::dealWithProducts(QJsonDocument doc)
 
 void Parser::dealWithLargeDoc(QByteArray json)
 {
+    const char* data = json.constData();
 
+    Document doc;
+
+    if(doc.Parse(data).HasParseError())
+    {
+        qDebug() << "big file parse error!!!";
+    }
+    else
+    {
+        if(doc.IsArray())
+        {
+            qDebug() << "doc is a array";
+        }
+        else
+        {
+            qDebug() << "file structure error!!!";
+        }
+    }
 }
 
 
