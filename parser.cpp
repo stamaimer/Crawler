@@ -183,7 +183,7 @@ void Parser::dealWithLargeDoc(QByteArray json)
     {
         if(doc.IsArray())
         {
-            for(SizeType i = 0; i < products.Size(); ++i)
+            for(SizeType i = 0; i < doc.Size(); ++i)
             {
                 Document products;
 
