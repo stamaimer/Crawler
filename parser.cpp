@@ -1,5 +1,7 @@
 #include "parser.h"
+#include "rapidjson/writer.h"
 #include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
 
 using namespace rapidjson;
 
@@ -181,7 +183,33 @@ void Parser::dealWithLargeDoc(QByteArray json)
     {
         if(doc.IsArray())
         {
-            qDebug() << "doc is a array";
+            for(SizeType i = 0; i < products.Size(); ++i)
+            {
+                Document products;
+
+                products.SetArray();
+
+                products.PushBack(doc[i], products.GetAllocator());
+
+                StringBuffer strbuf;
+
+                Writer<StringBuffer> writer(strbuf);
+
+                products.Accept(writer);
+
+                QJsonParseError status;
+
+                QJsonDocument doc = QJsonDocument::fromJson(QByteArray(strbuf.GetString()), &status);
+
+                if(QJsonParseError::NoError == status.error)
+                {
+                    dealWithProducts(doc);
+                }
+                else
+                {
+                    qDebug() << status.error << status.errorString();
+                }
+            }
         }
         else
         {
