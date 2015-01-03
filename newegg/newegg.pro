@@ -8,7 +8,7 @@ QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = spider_with_ui_v04
+TARGET = newegg
 TEMPLATE = app
 
 
